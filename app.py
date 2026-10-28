@@ -128,34 +128,33 @@ if "current_artist" not in st.session_state:
 def select_artist(name):
     st.session_state.current_artist = name
 
-# 5. 側邊欄篩選與導覽控制台
+# 5. 側邊欄：改為正式策展導覽指南與操作手冊（移除重複的名家按鈕）
 with st.sidebar:
     st.title("🏛️ 策展導覽台")
-    st.caption("跨維度數位策展索引")
-    
-    category_filter = st.selectbox(
-        "藝術媒材分類",
-        ["全部媒材", "油畫", "雕塑", "壁畫"]
-    )
-    
-    filtered_artists = [
-        name for name, info in ARTISTS_DATABASE.items()
-        if category_filter == "全部媒材" or category_filter in info["category"]
-    ]
+    st.caption("數位虛擬展覽暨知識圖譜系統")
     
     st.divider()
-    st.subheader("📌 快速選擇名家")
+    st.subheader("💡 展廳操作指南")
+    st.markdown("""
+    * **左鍵拖曳**：環顧 3D 展廳 360° 視角
+    * **滾輪滑動**：拉近 / 推遠畫作細節
+    * **W / A / S / D**：於展廳內前後左右漫遊移動
+    * **上方標籤**：一鍵檢索名家脈絡與代表作
+    """)
     
-    for name in filtered_artists:
-        if st.button(f"👤 {name}", key=f"sidebar_{name}", use_container_width=True):
-            select_artist(name)
-            st.rerun()
+    st.divider()
+    st.subheader("📐 系統設計架構")
+    st.markdown("""
+    * **視覺引擎**：Exhverse 3D WebGL
+    * **知識架構**：開放藝術歷史語義圖譜
+    * **UI 框架**：Streamlit 全響應式介面
+    """)
     
     st.divider()
     st.markdown("🔗 **外部展廳直通**")
     st.link_button("🌐 開啟 3D 展廳全螢幕", EXHVERSE_PUBLIC_URL, use_container_width=True)
 
-# 6. 主頁面：自訂藝術風格標題與字體樣式（大幅調大內文字級）
+# 6. 主頁面：自訂藝術風格標題與大字級樣式
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;900&display=swap');
@@ -188,7 +187,7 @@ st.markdown("""
         font-weight: bold;
     }
 
-    /* 右側分頁內文（非粗體一般字體）：放大至 1.45rem，行距加大更透氣 */
+    /* 右側分頁內文放大（一般字體 1.45rem） */
     .stTabs [data-baseweb="tab-panel"] p,
     .stTabs [data-baseweb="tab-panel"] li,
     .stTabs [data-baseweb="tab-panel"] a {
@@ -198,13 +197,13 @@ st.markdown("""
         letter-spacing: 0.5px !important;
     }
 
-    /* 藍色資訊框文字放大 */
+    /* 身份地位藍色資訊框文字 */
     div[data-testid="stAlert"] p {
         font-size: 1.35rem !important;
         line-height: 1.8 !important;
     }
 
-    /* 分段小標題（粗體） */
+    /* 分段小標題（粗體 1.7rem） */
     .stTabs [data-baseweb="tab-panel"] h3 {
         font-size: 1.7rem !important;
         color: #64B5F6 !important;
@@ -239,7 +238,7 @@ with col_tags:
 
 st.markdown("---")
 
-# 8. 主視覺展示：左右雙欄排版
+# 8. 主視覺展示：左右雙欄排版（左：3D 展廳；右：藝術家詳情卡片）
 col_exhibition, col_info = st.columns([3, 2], gap="large")
 
 with col_exhibition:
@@ -282,5 +281,5 @@ with col_info:
         st.warning(f"目前資料庫中未直接收錄「{st.session_state.current_artist}」")
         st.markdown("""
         > **系統動態檢索機制已啟動：**  
-        > 系統正透過外部開放資料節點進行語義解析，建議您點擊上方熱門名家標籤，或於左側導覽台選擇已索引之典藏名單。
+        > 系統正透過外部開放資料節點進行語義解析，建議您點擊上方熱門名家標籤，或使用標準關鍵字搜尋。
         """)
