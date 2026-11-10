@@ -133,9 +133,9 @@ with st.sidebar:
     st.divider()
     st.subheader("🎮 像素小遊戲操控")
     st.markdown("""
-    * **方向鍵**（`↑` `↓` `←` `→`）或 **W / A / S / D**：控制像素小人自由移動
-    * **接近展品**：走到牆上的名畫或雕像展位前
-    * **互動查看**：碰觸展品時會顯示名畫資訊，點擊右方標籤可查看完整人生脈絡
+    * **移動**：方向鍵（`↑` `↓` `←` `→`）或 **W / A / S / D**
+    * **互動**：走近展位，按 **空白鍵 (Space)** 或 **Enter** 打開作品與名言卡片
+    * **脈絡解鎖**：卡片中點擊 **「查看生平」** 或點擊上方標籤，右側同步解析
     """)
     
     st.divider()
@@ -229,9 +229,8 @@ col_game, col_info = st.columns([3, 2], gap="large")
 
 with col_game:
     st.subheader("🕹️ 像素時空美術館 (Pixel Art Museum)")
-    st.caption("點擊下方遊戲畫面獲取焦點，使用 方向鍵 或 W/A/S/D 漫步參觀展廳！")
+    st.caption("點擊下方遊戲畫面獲取焦點，使用 方向鍵 或 W/A/S/D 漫步，接近展品按【空白鍵】互動！")
 
-    # 內嵌 HTML5 Canvas 像素遊戲
     pixel_game_html = """
     <!DOCTYPE html>
     <html>
@@ -241,176 +240,337 @@ with col_game:
         body {
             margin: 0;
             padding: 0;
-            background-color: #0E1117;
+            background-color: #0B0F19;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-family: 'Courier New', Courier, monospace;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             overflow: hidden;
             user-select: none;
         }
-        #game-container {
+        #game-box {
             position: relative;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.8), 0 0 15px rgba(41, 182, 246, 0.4);
+            width: 640px;
+            height: 520px;
+            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.9), 0 0 20px rgba(41, 182, 246, 0.3);
             border: 3px solid #1E293B;
-            border-radius: 8px;
+            border-radius: 10px;
             overflow: hidden;
+            background: #0F172A;
         }
         canvas {
             display: block;
             image-rendering: pixelated;
         }
-        #hud {
+        #guide-bar {
             position: absolute;
-            top: 10px;
-            left: 10px;
-            background: rgba(15, 23, 42, 0.85);
+            top: 12px;
+            left: 12px;
+            background: rgba(15, 23, 42, 0.9);
             color: #38BDF8;
-            padding: 6px 14px;
-            border-radius: 4px;
-            font-size: 13px;
-            border: 1px solid #38BDF8;
-            letter-spacing: 1px;
-            pointer-events: none;
-        }
-        #dialog {
-            position: absolute;
-            bottom: 12px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(15, 23, 42, 0.95);
-            color: #F8FAFC;
-            padding: 10px 20px;
+            padding: 6px 12px;
             border-radius: 6px;
-            font-size: 14px;
-            border: 2px solid #F59E0B;
+            font-size: 12px;
+            border: 1px solid #0284C7;
+            pointer-events: none;
+            letter-spacing: 0.5px;
+        }
+        /* 靠近時的驚嘆號提示 */
+        #interact-prompt {
+            position: absolute;
             display: none;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.6);
-            text-align: center;
+            color: #FACC15;
+            background: rgba(15, 23, 42, 0.92);
+            border: 1.5px solid #F59E0B;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            pointer-events: none;
+            transform: translate(-50%, -100%);
             white-space: nowrap;
+            animation: bounce 0.8s infinite alternate;
+        }
+        @keyframes bounce {
+            from { margin-top: 0px; }
+            to { margin-top: -6px; }
+        }
+        /* 按下空白鍵彈出的精緻 RPG 卡片 */
+        #rpg-modal {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 440px;
+            background: linear-gradient(145deg, #0F172A 0%, #1E293B 100%);
+            border: 2px solid #38BDF8;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.85), 0 0 15px rgba(56, 189, 248, 0.4);
+            border-radius: 10px;
+            padding: 18px 22px;
+            display: none;
+            z-index: 100;
+            color: #F8FAFC;
+        }
+        #rpg-modal h3 {
+            margin: 0 0 6px 0;
+            color: #38BDF8;
+            font-size: 19px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        #rpg-modal .period-tag {
+            display: inline-block;
+            background: #0369A1;
+            color: #E0F2FE;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            margin-bottom: 10px;
+        }
+        #rpg-modal .quote {
+            font-style: italic;
+            color: #CBD5E1;
+            font-size: 13px;
+            line-height: 1.5;
+            background: rgba(0, 0, 0, 0.3);
+            border-left: 3px solid #F59E0B;
+            padding: 8px 12px;
+            margin: 8px 0 12px 0;
+            border-radius: 0 4px 4px 0;
+        }
+        #rpg-modal .meta-list {
+            font-size: 12px;
+            color: #94A3B8;
+            line-height: 1.6;
+        }
+        #rpg-modal .close-hint {
+            margin-top: 12px;
+            text-align: right;
+            font-size: 11px;
+            color: #64748B;
         }
     </style>
     </head>
     <body>
 
-    <div id="game-container">
-        <canvas id="canvas" width="600" height="540"></canvas>
-        <div id="hud">🚶 鍵盤 [↑↓←→] 或 [WASD] 移動探索</div>
-        <div id="dialog">💡 走近展品觸發對話</div>
+    <div id="game-box">
+        <canvas id="gameCanvas" width="640" height="520"></canvas>
+        <div id="guide-bar">🚶 [WASD / 方向鍵] 移動 ｜ [Space / Enter] 展品互動</div>
+        <div id="interact-prompt">❗ [空白鍵] 查看作品</div>
+
+        <!-- 互動彈出卡片 -->
+        <div id="rpg-modal">
+            <h3 id="modal-title">🎨 名稱</h3>
+            <span class="period-tag" id="modal-period">時代時期</span>
+            <div class="quote" id="modal-quote">名言</div>
+            <div class="meta-list" id="modal-meta">代表作與媒材</div>
+            <div class="close-hint">按 [Space] 或 移動 關閉視窗</div>
+        </div>
     </div>
 
     <script>
-    const canvas = document.getElementById('canvas');
+    const canvas = document.getElementById('gameCanvas');
     const ctx = canvas.getContext('2d');
-    const dialog = document.getElementById('dialog');
+    const prompt = document.getElementById('interact-prompt');
+    const modal = document.getElementById('rpg-modal');
 
-    // 玩家像素小人
+    // 玩家設定
     const player = {
-        x: 300,
-        y: 420,
-        size: 20,
-        speed: 3.5,
-        color: '#38BDF8',
-        dir: 'down'
+        x: 320,
+        y: 450,
+        size: 22,
+        speed: 3.6,
+        dir: 'up',
+        walkFrame: 0
     };
 
-    // 展廳中的展品節點（對應五大名家）
+    // 五大展位精密工整佈局（完全對稱）
+    // 畫布寬 640：中央為 320。兩翼展位對稱排列於上牆與兩側
     const exhibits = [
-        { name: "梵谷", title: "《星夜》展位", color: "#FBBF24", frameColor: "#B45309", x: 100, y: 100, w: 50, h: 60, icon: "🌌" },
-        { name: "達文西", title: "《蒙娜麗莎》展位", color: "#34D399", frameColor: "#047857", x: 230, y: 90, w: 50, h: 60, icon: "🖼️" },
-        { name: "米開朗基羅", title: "《大衛像》展位", color: "#E2E8F0", frameColor: "#64748B", x: 370, y: 90, w: 46, h: 70, icon: "🗿" },
-        { name: "莫內", title: "《睡蓮》展位", color: "#60A5FA", frameColor: "#1D4ED8", x: 500, y: 100, w: 50, h: 60, icon: "🌸" },
-        { name: "畢卡索", title: "《格爾尼卡》立體展位", color: "#F472B6", frameColor: "#BE185D", x: 290, y: 250, w: 60, h: 50, icon: "🧩" }
+        { 
+            name: "梵谷", 
+            title: "《星夜》", 
+            period: "後印象派 (1853–1890)", 
+            color: "#FBBF24", frame: "#B45309", 
+            x: 70, y: 55, w: 54, h: 64, icon: "🌌",
+            quote: "「我夢想著繪畫，然後我畫下了我的夢想。」",
+            rep: "代表作：《星夜》、《向日葵》、《麥田群鴉》"
+        },
+        { 
+            name: "達文西", 
+            title: "《蒙娜麗莎》", 
+            period: "文藝復興全盛期 (1452–1519)", 
+            color: "#34D399", frame: "#047857", 
+            x: 200, y: 55, w: 54, h: 64, icon: "🖼️",
+            quote: "「簡約是細膩的極致。觀察是唯一的智慧泉源。」",
+            rep: "代表作：《蒙娜麗莎》、《最後的晚餐》、《維特魯威人》"
+        },
+        { 
+            name: "畢卡索", 
+            title: "《格爾尼卡》", 
+            period: "現代立體主義 (1881–1973)", 
+            color: "#F472B6", frame: "#BE185D", 
+            x: 293, y: 50, w: 54, h: 64, icon: "🧩",
+            quote: "「每個孩子都是藝術家，問題在於長大後如何保持。」",
+            rep: "代表作：《格爾尼卡》、《亞維農的少女》、《哭泣的女人》"
+        },
+        { 
+            name: "米開朗基羅", 
+            title: "《大衛像》", 
+            period: "文藝復興全盛期 (1475–1564)", 
+            color: "#E2E8F0", frame: "#475569", 
+            x: 386, y: 55, w: 54, h: 64, icon: "🗿",
+            quote: "「我看見天使在巨石裡，我雕刻直到使他重獲自由。」",
+            rep: "代表作：《大衛像》、《聖殤》、《創世紀：創造亞當》"
+        },
+        { 
+            name: "莫內", 
+            title: "《睡蓮》", 
+            period: "印象派奠基人 (1840–1926)", 
+            color: "#60A5FA", frame: "#1D4ED8", 
+            x: 516, y: 55, w: 54, h: 64, icon: "🌸",
+            quote: "「世上沒有固定不變的色彩，只有特定瞬間的光線折射。」",
+            rep: "代表作：《睡蓮》、《印象·日出》、《撐陽傘的女人》"
+        }
     ];
 
     const keys = {};
+    let currentNear = null;
+    let isModalOpen = false;
 
     window.addEventListener('keydown', (e) => {
         if(["ArrowUp","ArrowDown","ArrowLeft","ArrowRight"," "].includes(e.key)) {
             e.preventDefault();
         }
         keys[e.key.toLowerCase()] = true;
+
+        if (e.key === " " || e.key === "Enter") {
+            if (currentNear) {
+                toggleModal(currentNear);
+            }
+        }
     });
 
     window.addEventListener('keyup', (e) => {
         keys[e.key.toLowerCase()] = false;
     });
 
+    function toggleModal(ex) {
+        if (isModalOpen) {
+            modal.style.display = 'none';
+            isModalOpen = false;
+        } else {
+            document.getElementById('modal-title').innerHTML = `${ex.icon} 【${ex.name}】${ex.title}`;
+            document.getElementById('modal-period').innerText = ex.period;
+            document.getElementById('modal-quote').innerText = ex.quote;
+            document.getElementById('modal-meta').innerHTML = `<b>傳世特色：</b>${ex.rep}<br><span style="color:#38BDF8; font-weight:bold; margin-top:4px; display:inline-block;">👉 可點選上方按鈕快速跳轉右側檔案庫</span>`;
+            modal.style.display = 'block';
+            isModalOpen = true;
+        }
+    }
+
     function update() {
-        if (keys['arrowup'] || keys['w']) { player.y -= player.speed; player.dir = 'up'; }
-        if (keys['arrowdown'] || keys['s']) { player.y += player.speed; player.dir = 'down'; }
-        if (keys['arrowleft'] || keys['a']) { player.x -= player.speed; player.dir = 'left'; }
-        if (keys['arrowright'] || keys['d']) { player.x += player.speed; player.dir = 'right'; }
+        let moving = false;
+        if (keys['arrowup'] || keys['w']) { player.y -= player.speed; player.dir = 'up'; moving = true; }
+        if (keys['arrowdown'] || keys['s']) { player.y += player.speed; player.dir = 'down'; moving = true; }
+        if (keys['arrowleft'] || keys['a']) { player.x -= player.speed; player.dir = 'left'; moving = true; }
+        if (keys['arrowright'] || keys['d']) { player.x += player.speed; player.dir = 'right'; moving = true; }
 
-        // 牆壁碰撞邊界
-        player.x = Math.max(35, Math.min(canvas.width - 35, player.x));
-        player.y = Math.max(160, Math.min(canvas.height - 40, player.y));
+        if (moving) {
+            player.walkFrame += 0.2;
+            if (isModalOpen) {
+                modal.style.display = 'none';
+                isModalOpen = false;
+            }
+        }
 
-        // 偵測是否走到展品附近
-        let nearExhibit = null;
+        // 活動邊界
+        player.x = Math.max(30, Math.min(canvas.width - 30, player.x));
+        player.y = Math.max(140, Math.min(canvas.height - 35, player.y));
+
+        // 偵測是否走到展品前
+        currentNear = null;
         for (let ex of exhibits) {
-            let dist = Math.hypot((player.x) - (ex.x + ex.w / 2), (player.y) - (ex.y + ex.h / 2));
-            if (dist < 55) {
-                nearExhibit = ex;
+            let dist = Math.hypot(player.x - (ex.x + ex.w / 2), player.y - (ex.y + ex.h / 2 + 30));
+            if (dist < 48) {
+                currentNear = ex;
                 break;
             }
         }
 
-        if (nearExhibit) {
-            dialog.style.display = 'block';
-            dialog.innerHTML = `✨ 正在欣賞：<b>【${nearExhibit.name}】${nearExhibit.title}</b><br><span style="color:#94A3B8; font-size:12px;">👉 點擊右側標籤可檢索生平與傳世全集</span>`;
+        if (currentNear && !isModalOpen) {
+            prompt.style.display = 'block';
+            prompt.style.left = player.x + 'px';
+            prompt.style.top = (player.y - 25) + 'px';
         } else {
-            dialog.style.display = 'none';
+            prompt.style.display = 'none';
         }
     }
 
-    function drawFloor() {
-        // 復古方格地板
+    function drawRoom() {
+        // 展廳後壁（深藍沉穩博物館色調）
+        ctx.fillStyle = '#0F172A';
+        ctx.fillRect(0, 0, canvas.width, 130);
+
+        // 牆面頂部天花板裝飾線
+        ctx.fillStyle = '#1E293B';
+        ctx.fillRect(0, 0, canvas.width, 16);
+
+        // 踢腳木線
+        ctx.fillStyle = '#334155';
+        ctx.fillRect(0, 126, canvas.width, 6);
+
+        // 地磚（木質格紋深色地板）
         const tileSize = 40;
         for (let x = 0; x < canvas.width; x += tileSize) {
-            for (let y = 140; y < canvas.height; y += tileSize) {
-                ctx.fillStyle = ((x / tileSize + y / tileSize) % 2 === 0) ? '#1E2430' : '#171B24';
+            for (let y = 132; y < canvas.height; y += tileSize) {
+                ctx.fillStyle = ((x / tileSize + y / tileSize) % 2 === 0) ? '#1A202C' : '#141822';
                 ctx.fillRect(x, y, tileSize, tileSize);
             }
         }
 
-        // 後牆展覽壁面
-        ctx.fillStyle = '#0F172A';
-        ctx.fillRect(0, 0, canvas.width, 140);
+        // 中央經典紅地毯走道（寬 100，完全居中於 320）
+        const carpetW = 110;
+        const carpetX = (canvas.width - carpetW) / 2;
+        ctx.fillStyle = '#881337';
+        ctx.fillRect(carpetX, 132, carpetW, canvas.height - 132);
 
-        // 踢腳線與紅地毯走道
-        ctx.fillStyle = '#475569';
-        ctx.fillRect(0, 136, canvas.width, 4);
-
-        // 紅地毯走道
-        ctx.fillStyle = '#991B1B';
-        ctx.fillRect(260, 140, 80, canvas.height - 140);
-        ctx.fillStyle = '#F59E0B';
-        ctx.fillRect(258, 140, 2, canvas.height - 140);
-        ctx.fillRect(340, 140, 2, canvas.height - 140);
+        // 紅地毯金邊
+        ctx.fillStyle = '#D97706';
+        ctx.fillRect(carpetX - 2, 132, 2, canvas.height - 132);
+        ctx.fillRect(carpetX + carpetW, 132, 2, canvas.height - 132);
     }
 
     function drawExhibits() {
         for (let ex of exhibits) {
-            // 畫框陰影
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
-            ctx.fillRect(ex.x + 4, ex.y + 4, ex.w, ex.h);
+            // 聚光燈效果
+            ctx.fillStyle = 'rgba(56, 189, 248, 0.08)';
+            ctx.beginPath();
+            ctx.arc(ex.x + ex.w / 2, ex.y + ex.h / 2 + 10, 36, 0, Math.PI * 2);
+            ctx.fill();
 
-            // 畫框
-            ctx.fillStyle = ex.frameColor;
+            // 畫框外層陰影
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
+            ctx.fillRect(ex.x + 3, ex.y + 3, ex.w, ex.h);
+
+            // 畫框邊
+            ctx.fillStyle = ex.frame;
             ctx.fillRect(ex.x, ex.y, ex.w, ex.h);
 
-            // 畫布內容
+            // 畫布中央色塊
             ctx.fillStyle = ex.color;
             ctx.fillRect(ex.x + 4, ex.y + 4, ex.w - 8, ex.h - 8);
 
-            // 展品圖示
-            ctx.font = '20px Arial';
+            // 畫布圖標
+            ctx.font = '22px Arial';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
             ctx.fillText(ex.icon, ex.x + ex.w / 2, ex.y + ex.h / 2);
 
-            // 銘牌說明
+            // 名牌小底座
+            ctx.fillStyle = '#0284C7';
+            ctx.fillRect(ex.x + 2, ex.y + ex.h + 5, ex.w - 4, 18);
             ctx.fillStyle = '#F8FAFC';
             ctx.font = 'bold 11px sans-serif';
             ctx.fillText(ex.name, ex.x + ex.w / 2, ex.y + ex.h + 14);
@@ -418,42 +578,44 @@ with col_game:
     }
 
     function drawPlayer() {
-        // 像素小人陰影
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.35)';
+        // 小人地面陰影
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.45)';
         ctx.beginPath();
-        ctx.ellipse(player.x, player.y + 12, 10, 5, 0, 0, Math.PI * 2);
+        ctx.ellipse(player.x, player.y + 10, 10, 5, 0, 0, Math.PI * 2);
         ctx.fill();
 
-        // 像素小人主體（復古像素風格小法師 / 探險家）
-        // 身體 (披風)
-        ctx.fillStyle = player.color;
-        ctx.fillRect(player.x - 7, player.y - 2, 14, 14);
+        const bob = Math.sin(player.walkFrame) * 2;
 
-        // 頭部
-        ctx.fillStyle = '#FDE68A';
-        ctx.fillRect(player.x - 6, player.y - 14, 12, 12);
+        // 像素冒險者主體
+        // 身體披風
+        ctx.fillStyle = '#0284C7';
+        ctx.fillRect(player.x - 7, player.y - 4 + bob, 14, 13);
 
-        // 帽子 / 頭飾
-        ctx.fillStyle = '#1D4ED8';
-        ctx.fillRect(player.x - 8, player.y - 18, 16, 5);
-        ctx.fillRect(player.x - 4, player.y - 23, 8, 5);
+        // 臉部
+        ctx.fillStyle = '#FED7AA';
+        ctx.fillRect(player.x - 6, player.y - 15 + bob, 12, 11);
+
+        // 探險帽
+        ctx.fillStyle = '#D97706';
+        ctx.fillRect(player.x - 8, player.y - 19 + bob, 16, 5);
+        ctx.fillRect(player.x - 5, player.y - 23 + bob, 10, 5);
 
         // 眼睛
         ctx.fillStyle = '#0F172A';
         if (player.dir === 'down') {
-            ctx.fillRect(player.x - 4, player.y - 10, 2, 3);
-            ctx.fillRect(player.x + 2, player.y - 10, 2, 3);
+            ctx.fillRect(player.x - 4, player.y - 11 + bob, 2, 3);
+            ctx.fillRect(player.x + 2, player.y - 11 + bob, 2, 3);
         } else if (player.dir === 'left') {
-            ctx.fillRect(player.x - 5, player.y - 10, 2, 3);
+            ctx.fillRect(player.x - 5, player.y - 11 + bob, 2, 3);
         } else if (player.dir === 'right') {
-            ctx.fillRect(player.x + 3, player.y - 10, 2, 3);
+            ctx.fillRect(player.x + 3, player.y - 11 + bob, 2, 3);
         }
     }
 
     function loop() {
         update();
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        drawFloor();
+        drawRoom();
         drawExhibits();
         drawPlayer();
         requestAnimationFrame(loop);
@@ -465,7 +627,7 @@ with col_game:
     </html>
     """
 
-    components.html(pixel_game_html, height=560)
+    components.html(pixel_game_html, height=540)
 
 with col_info:
     st.subheader("📖 藝術家脈絡與作品檔案")
@@ -500,4 +662,3 @@ with col_info:
         > **系統動態檢索機制已啟動：**  
         > 建議您點擊上方熱門名家標籤，或在左側像素小遊戲中靠近名家展位進行探索。
         """)
-        
