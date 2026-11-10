@@ -10,7 +10,7 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# 2. 結構化深度全球藝術家與雕塑家資料庫（真跡精確直鏈）
+# 2. 結構化深度全球藝術家與雕塑家資料庫
 ARTISTS_DATABASE = {
     "梵谷": {
         "title": "文森·梵谷 (Vincent van Gogh)",
@@ -21,6 +21,29 @@ ARTISTS_DATABASE = {
         "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg/640px-Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg",
         "color": "#FBBF24", "frame": "#B45309", "icon": "🌌",
         "quote": "「我夢想著繪畫，然後我畫下了我的夢想。」",
+        # 內建零破圖向量藝術卡片
+        "svg": """<svg viewBox='0 0 160 210' width='100%' height='100%' xmlns='http://www.w3.org/2000/svg'>
+            <defs>
+                <linearGradient id='sky' x1='0%' y1='0%' x2='100%' y2='100%'>
+                    <stop offset='0%' stop-color='#0B192C'/><stop offset='60%' stop-color='#1E3E62'/><stop offset='100%' stop-color='#000000'/>
+                </linearGradient>
+            </defs>
+            <rect width='160' height='210' fill='url(#sky)' rx='6'/>
+            <circle cx='130' cy='35' r='18' fill='#FEE715' opacity='0.9'/>
+            <circle cx='130' cy='35' r='12' fill='#0B192C'/>
+            <path d='M10 50 Q 80 20 150 60' stroke='#FEE715' stroke-width='4' fill='none' opacity='0.75' stroke-dasharray='4,4'/>
+            <path d='M10 70 Q 70 95 150 75' stroke='#38BDF8' stroke-width='5' fill='none' opacity='0.65'/>
+            <path d='M10 90 Q 90 60 150 100' stroke='#FBBF24' stroke-width='4' fill='none' opacity='0.8' stroke-dasharray='6,3'/>
+            <!-- 柏樹剪影 -->
+            <path d='M25 210 Q 15 130 32 70 Q 42 120 48 210 Z' fill='#064E3B'/>
+            <path d='M30 210 Q 22 140 33 90 Q 40 135 44 210 Z' fill='#022C22'/>
+            <!-- 小鎮剪影 -->
+            <rect x='70' y='170' width='25' height='25' fill='#1E293B'/>
+            <polygon points='82,145 70,170 95,170' fill='#0F172A'/>
+            <polygon points='82,130 80,145 84,145' fill='#FBBF24'/>
+            <rect x='110' y='175' width='30' height='20' fill='#1E293B'/>
+            <rect x='0' y='190' width='160' height='20' fill='#09101D'/>
+        </svg>""",
         "extract": (
             "### 📌 坎坷生平與創作狂熱\n\n"
             "梵谷出生於荷蘭南部，早年曾任藝術品店員、教師與傳教士，直到接近三十歲才正式投身繪畫。他一生飽受精神疾病、貧困與不被理解的孤獨折磨，但在其生命的最後十年間，以驚人的創作狂熱完成兩千餘幅作品，與弟弟西奧（Theo）之間真摯深刻的書信往返亦成為後世研究其心靈的重要文獻。\n\n"
@@ -46,6 +69,29 @@ ARTISTS_DATABASE = {
         "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg/640px-Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg",
         "color": "#34D399", "frame": "#047857", "icon": "🖼️",
         "quote": "「簡約是細膩的極致。觀察是唯一的智慧泉源。」",
+        "svg": """<svg viewBox='0 0 160 210' width='100%' height='100%' xmlns='http://www.w3.org/2000/svg'>
+            <defs>
+                <linearGradient id='bg_davinci' x1='0%' y1='0%' x2='0%' y2='100%'>
+                    <stop offset='0%' stop-color='#3F4E4F'/><stop offset='60%' stop-color='#2C3639'/><stop offset='100%' stop-color='#1A120B'/>
+                </linearGradient>
+            </defs>
+            <rect width='160' height='210' fill='url(#bg_davinci)' rx='6'/>
+            <!-- 遠方冷色暈塗山水 -->
+            <path d='M0 90 Q 40 70 80 85 T 160 80 L 160 120 L 0 120 Z' fill='#4E6C50' opacity='0.5'/>
+            <!-- 蒙娜麗莎半身古典輪廓 -->
+            <path d='M35 210 Q 45 130 80 130 Q 115 130 125 210 Z' fill='#2B2A4C'/>
+            <ellipse cx='80' cy='95' rx='28' ry='34' fill='#D5CEA3'/>
+            <!-- 頭巾與深色捲髮 -->
+            <path d='M50 85 Q 46 140 58 170 Q 70 120 74 95 Z' fill='#1A120B'/>
+            <path d='M110 85 Q 114 140 102 170 Q 90 120 86 95 Z' fill='#1A120B'/>
+            <path d='M50 78 Q 80 62 110 78 Q 80 70 50 78 Z' fill='#1A120B' opacity='0.7'/>
+            <!-- 微笑特徵線條 -->
+            <path d='M70 108 Q 80 114 90 108' stroke='#78350F' stroke-width='2' fill='none' stroke-linecap='round'/>
+            <ellipse cx='68' cy='90' rx='3' ry='2' fill='#4A3E3D'/>
+            <ellipse cx='92' cy='90' rx='3' ry='2' fill='#4A3E3D'/>
+            <path d='M65 84 Q 70 82 76 85' stroke='#5C3D2E' stroke-width='1.5' fill='none'/>
+            <path d='M84 85 Q 90 82 95 84' stroke='#5C3D2E' stroke-width='1.5' fill='none'/>
+        </svg>""",
         "extract": (
             "### 📌 托斯卡尼的私生子與全方位的求知狂熱\n\n"
             "達文西出生於義大利佛羅倫斯附近的芬奇鎮，進入名師韋羅基奧畫坊學藝。他不僅是無可爭議的畫壇巨擘，更是跨越解剖學、工程學、流體力學、光學、建築與植物學的博學全才。他終生秉持「觀察是唯一的智慧泉源」，在數千頁的鏡像反寫手稿中記錄下對自然律動的精密洞察。\n\n"
@@ -71,6 +117,33 @@ ARTISTS_DATABASE = {
         "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Michelangelo%27s_David_-_waist_up.jpg/640px-Michelangelo%27s_David_-_waist_up.jpg",
         "color": "#E2E8F0", "frame": "#475569", "icon": "🗿",
         "quote": "「我看見天使在巨石裡，我雕刻直到使他重獲自由。」",
+        "svg": """<svg viewBox='0 0 160 210' width='100%' height='100%' xmlns='http://www.w3.org/2000/svg'>
+            <rect width='160' height='210' fill='#0F172A' rx='6'/>
+            <defs>
+                <linearGradient id='marble' x1='0%' y1='0%' x2='100%' y2='100%'>
+                    <stop offset='0%' stop-color='#FFFFFF'/><stop offset='60%' stop-color='#E2E8F0'/><stop offset='100%' stop-color='#94A3B8'/>
+                </linearGradient>
+            </defs>
+            <!-- 雕塑底座石階 -->
+            <rect x='30' y='180' width='100' height='22' fill='#334155' rx='3'/>
+            <!-- 雄健大衛雕像主體 -->
+            <ellipse cx='80' cy='52' rx='20' ry='24' fill='url(#marble)'/>
+            <!-- 捲髮細節 -->
+            <circle cx='70' cy='36' r='8' fill='#CBD5E1'/>
+            <circle cx='82' cy='32' r='9' fill='#CBD5E1'/>
+            <circle cx='92' cy='38' r='8' fill='#CBD5E1'/>
+            <path d='M70 74 L 90 74 L 96 115 L 64 115 Z' fill='url(#marble)'/>
+            <!-- 健美軀幹肌理陰影 -->
+            <path d='M80 82 L 80 110' stroke='#94A3B8' stroke-width='2'/>
+            <path d='M70 95 Q 80 98 90 95' stroke='#94A3B8' stroke-width='1.5' fill='none'/>
+            <!-- 左肩投石帶引線 -->
+            <path d='M65 74 Q 60 110 56 140' stroke='#64748B' stroke-width='3' fill='none'/>
+            <!-- 雙腿站姿 -->
+            <rect x='64' y='115' width='14' height='68' fill='url(#marble)' rx='4'/>
+            <rect x='82' y='115' width='14' height='68' fill='url(#marble)' rx='4'/>
+            <!-- 聚光燈投影 -->
+            <polygon points='80,0 20,210 140,210' fill='rgba(255,255,255,0.06)'/>
+        </svg>""",
         "extract": (
             "### 📌 雕刻家的靈魂與對石材的虔誠\n\n"
             "米開朗基羅出生於卡普雷塞，深受佛羅倫斯美第奇家族的人文主義薰陶。他畢生自視為「純粹的雕刻家」，認為雕刻的真諦不是塑造形體，而是將隱藏並禁錮在沉重冷硬大理石中的靈魂釋放出來。他對人體結構與肌肉張力的掌握達到神聖無比的高度。\n\n"
@@ -92,10 +165,32 @@ ARTISTS_DATABASE = {
         "period": "印象派奠基人 (1840–1926)",
         "category": "油畫 / 外光派印象主義",
         "identity": "印象派之父 ｜ 追逐光影與剎那時間的色彩魔法師",
-        "work_name": "《印象·日出》 (Impression, Sunrise)",
-        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Claude_Monet%2C_Impression%2C_soleil_levant.jpg/640px-Claude_Monet%2C_Impression%2C_soleil_levant.jpg",
+        "work_name": "《睡蓮池》 (Water Lilies)",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Claude_Monet_-_Water_Lilies_-_Google_Art_Project.jpg/640px-Claude_Monet_-_Water_Lilies_-_Google_Art_Project.jpg",
         "color": "#60A5FA", "frame": "#1D4ED8", "icon": "🌸",
         "quote": "「世上沒有固定不變的色彩，只有特定瞬間的光線折射。」",
+        "svg": """<svg viewBox='0 0 160 210' width='100%' height='100%' xmlns='http://www.w3.org/2000/svg'>
+            <defs>
+                <linearGradient id='pond' x1='0%' y1='0%' x2='100%' y2='100%'>
+                    <stop offset='0%' stop-color='#1E40AF'/><stop offset='50%' stop-color='#065F46'/><stop offset='100%' stop-color='#1E293B'/>
+                </linearGradient>
+            </defs>
+            <rect width='160' height='210' fill='url(#pond)' rx='6'/>
+            <!-- 吉維尼綠色拱橋 -->
+            <path d='M-10 90 Q 80 30 170 90' stroke='#047857' stroke-width='10' fill='none'/>
+            <path d='M-10 90 Q 80 30 170 90' stroke='#A7F3D0' stroke-width='2' fill='none'/>
+            <!-- 睡蓮葉群 -->
+            <ellipse cx='40' cy='140' rx='22' ry='9' fill='#15803D' opacity='0.85'/>
+            <circle cx='38' cy='138' r='5' fill='#F472B6'/>
+            <ellipse cx='115' cy='155' rx='28' ry='11' fill='#166534' opacity='0.85'/>
+            <circle cx='118' cy='152' r='7' fill='#FBCFE8'/>
+            <circle cx='124' cy='154' r='4' fill='#F43F5E'/>
+            <ellipse cx='75' cy='180' rx='24' ry='10' fill='#15803D' opacity='0.9'/>
+            <circle cx='75' cy='178' r='6' fill='#FDE047'/>
+            <!-- 印象派水面倒影光斑 -->
+            <ellipse cx='90' cy='115' rx='35' ry='3' fill='#93C5FD' opacity='0.4'/>
+            <ellipse cx='40' cy='165' rx='20' ry='2' fill='#A7F3D0' opacity='0.35'/>
+        </svg>""",
         "extract": (
             "### 📌 外光寫生革命與印象派誕生\n\n"
             "莫內出生於巴黎，自幼展露過人素描天賦，後師從尤金·布丹走出畫室，進入戶外大自然從事「外光寫生（En plein air）」。1874年，莫內與雷諾瓦等人舉辦獨立展覽，展出其名作《印象·日出》，遭受學院派保守藝評家嘲諷為「充其量不過是種模糊的印象」，這群革新者反而自豪地以「印象派」為名，正式掀起近代美術史最偉大的視覺革命。\n\n"
@@ -121,6 +216,21 @@ ARTISTS_DATABASE = {
         "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Guernica_reproduction_at_the_UN.jpg/640px-Guernica_reproduction_at_the_UN.jpg",
         "color": "#F472B6", "frame": "#BE185D", "icon": "🧩",
         "quote": "「每個孩子都是藝術家，問題在於長大後如何保持。」",
+        "svg": """<svg viewBox='0 0 160 210' width='100%' height='100%' xmlns='http://www.w3.org/2000/svg'>
+            <rect width='160' height='210' fill='#18181B' rx='6'/>
+            <!-- 格爾尼卡立體主義黑白灰幾何解構 -->
+            <polygon points='20,30 90,15 70,80 10,65' fill='#3F3F46'/>
+            <polygon points='90,15 150,45 130,95 70,80' fill='#71717A'/>
+            <!-- 驚恐眼睛與燈泡象徵 -->
+            <polygon points='80,45 100,55 90,75 70,65' fill='#F4F4F5'/>
+            <circle cx='85' cy='60' r='4' fill='#09090B'/>
+            <!-- 嘶鳴的馬與幾何碎片 -->
+            <polygon points='15,100 80,105 50,160 10,140' fill='#52525B'/>
+            <polygon points='80,105 145,115 125,170 50,160' fill='#A1A1AA'/>
+            <polygon points='30,165 75,150 110,195 45,200' fill='#E4E4E7'/>
+            <line x1='10' y1='20' x2='150' y2='190' stroke='#FAFAFA' stroke-width='1.5' stroke-dasharray='4,4'/>
+            <line x1='150' y1='20' x2='10' y2='190' stroke='#09090B' stroke-width='2'/>
+        </svg>""",
         "extract": (
             "### 📌 神童早慧與風格變奏\n\n"
             "畢卡索出生於西班牙馬拉加，自幼便展現驚人的古典寫實技藝，號稱「十多歲便畫得像拉斐爾一樣」。然而他隨後前往巴黎，歷經憂傷冷冽的「藍色時期」與溫馨浪漫的「粉紅時期」，不斷主動打碎已建立的成就，尋找全新的視覺表現途徑。\n\n"
@@ -164,11 +274,11 @@ with st.sidebar:
         st.info("🛋️ 狀態：**接待大廳等待中**\n\n請在上方搜尋或點選標籤領取門票！")
 
     st.divider()
-    st.subheader("🎮 展廳互動模式")
+    st.subheader("🎮 展廳互動指南")
     st.markdown("""
-    * **未搜尋**：停留於接待大廳。
+    * **未搜尋**：停留於接待大廳休憩。
     * **搜尋人名後**：系統只會開放**該人名的專屬展廊大門**，小人直接走向該門參觀！
-    * **操作鍵位**：`↑` `↓` `←` `→` 或 `W / A / S / D` 移動；按 `空白鍵` 查看真跡代表作。
+    * **操作鍵位**：`↑` `↓` `←` `→` 或 `W / A / S / D` 移動；按 `空白鍵` 查看真跡藝術卡片。
     """)
 
 # 5. 主標題樣式
@@ -247,7 +357,6 @@ st.markdown("---")
 current_query = st.session_state.current_artist.strip()
 is_in_gallery = (current_query != "")
 
-# 尋找匹配的藝術家資料
 target_artist_data = None
 for name, d in ARTISTS_DATABASE.items():
     if current_query and (current_query.lower() in name.lower() or current_query.lower() in d["title"].lower()):
@@ -255,7 +364,6 @@ for name, d in ARTISTS_DATABASE.items():
         target_artist_data["matched_name"] = name
         break
 
-# 如果搜尋自訂未收錄的名家，動態建立特展
 if is_in_gallery and not target_artist_data:
     target_artist_data = {
         "matched_name": current_query,
@@ -263,12 +371,18 @@ if is_in_gallery and not target_artist_data:
         "period": "全球特展策劃中",
         "category": "跨媒材藝術創作",
         "identity": "當前特展焦點藝術家",
-        "work_name": f"《{current_query} 代表性創作》",
+        "work_name": f"《{current_query} 傳世構圖》",
         "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg/640px-Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg",
         "color": "#A855F7",
         "frame": "#6B21A8",
         "icon": "✨",
         "quote": f"「為您特別開放：【{current_query}】專屬展門已就緒。」",
+        "svg": """<svg viewBox='0 0 160 210' width='100%' height='100%' xmlns='http://www.w3.org/2000/svg'>
+            <rect width='160' height='210' fill='#2E1065' rx='6'/>
+            <circle cx='80' cy='105' r='50' fill='#7E22CE' opacity='0.7'/>
+            <polygon points='80,45 125,135 35,135' fill='#C084FC'/>
+            <text x='80' y='180' font-size='13' fill='#F3E8FF' text-anchor='middle' font-weight='bold'>特展構想中</text>
+        </svg>""",
         "representative": "外部開放資料庫即時索引中",
         "extract": "系統正透過外部開放資料節點進行語義解析中...",
         "link": "https://zh.wikipedia.org"
@@ -292,7 +406,6 @@ with col_game:
     <html>
     <head>
     <meta charset="utf-8">
-    <meta name="referrer" content="no-referrer">
     <style>
         body {{
             margin: 0;
@@ -352,7 +465,6 @@ with col_game:
             from {{ margin-top: 0px; }}
             to {{ margin-top: -6px; }}
         }}
-        /* 彈出卡片 */
         #rpg-modal {{
             position: absolute;
             top: 52%;
@@ -374,22 +486,16 @@ with col_game:
             align-items: center;
         }}
         .modal-img-box {{
-            flex: 0 0 170px;
-            height: 220px;
+            flex: 0 0 160px;
+            height: 210px;
             border-radius: 8px;
             overflow: hidden;
             border: 2px solid #475569;
-            background: #1E293B;
+            background: #000;
             display: flex;
             align-items: center;
             justify-content: center;
-        }}
-        .modal-img-box img {{
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            background: #000;
-            display: block;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.6);
         }}
         .modal-info {{
             flex: 1;
@@ -437,12 +543,12 @@ with col_game:
     <div id="game-box">
         <canvas id="gameCanvas" width="660" height="520"></canvas>
         <div id="guide-bar">🚶 [WASD / 方向鍵] 移動</div>
-        <div id="interact-prompt">❗ [空白鍵] 鑑賞代表作真跡</div>
+        <div id="interact-prompt">❗ [空白鍵] 鑑賞代表作</div>
 
         <div id="rpg-modal">
             <div class="modal-body">
-                <div class="modal-img-box">
-                    <img id="modal-img" src="" alt="代表作真跡" referrerpolicy="no-referrer">
+                <div class="modal-img-box" id="modal-svg-container">
+                    <!-- 零破圖向量藝術卡片將即時注入此處 -->
                 </div>
                 <div class="modal-info">
                     <h3 id="modal-title">🎨 作品名稱</h3>
@@ -465,7 +571,6 @@ with col_game:
     const mode = "{mode_str}";
     const currentArtist = {exhibit_json};
 
-    // 玩家小人初始位置
     const player = {{
         x: 330,
         y: mode === "gallery" ? 440 : 380,
@@ -480,7 +585,6 @@ with col_game:
         guide.innerHTML = `🛋️ 接待大廳漫步 ｜ 請於上方搜尋或點選標籤開啟展門`;
     }}
 
-    // 單一專屬展門的規格（完全居中放置於 X=330）
     const singleDoor = {{
         x: 290,
         y: 45,
@@ -519,8 +623,8 @@ with col_game:
             document.getElementById('modal-quote').innerText = currentArtist.quote;
             document.getElementById('modal-meta').innerHTML = `<b>代表作品：</b>${{currentArtist.work_name}}<br><span style="color:#38BDF8; font-weight:bold; margin-top:4px; display:inline-block;">👉 右側已同步載入深度生平與完整傳世解析</span>`;
             
-            const imgElem = document.getElementById('modal-img');
-            imgElem.src = currentArtist.image;
+            // 直接注入 SVG 向量圖形，永不破圖
+            document.getElementById('modal-svg-container').innerHTML = currentArtist.svg;
             
             modal.style.display = 'block';
             isModalOpen = true;
@@ -546,7 +650,6 @@ with col_game:
         player.y = Math.max(mode === "gallery" ? 145 : 180, Math.min(canvas.height - 35, player.y));
 
         if (mode === "gallery") {{
-            // 偵測走近單一專屬展門
             let dist = Math.hypot(player.x - (singleDoor.x + singleDoor.w / 2), player.y - (singleDoor.y + singleDoor.h));
             isNearDoor = (dist < 60);
 
@@ -560,7 +663,6 @@ with col_game:
         }}
     }}
 
-    // 接待大廳繪製
     function drawLobby() {{
         ctx.fillStyle = '#0F172A';
         ctx.fillRect(0, 0, canvas.width, 160);
@@ -578,7 +680,6 @@ with col_game:
             }}
         }}
 
-        // 接待諮詢櫃台
         ctx.fillStyle = '#78350F';
         ctx.fillRect(230, 80, 200, 48);
         ctx.fillStyle = '#B45309';
@@ -588,7 +689,6 @@ with col_game:
         ctx.textAlign = 'center';
         ctx.fillText('🏛️ 美術館接待諮詢處', 330, 108);
 
-        // 兩側盆栽
         ctx.fillStyle = '#166534';
         ctx.beginPath();
         ctx.arc(80, 130, 24, 0, Math.PI * 2);
@@ -598,16 +698,13 @@ with col_game:
         ctx.fillRect(70, 130, 20, 25);
         ctx.fillRect(570, 130, 20, 25);
 
-        // 兩座休憩長沙發
         ctx.fillStyle = '#991B1B';
         ctx.fillRect(80, 260, 40, 90);
         ctx.fillRect(540, 260, 40, 90);
 
-        // 引導走道
         ctx.fillStyle = 'rgba(2, 132, 199, 0.25)';
         ctx.fillRect(280, 160, 100, canvas.height - 160);
 
-        // 引導字
         ctx.fillStyle = '#38BDF8';
         ctx.font = 'bold 15px sans-serif';
         ctx.textAlign = 'center';
@@ -617,7 +714,6 @@ with col_game:
         ctx.fillText('（小人目前在大廳休息，選定後將開啟該藝術家的單一專屬展廳）', 330, 245);
     }}
 
-    // 單一名家專屬展廳繪製（只出現這一個人的展廳門與代表作畫框）
     function drawGallery() {{
         ctx.fillStyle = '#0F172A';
         ctx.fillRect(0, 0, canvas.width, 130);
@@ -635,7 +731,6 @@ with col_game:
             }}
         }}
 
-        // 紅地毯走道直達正前方專屬大門
         const carpetW = 120;
         const carpetX = (canvas.width - carpetW) / 2;
         ctx.fillStyle = '#881337';
@@ -645,29 +740,24 @@ with col_game:
         ctx.fillRect(carpetX - 2, 132, 2, canvas.height - 132);
         ctx.fillRect(carpetX + carpetW, 132, 2, canvas.height - 132);
 
-        // 專屬大門背景聚光燈
         ctx.fillStyle = 'rgba(250, 204, 21, 0.28)';
         ctx.beginPath();
         ctx.arc(330, 85, 75, 0, Math.PI * 2);
         ctx.fill();
 
-        // 繪製【唯一專屬展門】拱門架構
         ctx.fillStyle = '#78350F';
         ctx.fillRect(singleDoor.x, singleDoor.y, singleDoor.w, singleDoor.h);
         ctx.fillStyle = '#D97706';
-        ctx.fillRect(singleDoor.x - 4, singleDoor.y - 4, singleDoor.w + 8, 8); // 門楣
+        ctx.fillRect(singleDoor.x - 4, singleDoor.y - 4, singleDoor.w + 8, 8);
 
-        // 門內金色展覽通道
         ctx.fillStyle = currentArtist.color || '#38BDF8';
         ctx.fillRect(singleDoor.x + 8, singleDoor.y + 12, singleDoor.w - 16, singleDoor.h - 12);
 
-        // 門內中央代表性標誌圖示
         ctx.font = '34px Arial';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.fillText(currentArtist.icon || '🎨', 330, singleDoor.y + 45);
 
-        // 專屬名家燙金銘牌
         ctx.fillStyle = '#B45309';
         ctx.fillRect(singleDoor.x - 14, singleDoor.y + singleDoor.h + 8, singleDoor.w + 28, 26);
         ctx.fillStyle = '#FEF3C7';
@@ -741,7 +831,7 @@ with col_info:
             st.divider()
             st.markdown(f"""
             ⏳ **活躍年代：** {target_artist_data['period']}  
-            🎨 **主要媒材：** {target_data_category if (target_data_category := target_artist_data.get('category')) else '油畫 / 雕塑'}
+            🎨 **主要媒材：** {target_artist_data['category']}
             """)
     else:
         st.subheader("🏛️ 美術館迎賓服務處")
@@ -752,6 +842,7 @@ with col_info:
         #### 🎫 參觀動線說明：
         1. **領取展覽門票**：請於上方 **「搜尋藝術家」** 輸入人名，或直接點選 **「熱門名家標籤」**。
         2. **啟程漫遊專屬展廳**：領取門票後，左側畫面將只為您開啟該藝術家的**唯一專屬展廊大門**！
-        3. **深度互動鑑賞**：操縱小人走至展門正前方並按下 **【空白鍵 (Space)】**，即可欣賞高解析代表作真跡並同步解鎖其生平脈絡。
+        3. **深度互動鑑賞**：操縱小人走至展門正前方並按下 **【空白鍵 (Space)】**，即可欣賞代表作真跡並同步解鎖其生平脈絡。
         """)
         st.info("💡 試著點擊上方標籤「**梵谷**」、「**米開朗基羅**」或「**莫內**」，立即開啟獨立專屬展廳！")
+    
