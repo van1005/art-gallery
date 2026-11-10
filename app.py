@@ -10,7 +10,7 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# 2. 結構化深度全球藝術家與雕塑家資料庫（含真跡代表作高解析度圖片與名言）
+# 2. 結構化深度全球藝術家與雕塑家資料庫（使用無阻擋的高畫質穩定圖床）
 ARTISTS_DATABASE = {
     "梵谷": {
         "title": "文森·梵谷 (Vincent van Gogh)",
@@ -18,7 +18,7 @@ ARTISTS_DATABASE = {
         "category": "油畫 / 後印象派表現主義",
         "identity": "現代表現主義先驅 ｜ 燃燒靈魂的悲劇巨匠",
         "work_name": "《星夜》 (The Starry Night)",
-        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg/600px-Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg",
+        "image": "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?w=600&auto=format&fit=crop",
         "quote": "「我夢想著繪畫，然後我畫下了我的夢想。」",
         "extract": (
             "### 📌 坎坷生平與創作狂熱\n\n"
@@ -42,7 +42,7 @@ ARTISTS_DATABASE = {
         "category": "油畫 / 跨學科手稿 / 解剖研究",
         "identity": "文藝復興三傑 ｜ 人類史上最偉大的全才博學大師",
         "work_name": "《蒙娜麗莎》 (Mona Lisa)",
-        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg/600px-Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg",
+        "image": "https://images.unsplash.com/photo-1582561424760-0321d75e81fa?w=600&auto=format&fit=crop",
         "quote": "「簡約是細膩的極致。觀察是唯一的智慧泉源。」",
         "extract": (
             "### 📌 托斯卡尼的私生子與全方位的求知狂熱\n\n"
@@ -66,7 +66,7 @@ ARTISTS_DATABASE = {
         "category": "大理石雕塑 / 濕壁畫 / 建築設計",
         "identity": "文藝復興三傑 ｜ 西方雕塑史的不朽神聖巨匠",
         "work_name": "《大衛像》 (David)",
-        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/%27David%27_by_Michelangelo_Fir_JBU005_retouched.jpg/600px-%27David%27_by_Michelangelo_Fir_JBU005_retouched.jpg",
+        "image": "https://images.unsplash.com/photo-1544531585-9847b68c8c86?w=600&auto=format&fit=crop",
         "quote": "「我看見天使在巨石裡，我雕刻直到使他重獲自由。」",
         "extract": (
             "### 📌 雕刻家的靈魂與對石材的虔誠\n\n"
@@ -90,7 +90,7 @@ ARTISTS_DATABASE = {
         "category": "油畫 / 外光派印象主義",
         "identity": "印象派之父 ｜ 追逐光影與剎那時間的色彩魔法師",
         "work_name": "《睡蓮》 (Water Lilies)",
-        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Claude_Monet_-_Water_Lilies_-_Google_Art_Project.jpg/600px-Claude_Monet_-_Water_Lilies_-_Google_Art_Project.jpg",
+        "image": "https://images.unsplash.com/photo-1579783902614-a3fb3927b675?w=600&auto=format&fit=crop",
         "quote": "「世上沒有固定不變的色彩，只有特定瞬間的光線折射。」",
         "extract": (
             "### 📌 外光寫生革命與印象派誕生\n\n"
@@ -113,8 +113,8 @@ ARTISTS_DATABASE = {
         "period": "現代立體派 (1881–1973)",
         "category": "油畫 / 拼貼 / 雕塑 / 現代主義",
         "identity": "立體主義創始人 ｜ 20世紀現代藝術最多產的天才巨擘",
-        "work_name": "《亞維農的少女》 (Les Demoiselles)",
-        "image": "https://upload.wikimedia.org/wikipedia/en/thumb/4/4c/Les_Demoiselles_d%27Avignon.jpg/600px-Les_Demoiselles_d%27Avignon.jpg",
+        "work_name": "《立體主義幾何構成》",
+        "image": "https://images.unsplash.com/photo-1541701494587-cb58502866ab?w=600&auto=format&fit=crop",
         "quote": "「每個孩子都是藝術家，問題在於長大後如何保持。」",
         "extract": (
             "### 📌 神童早慧與風格變奏\n\n"
@@ -156,7 +156,7 @@ with st.sidebar:
     st.subheader("📐 系統設計規格")
     st.markdown("""
     * **渲染引擎**：HTML5 Canvas 均分向量投影
-    * **視覺真跡**：WikiArt & Wikimedia Commons 高畫質典藏
+    * **視覺影像**：高穩定 CDN 典藏串流
     * **架構模式**：雙向狀態連動（Two-way State Sync）
     """)
 
@@ -234,11 +234,9 @@ st.markdown("---")
 # 7. 主視覺展示
 col_game, col_info = st.columns([3, 2], gap="large")
 
-# 準備傳給前端遊戲的動態展品資料
 current_query = st.session_state.current_artist.strip()
 is_custom_artist = current_query not in ARTISTS_DATABASE and current_query != ""
 
-# 如果查詢的是外部自訂名家，展館中央會動態佈展為該名家的特展區！
 exhibit_list = [
     {
         "name": "梵谷", "work": "《星夜》", "period": "後印象派 (1853–1890)",
@@ -256,12 +254,12 @@ exhibit_list = [
     },
     {
         "name": current_query if is_custom_artist else "畢卡索",
-        "work": f"《{current_query}當前特展作品》" if is_custom_artist else "《亞維農少女》",
+        "work": f"《{current_query}當前特展作品》" if is_custom_artist else "《立體主義構圖》",
         "period": "全球特展策劃中" if is_custom_artist else "現代立體派 (1881–1973)",
         "color": "#A855F7" if is_custom_artist else "#F472B6",
         "frame": "#6B21A8" if is_custom_artist else "#BE185D",
         "icon": "✨" if is_custom_artist else "🧩",
-        "img": "https://images.unsplash.com/photo-1579783902614-a3fb3927b675?w=500" if is_custom_artist else ARTISTS_DATABASE["畢卡索"]["image"],
+        "img": "https://images.unsplash.com/photo-1579783902614-a3fb3927b675?w=600&auto=format&fit=crop" if is_custom_artist else ARTISTS_DATABASE["畢卡索"]["image"],
         "quote": f"「為您特別策劃：【{current_query}】主題展位已佈展完成。」" if is_custom_artist else ARTISTS_DATABASE["畢卡索"]["quote"],
         "rep": "外部開放資料庫即時索引中" if is_custom_artist else "《格爾尼卡》、《亞維農的少女》、《哭泣的女人》"
     },
@@ -378,13 +376,17 @@ with col_game:
             border-radius: 8px;
             overflow: hidden;
             border: 2px solid #475569;
-            background: #000;
+            background: #1E293B;
             box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }}
         .modal-img-box img {{
             width: 100%;
             height: 100%;
             object-fit: cover;
+            display: block;
         }}
         .modal-info {{
             flex: 1;
@@ -438,7 +440,7 @@ with col_game:
         <div id="rpg-modal">
             <div class="modal-body">
                 <div class="modal-img-box">
-                    <img id="modal-img" src="" alt="代表作真跡">
+                    <img id="modal-img" src="" alt="代表作真跡" referrerpolicy="no-referrer" crossorigin="anonymous">
                 </div>
                 <div class="modal-info">
                     <h3 id="modal-title">🎨 作品名稱</h3>
@@ -457,10 +459,8 @@ with col_game:
     const prompt = document.getElementById('interact-prompt');
     const modal = document.getElementById('rpg-modal');
 
-    // 接收後端 Python 傳來的動態策展資料
     const rawExhibits = {exhibits_json};
 
-    // 玩家設定
     const player = {{
         x: 330,
         y: 440,
@@ -469,8 +469,6 @@ with col_game:
         walkFrame: 0
     }};
 
-    // 嚴格平均計算 5 個展位的 X 座標（完全平均對稱居中）
-    // 畫布寬 660，分為 5 個等距格點
     const count = rawExhibits.length;
     const itemW = 56;
     const itemH = 68;
@@ -537,11 +535,9 @@ with col_game:
             }}
         }}
 
-        // 活動邊界
         player.x = Math.max(30, Math.min(canvas.width - 30, player.x));
         player.y = Math.max(140, Math.min(canvas.height - 35, player.y));
 
-        // 偵測走近展品（距離在 50px 內觸發提示）
         currentNear = null;
         for (let ex of exhibits) {{
             let dist = Math.hypot(player.x - (ex.x + ex.w / 2), player.y - (ex.y + ex.h / 2 + 28));
@@ -561,17 +557,14 @@ with col_game:
     }}
 
     function drawRoom() {{
-        // 展廳後壁（深藍沉穩博物館色調）
         ctx.fillStyle = '#0F172A';
         ctx.fillRect(0, 0, canvas.width, 130);
 
-        // 牆面天花板與踢腳線
         ctx.fillStyle = '#1E293B';
         ctx.fillRect(0, 0, canvas.width, 14);
         ctx.fillStyle = '#334155';
         ctx.fillRect(0, 126, canvas.width, 6);
 
-        // 木質格紋深色地磚
         const tileSize = 40;
         for (let x = 0; x < canvas.width; x += tileSize) {{
             for (let y = 132; y < canvas.height; y += tileSize) {{
@@ -580,13 +573,11 @@ with col_game:
             }}
         }}
 
-        // 中央經典紅地毯走道（寬 110，完全居中對齊）
         const carpetW = 110;
         const carpetX = (canvas.width - carpetW) / 2;
         ctx.fillStyle = '#881337';
         ctx.fillRect(carpetX, 132, carpetW, canvas.height - 132);
 
-        // 紅地毯金色鑲邊
         ctx.fillStyle = '#D97706';
         ctx.fillRect(carpetX - 2, 132, 2, canvas.height - 132);
         ctx.fillRect(carpetX + carpetW, 132, 2, canvas.height - 132);
@@ -594,31 +585,25 @@ with col_game:
 
     function drawExhibits() {{
         for (let ex of exhibits) {{
-            // 聚光燈圓弧光暈
             ctx.fillStyle = 'rgba(56, 189, 248, 0.08)';
             ctx.beginPath();
             ctx.arc(ex.x + ex.w / 2, ex.y + ex.h / 2 + 10, 36, 0, Math.PI * 2);
             ctx.fill();
 
-            // 畫框外層陰影
             ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
             ctx.fillRect(ex.x + 3, ex.y + 3, ex.w, ex.h);
 
-            // 實木外框
             ctx.fillStyle = ex.frame;
             ctx.fillRect(ex.x, ex.y, ex.w, ex.h);
 
-            // 畫布中央色塊
             ctx.fillStyle = ex.color;
             ctx.fillRect(ex.x + 4, ex.y + 4, ex.w - 8, ex.h - 8);
 
-            // 展品象徵圖騰
             ctx.font = '22px Arial';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
             ctx.fillText(ex.icon, ex.x + ex.w / 2, ex.y + ex.h / 2);
 
-            // 名牌小底座
             ctx.fillStyle = '#0284C7';
             ctx.fillRect(ex.x + 2, ex.y + ex.h + 5, ex.w - 4, 18);
             ctx.fillStyle = '#F8FAFC';
@@ -628,7 +613,6 @@ with col_game:
     }}
 
     function drawPlayer() {{
-        // 小人地面陰影
         ctx.fillStyle = 'rgba(0, 0, 0, 0.45)';
         ctx.beginPath();
         ctx.ellipse(player.x, player.y + 10, 10, 5, 0, 0, Math.PI * 2);
@@ -636,20 +620,16 @@ with col_game:
 
         const bob = Math.sin(player.walkFrame) * 2;
 
-        // 像素冒險者披風
         ctx.fillStyle = '#0284C7';
         ctx.fillRect(player.x - 7, player.y - 4 + bob, 14, 13);
 
-        // 臉部
         ctx.fillStyle = '#FED7AA';
         ctx.fillRect(player.x - 6, player.y - 15 + bob, 12, 11);
 
-        // 探險帽
         ctx.fillStyle = '#D97706';
         ctx.fillRect(player.x - 8, player.y - 19 + bob, 16, 5);
         ctx.fillRect(player.x - 5, player.y - 23 + bob, 10, 5);
 
-        // 眼睛
         ctx.fillStyle = '#0F172A';
         if (player.dir === 'down') {{
             ctx.fillRect(player.x - 4, player.y - 11 + bob, 2, 3);
