@@ -9,10 +9,7 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# 2. 外部 3D 虛擬展廳公開網址
-EXHVERSE_PUBLIC_URL = "https://e.fliphtml5.com/huucj/qflj/index.html"
-
-# 3. 結構化深度全球藝術家與雕塑家資料庫
+# 2. 結構化深度全球藝術家與雕塑家資料庫
 ARTISTS_DATABASE = {
     "梵谷": {
         "title": "文森·梵谷 (Vincent van Gogh)",
@@ -121,65 +118,58 @@ ARTISTS_DATABASE = {
     }
 }
 
-# 4. 狀態管理函數
+# 3. 狀態管理函數
 if "current_artist" not in st.session_state:
     st.session_state.current_artist = "梵谷"
 
 def select_artist(name):
     st.session_state.current_artist = name
 
-# 5. 側邊欄：改為正式策展導覽指南與操作手冊（移除重複的名家按鈕）
+# 4. 側邊欄：展覽系統說明與導覽指南
 with st.sidebar:
     st.title("🏛️ 策展導覽台")
-    st.caption("數位虛擬展覽暨知識圖譜系統")
+    st.caption("數位像素美術館 ｜ 互動探索系統")
     
     st.divider()
-    st.subheader("💡 展廳操作指南")
+    st.subheader("🎮 像素小遊戲操控")
     st.markdown("""
-    * **左鍵拖曳**：環顧 3D 展廳 360° 視角
-    * **滾輪滑動**：拉近 / 推遠畫作細節
-    * **W / A / S / D**：於展廳內前後左右漫遊移動
-    * **上方標籤**：一鍵檢索名家脈絡與代表作
+    * **方向鍵**（`↑` `↓` `←` `→`）或 **W / A / S / D**：控制像素小人自由移動
+    * **接近展品**：走到牆上的名畫或雕像展位前
+    * **互動查看**：碰觸展品時會顯示名畫資訊，點擊右方標籤可查看完整人生脈絡
     """)
     
     st.divider()
     st.subheader("📐 系統設計架構")
     st.markdown("""
-    * **視覺引擎**：Exhverse 3D WebGL
+    * **遊戲引擎**：HTML5 Canvas 2D 像素渲染
     * **知識架構**：開放藝術歷史語義圖譜
-    * **UI 框架**：Streamlit 全響應式介面
+    * **UI 框架**：Streamlit 響應式佈局
     """)
-    
-    st.divider()
-    st.markdown("🔗 **外部展廳直通**")
-    st.link_button("🌐 開啟 3D 展廳全螢幕", EXHVERSE_PUBLIC_URL, use_container_width=True)
 
-# 6. 主頁面：自訂藝術風格標題與大字級樣式
+# 5. 主頁面：自訂藝術風格標題與字級樣式
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;900&display=swap');
 
-    /* 頂部主標題 */
     .custom-main-title {
         font-family: 'Noto Serif TC', 'PingFang TC', 'Microsoft JhengHei', serif;
-        font-size: 2.9rem;
+        font-size: 2.8rem;
         font-weight: 900;
-        letter-spacing: 2.5px;
+        letter-spacing: 2px;
         line-height: 1.25;
-        margin-bottom: 0.4rem;
+        margin-bottom: 0.3rem;
         background: linear-gradient(135deg, #E0F7FA 0%, #29B6F6 40%, #0288D1 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         text-shadow: 0px 4px 20px rgba(41, 182, 246, 0.35);
     }
 
-    /* 頂部副標題 */
     .custom-subtitle {
         font-family: 'Noto Serif TC', 'PingFang TC', 'Microsoft JhengHei', serif;
         font-size: 1.15rem;
         color: #B0BEC5;
         letter-spacing: 1.5px;
-        margin-bottom: 1.5rem;
+        margin-bottom: 1.2rem;
     }
     
     .cyan-accent {
@@ -187,36 +177,32 @@ st.markdown("""
         font-weight: bold;
     }
 
-    /* 右側分頁內文放大（一般字體 1.45rem） */
     .stTabs [data-baseweb="tab-panel"] p,
     .stTabs [data-baseweb="tab-panel"] li,
     .stTabs [data-baseweb="tab-panel"] a {
-        font-size: 1.45rem !important;
-        line-height: 2.05 !important;
-        color: #E2E8F0 !important;
-        letter-spacing: 0.5px !important;
-    }
-
-    /* 身份地位藍色資訊框文字 */
-    div[data-testid="stAlert"] p {
         font-size: 1.35rem !important;
-        line-height: 1.8 !important;
+        line-height: 1.95 !important;
+        color: #E2E8F0 !important;
     }
 
-    /* 分段小標題（粗體 1.7rem） */
+    div[data-testid="stAlert"] p {
+        font-size: 1.25rem !important;
+        line-height: 1.7 !important;
+    }
+
     .stTabs [data-baseweb="tab-panel"] h3 {
-        font-size: 1.7rem !important;
+        font-size: 1.6rem !important;
         color: #64B5F6 !important;
-        margin-top: 1.5rem !important;
-        margin-bottom: 0.8rem !important;
+        margin-top: 1.4rem !important;
+        margin-bottom: 0.7rem !important;
     }
 </style>
 
 <div class="custom-main-title">跨時代全球藝術家作品與生命歷程互動圖譜</div>
-<div class="custom-subtitle">痕跡與靈魂 <span class="cyan-accent">｜</span> 整合繪畫、雕塑與生命脈絡的全球藝術開放檢索系統</div>
+<div class="custom-subtitle">痕跡與靈魂 <span class="cyan-accent">｜</span> 結合像素互動探索與多維生命脈絡之開放藝術平台</div>
 """, unsafe_allow_html=True)
 
-# 7. 主頁面：搜尋輸入區與熱門名家標籤
+# 6. 主頁面：搜尋輸入區與熱門名家標籤
 col_search, col_tags = st.columns([2, 3])
 
 with col_search:
@@ -238,17 +224,248 @@ with col_tags:
 
 st.markdown("---")
 
-# 8. 主視覺展示：左右雙欄排版（左：3D 展廳；右：藝術家詳情卡片）
-col_exhibition, col_info = st.columns([3, 2], gap="large")
+# 7. 主視覺展示：左側像素美術館小遊戲；右側藝術家檔案
+col_game, col_info = st.columns([3, 2], gap="large")
 
-with col_exhibition:
-    st.subheader("🏛️ 3D 沉浸式虛擬展廳")
-    st.caption("支援在畫面內直接拖曳視角漫遊體驗")
-    components.iframe(
-        src=EXHVERSE_PUBLIC_URL,
-        height=660,
-        scrolling=True
-    )
+with col_game:
+    st.subheader("🕹️ 像素時空美術館 (Pixel Art Museum)")
+    st.caption("點擊下方遊戲畫面獲取焦點，使用 方向鍵 或 W/A/S/D 漫步參觀展廳！")
+
+    # 內嵌 HTML5 Canvas 像素遊戲
+    pixel_game_html = """
+    <!DOCTYPE html>
+    <html>
+    <head>
+    <meta charset="utf-8">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #0E1117;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Courier New', Courier, monospace;
+            overflow: hidden;
+            user-select: none;
+        }
+        #game-container {
+            position: relative;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.8), 0 0 15px rgba(41, 182, 246, 0.4);
+            border: 3px solid #1E293B;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        canvas {
+            display: block;
+            image-rendering: pixelated;
+        }
+        #hud {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(15, 23, 42, 0.85);
+            color: #38BDF8;
+            padding: 6px 14px;
+            border-radius: 4px;
+            font-size: 13px;
+            border: 1px solid #38BDF8;
+            letter-spacing: 1px;
+            pointer-events: none;
+        }
+        #dialog {
+            position: absolute;
+            bottom: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(15, 23, 42, 0.95);
+            color: #F8FAFC;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-size: 14px;
+            border: 2px solid #F59E0B;
+            display: none;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.6);
+            text-align: center;
+            white-space: nowrap;
+        }
+    </style>
+    </head>
+    <body>
+
+    <div id="game-container">
+        <canvas id="canvas" width="600" height="540"></canvas>
+        <div id="hud">🚶 鍵盤 [↑↓←→] 或 [WASD] 移動探索</div>
+        <div id="dialog">💡 走近展品觸發對話</div>
+    </div>
+
+    <script>
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    const dialog = document.getElementById('dialog');
+
+    // 玩家像素小人
+    const player = {
+        x: 300,
+        y: 420,
+        size: 20,
+        speed: 3.5,
+        color: '#38BDF8',
+        dir: 'down'
+    };
+
+    // 展廳中的展品節點（對應五大名家）
+    const exhibits = [
+        { name: "梵谷", title: "《星夜》展位", color: "#FBBF24", frameColor: "#B45309", x: 100, y: 100, w: 50, h: 60, icon: "🌌" },
+        { name: "達文西", title: "《蒙娜麗莎》展位", color: "#34D399", frameColor: "#047857", x: 230, y: 90, w: 50, h: 60, icon: "🖼️" },
+        { name: "米開朗基羅", title: "《大衛像》展位", color: "#E2E8F0", frameColor: "#64748B", x: 370, y: 90, w: 46, h: 70, icon: "🗿" },
+        { name: "莫內", title: "《睡蓮》展位", color: "#60A5FA", frameColor: "#1D4ED8", x: 500, y: 100, w: 50, h: 60, icon: "🌸" },
+        { name: "畢卡索", title: "《格爾尼卡》立體展位", color: "#F472B6", frameColor: "#BE185D", x: 290, y: 250, w: 60, h: 50, icon: "🧩" }
+    ];
+
+    const keys = {};
+
+    window.addEventListener('keydown', (e) => {
+        if(["ArrowUp","ArrowDown","ArrowLeft","ArrowRight"," "].includes(e.key)) {
+            e.preventDefault();
+        }
+        keys[e.key.toLowerCase()] = true;
+    });
+
+    window.addEventListener('keyup', (e) => {
+        keys[e.key.toLowerCase()] = false;
+    });
+
+    function update() {
+        if (keys['arrowup'] || keys['w']) { player.y -= player.speed; player.dir = 'up'; }
+        if (keys['arrowdown'] || keys['s']) { player.y += player.speed; player.dir = 'down'; }
+        if (keys['arrowleft'] || keys['a']) { player.x -= player.speed; player.dir = 'left'; }
+        if (keys['arrowright'] || keys['d']) { player.x += player.speed; player.dir = 'right'; }
+
+        // 牆壁碰撞邊界
+        player.x = Math.max(35, Math.min(canvas.width - 35, player.x));
+        player.y = Math.max(160, Math.min(canvas.height - 40, player.y));
+
+        // 偵測是否走到展品附近
+        let nearExhibit = null;
+        for (let ex of exhibits) {
+            let dist = Math.hypot((player.x) - (ex.x + ex.w / 2), (player.y) - (ex.y + ex.h / 2));
+            if (dist < 55) {
+                nearExhibit = ex;
+                break;
+            }
+        }
+
+        if (nearExhibit) {
+            dialog.style.display = 'block';
+            dialog.innerHTML = `✨ 正在欣賞：<b>【${nearExhibit.name}】${nearExhibit.title}</b><br><span style="color:#94A3B8; font-size:12px;">👉 點擊右側標籤可檢索生平與傳世全集</span>`;
+        } else {
+            dialog.style.display = 'none';
+        }
+    }
+
+    function drawFloor() {
+        // 復古方格地板
+        const tileSize = 40;
+        for (let x = 0; x < canvas.width; x += tileSize) {
+            for (let y = 140; y < canvas.height; y += tileSize) {
+                ctx.fillStyle = ((x / tileSize + y / tileSize) % 2 === 0) ? '#1E2430' : '#171B24';
+                ctx.fillRect(x, y, tileSize, tileSize);
+            }
+        }
+
+        // 後牆展覽壁面
+        ctx.fillStyle = '#0F172A';
+        ctx.fillRect(0, 0, canvas.width, 140);
+
+        // 踢腳線與紅地毯走道
+        ctx.fillStyle = '#475569';
+        ctx.fillRect(0, 136, canvas.width, 4);
+
+        // 紅地毯走道
+        ctx.fillStyle = '#991B1B';
+        ctx.fillRect(260, 140, 80, canvas.height - 140);
+        ctx.fillStyle = '#F59E0B';
+        ctx.fillRect(258, 140, 2, canvas.height - 140);
+        ctx.fillRect(340, 140, 2, canvas.height - 140);
+    }
+
+    function drawExhibits() {
+        for (let ex of exhibits) {
+            // 畫框陰影
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
+            ctx.fillRect(ex.x + 4, ex.y + 4, ex.w, ex.h);
+
+            // 畫框
+            ctx.fillStyle = ex.frameColor;
+            ctx.fillRect(ex.x, ex.y, ex.w, ex.h);
+
+            // 畫布內容
+            ctx.fillStyle = ex.color;
+            ctx.fillRect(ex.x + 4, ex.y + 4, ex.w - 8, ex.h - 8);
+
+            // 展品圖示
+            ctx.font = '20px Arial';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(ex.icon, ex.x + ex.w / 2, ex.y + ex.h / 2);
+
+            // 銘牌說明
+            ctx.fillStyle = '#F8FAFC';
+            ctx.font = 'bold 11px sans-serif';
+            ctx.fillText(ex.name, ex.x + ex.w / 2, ex.y + ex.h + 14);
+        }
+    }
+
+    function drawPlayer() {
+        // 像素小人陰影
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.35)';
+        ctx.beginPath();
+        ctx.ellipse(player.x, player.y + 12, 10, 5, 0, 0, Math.PI * 2);
+        ctx.fill();
+
+        // 像素小人主體（復古像素風格小法師 / 探險家）
+        // 身體 (披風)
+        ctx.fillStyle = player.color;
+        ctx.fillRect(player.x - 7, player.y - 2, 14, 14);
+
+        // 頭部
+        ctx.fillStyle = '#FDE68A';
+        ctx.fillRect(player.x - 6, player.y - 14, 12, 12);
+
+        // 帽子 / 頭飾
+        ctx.fillStyle = '#1D4ED8';
+        ctx.fillRect(player.x - 8, player.y - 18, 16, 5);
+        ctx.fillRect(player.x - 4, player.y - 23, 8, 5);
+
+        // 眼睛
+        ctx.fillStyle = '#0F172A';
+        if (player.dir === 'down') {
+            ctx.fillRect(player.x - 4, player.y - 10, 2, 3);
+            ctx.fillRect(player.x + 2, player.y - 10, 2, 3);
+        } else if (player.dir === 'left') {
+            ctx.fillRect(player.x - 5, player.y - 10, 2, 3);
+        } else if (player.dir === 'right') {
+            ctx.fillRect(player.x + 3, player.y - 10, 2, 3);
+        }
+    }
+
+    function loop() {
+        update();
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        drawFloor();
+        drawExhibits();
+        drawPlayer();
+        requestAnimationFrame(loop);
+    }
+
+    loop();
+    </script>
+    </body>
+    </html>
+    """
+
+    components.html(pixel_game_html, height=560)
 
 with col_info:
     st.subheader("📖 藝術家脈絡與作品檔案")
@@ -281,5 +498,6 @@ with col_info:
         st.warning(f"目前資料庫中未直接收錄「{st.session_state.current_artist}」")
         st.markdown("""
         > **系統動態檢索機制已啟動：**  
-        > 系統正透過外部開放資料節點進行語義解析，建議您點擊上方熱門名家標籤，或使用標準關鍵字搜尋。
+        > 建議您點擊上方熱門名家標籤，或在左側像素小遊戲中靠近名家展位進行探索。
         """)
+        
