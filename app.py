@@ -2,7 +2,7 @@ import streamlit as st
 import streamlit.components.v1 as components
 import json
 
-# 1. 頁面全域設定：啟用寬版全螢幕模式
+# 1. 頁面全域設定：寬版全螢幕模式
 st.set_page_config(
     page_title="跨時代全球藝術家作品與生命歷程互動圖譜",
     page_icon="🎨",
@@ -10,7 +10,7 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# 2. 結構化深度全球藝術家與雕塑家資料庫
+# 2. 結構化深度全球藝術家與雕塑家資料庫（真跡精確直鏈）
 ARTISTS_DATABASE = {
     "梵谷": {
         "title": "文森·梵谷 (Vincent van Gogh)",
@@ -18,7 +18,8 @@ ARTISTS_DATABASE = {
         "category": "油畫 / 後印象派表現主義",
         "identity": "現代表現主義先驅 ｜ 燃燒靈魂的悲劇巨匠",
         "work_name": "《星夜》 (The Starry Night)",
-        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg/500px-Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg/640px-Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg",
+        "color": "#FBBF24", "frame": "#B45309", "icon": "🌌",
         "quote": "「我夢想著繪畫，然後我畫下了我的夢想。」",
         "extract": (
             "### 📌 坎坷生平與創作狂熱\n\n"
@@ -42,7 +43,8 @@ ARTISTS_DATABASE = {
         "category": "油畫 / 跨學科手稿 / 解剖研究",
         "identity": "文藝復興三傑 ｜ 人類史上最偉大的全才博學大師",
         "work_name": "《蒙娜麗莎》 (Mona Lisa)",
-        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg/500px-Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg/640px-Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg",
+        "color": "#34D399", "frame": "#047857", "icon": "🖼️",
         "quote": "「簡約是細膩的極致。觀察是唯一的智慧泉源。」",
         "extract": (
             "### 📌 托斯卡尼的私生子與全方位的求知狂熱\n\n"
@@ -66,7 +68,8 @@ ARTISTS_DATABASE = {
         "category": "大理石雕塑 / 濕壁畫 / 建築設計",
         "identity": "文藝復興三傑 ｜ 西方雕塑史的不朽神聖巨匠",
         "work_name": "《大衛像》 (David)",
-        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/%27David%27_by_Michelangelo_Fir_JBU005_retouched.jpg/500px-%27David%27_by_Michelangelo_Fir_JBU005_retouched.jpg",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Michelangelo%27s_David_-_waist_up.jpg/640px-Michelangelo%27s_David_-_waist_up.jpg",
+        "color": "#E2E8F0", "frame": "#475569", "icon": "🗿",
         "quote": "「我看見天使在巨石裡，我雕刻直到使他重獲自由。」",
         "extract": (
             "### 📌 雕刻家的靈魂與對石材的虔誠\n\n"
@@ -89,8 +92,9 @@ ARTISTS_DATABASE = {
         "period": "印象派奠基人 (1840–1926)",
         "category": "油畫 / 外光派印象主義",
         "identity": "印象派之父 ｜ 追逐光影與剎那時間的色彩魔法師",
-        "work_name": "《睡蓮》 (Water Lilies)",
-        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Claude_Monet_-_Water_Lilies_-_Google_Art_Project.jpg/500px-Claude_Monet_-_Water_Lilies_-_Google_Art_Project.jpg",
+        "work_name": "《印象·日出》 (Impression, Sunrise)",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Claude_Monet%2C_Impression%2C_soleil_levant.jpg/640px-Claude_Monet%2C_Impression%2C_soleil_levant.jpg",
+        "color": "#60A5FA", "frame": "#1D4ED8", "icon": "🌸",
         "quote": "「世上沒有固定不變的色彩，只有特定瞬間的光線折射。」",
         "extract": (
             "### 📌 外光寫生革命與印象派誕生\n\n"
@@ -113,8 +117,9 @@ ARTISTS_DATABASE = {
         "period": "現代立體派 (1881–1973)",
         "category": "油畫 / 拼貼 / 雕塑 / 現代主義",
         "identity": "立體主義創始人 ｜ 20世紀現代藝術最多產的天才巨擘",
-        "work_name": "《亞維農的少女》 (Les Demoiselles)",
-        "image": "https://upload.wikimedia.org/wikipedia/en/thumb/4/4c/Les_Demoiselles_d%27Avignon.jpg/500px-Les_Demoiselles_d%27Avignon.jpg",
+        "work_name": "《格爾尼卡》 (Guernica)",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Guernica_reproduction_at_the_UN.jpg/640px-Guernica_reproduction_at_the_UN.jpg",
+        "color": "#F472B6", "frame": "#BE185D", "icon": "🧩",
         "quote": "「每個孩子都是藝術家，問題在於長大後如何保持。」",
         "extract": (
             "### 📌 神童早慧與風格變奏\n\n"
@@ -134,7 +139,7 @@ ARTISTS_DATABASE = {
     }
 }
 
-# 3. 狀態管理（初始為空字串，即「等待大廳」狀態）
+# 3. 狀態管理
 if "current_artist" not in st.session_state:
     st.session_state.current_artist = ""
 
@@ -151,19 +156,19 @@ with st.sidebar:
     st.divider()
     
     if st.session_state.current_artist:
-        st.success(f"🎟️ 目前參觀展區：**{st.session_state.current_artist}**")
+        st.success(f"🎟️ 目前參觀：**{st.session_state.current_artist}** 專屬展廳")
         if st.button("🚪 離開展廳，返回接待大廳", use_container_width=True):
             reset_to_lobby()
             st.rerun()
     else:
-        st.info("🛋️ 目前狀態：**接待大廳等待中**\n\n請於上方搜尋或點擊名家標籤領取參觀門票！")
+        st.info("🛋️ 狀態：**接待大廳等待中**\n\n請在上方搜尋或點選標籤領取門票！")
 
     st.divider()
-    st.subheader("🎮 展廳互動指南")
+    st.subheader("🎮 展廳互動模式")
     st.markdown("""
-    * **未搜尋時**：處於「美術館接待大廳」，小人在大廳休息。
-    * **搜尋/點擊標籤後**：啟動專屬展廳，小人步入畫廊參觀！
-    * **操作鍵位**：`↑` `↓` `←` `→` 或 `W / A / S / D` 移動；按 `空白鍵` 查看名畫真跡。
+    * **未搜尋**：停留於接待大廳。
+    * **搜尋人名後**：系統只會開放**該人名的專屬展廊大門**，小人直接走向該門參觀！
+    * **操作鍵位**：`↑` `↓` `←` `→` 或 `W / A / S / D` 移動；按 `空白鍵` 查看真跡代表作。
     """)
 
 # 5. 主標題樣式
@@ -220,7 +225,7 @@ col_search, col_tags = st.columns([2, 3])
 
 with col_search:
     user_input = st.text_input(
-        "🔍 搜尋藝術家（輸入後即刻開啟專屬展廊）：",
+        "🔍 搜尋藝術家（搜尋後只開放該名家專屬大門）：",
         value=st.session_state.current_artist,
         placeholder="請輸入藝術家姓名（例如：梵谷、達文西、米開朗基羅...）"
     )
@@ -229,7 +234,7 @@ with col_search:
         st.rerun()
 
 with col_tags:
-    st.write("✨ **點擊領票參觀：**")
+    st.write("✨ **點選名家直接開啟專屬展廳：**")
     tag_cols = st.columns(len(ARTISTS_DATABASE))
     for i, name in enumerate(ARTISTS_DATABASE.keys()):
         if tag_cols[i].button(name, key=f"tag_btn_{name}", use_container_width=True):
@@ -238,52 +243,49 @@ with col_tags:
 
 st.markdown("---")
 
-# 7. 判斷目前是「大廳等待模式」還是「進入展廊參觀模式」
+# 7. 判斷模式與構建專屬展位資料
 current_query = st.session_state.current_artist.strip()
 is_in_gallery = (current_query != "")
 
-col_game, col_info = st.columns([3, 2], gap="large")
-
-# 建立展廊資料（搜尋特定名家時高亮且居中對齊）
-exhibit_list = []
+# 尋找匹配的藝術家資料
+target_artist_data = None
 for name, d in ARTISTS_DATABASE.items():
-    exhibit_list.append({
-        "name": name,
-        "work": d["work_name"],
-        "period": d["period"],
-        "color": "#FBBF24" if name=="梵谷" else ("#34D399" if name=="達文西" else ("#E2E8F0" if name=="米開朗基羅" else ("#60A5FA" if name=="莫內" else "#F472B6"))),
-        "frame": "#B45309" if name=="梵谷" else ("#047857" if name=="達文西" else ("#475569" if name=="米開朗基羅" else ("#1D4ED8" if name=="莫內" else "#BE185D"))),
-        "icon": "🌌" if name=="梵谷" else ("🖼️" if name=="達文西" else ("🗿" if name=="米開朗基羅" else ("🌸" if name=="莫內" else "🧩"))),
-        "img": d["image"],
-        "quote": d["quote"],
-        "rep": d["representative"].split('\n\n')[0].replace('* ', '')
-    })
+    if current_query and (current_query.lower() in name.lower() or current_query.lower() in d["title"].lower()):
+        target_artist_data = d
+        target_artist_data["matched_name"] = name
+        break
 
-# 若搜尋的是自訂藝術家，動態插入中央展位
-if is_in_gallery and (current_query not in ARTISTS_DATABASE):
-    exhibit_list[2] = {
-        "name": current_query,
-        "work": f"《{current_query} 主題特展》",
+# 如果搜尋自訂未收錄的名家，動態建立特展
+if is_in_gallery and not target_artist_data:
+    target_artist_data = {
+        "matched_name": current_query,
+        "title": f"【{current_query}】主題特展",
         "period": "全球特展策劃中",
+        "category": "跨媒材藝術創作",
+        "identity": "當前特展焦點藝術家",
+        "work_name": f"《{current_query} 代表性創作》",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg/640px-Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg",
         "color": "#A855F7",
         "frame": "#6B21A8",
         "icon": "✨",
-        "img": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg/500px-Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg",
-        "quote": f"「為您特別策劃：【{current_query}】主題展位已佈展完成。」",
-        "rep": "外部開放資料庫即時索引中"
+        "quote": f"「為您特別開放：【{current_query}】專屬展門已就緒。」",
+        "representative": "外部開放資料庫即時索引中",
+        "extract": "系統正透過外部開放資料節點進行語義解析中...",
+        "link": "https://zh.wikipedia.org"
     }
 
-exhibits_json = json.dumps(exhibit_list, ensure_ascii=False)
+exhibit_json = json.dumps(target_artist_data, ensure_ascii=False) if target_artist_data else "{}"
 mode_str = "gallery" if is_in_gallery else "lobby"
-target_artist_name = current_query
+
+col_game, col_info = st.columns([3, 2], gap="large")
 
 with col_game:
     if is_in_gallery:
-        st.subheader(f"🕹️ 像素專屬展廳 ｜ 正在參觀：【{current_query}】")
-        st.caption("點擊下方遊戲畫面，使用 方向鍵 或 W/A/S/D 漫步，走近展品按【空白鍵】欣賞代表作真跡！")
+        st.subheader(f"🕹️ 【{target_artist_data['matched_name']}】專屬展廳大門")
+        st.caption("走進正前方專屬展位，按下【空白鍵 (Space)】欣賞該藝術家傳世真跡！")
     else:
         st.subheader("🛋️ 美術館接待大廳 (Grand Entrance Lobby)")
-        st.caption("點擊下方遊戲畫面，小人可在大廳漫步；請於上方搜尋或點擊標籤以開啟展覽大門！")
+        st.caption("小人目前在接待大廳中；請於上方搜尋或點選名家標籤以開啟專屬展廊！")
 
     pixel_game_html = f"""
     <!DOCTYPE html>
@@ -350,6 +352,7 @@ with col_game:
             from {{ margin-top: 0px; }}
             to {{ margin-top: -6px; }}
         }}
+        /* 彈出卡片 */
         #rpg-modal {{
             position: absolute;
             top: 52%;
@@ -371,8 +374,8 @@ with col_game:
             align-items: center;
         }}
         .modal-img-box {{
-            flex: 0 0 160px;
-            height: 200px;
+            flex: 0 0 170px;
+            height: 220px;
             border-radius: 8px;
             overflow: hidden;
             border: 2px solid #475569;
@@ -380,12 +383,12 @@ with col_game:
             display: flex;
             align-items: center;
             justify-content: center;
-            position: relative;
         }}
         .modal-img-box img {{
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: contain;
+            background: #000;
             display: block;
         }}
         .modal-info {{
@@ -448,7 +451,7 @@ with col_game:
                     <div class="meta-list" id="modal-meta">代表作列表</div>
                 </div>
             </div>
-            <div class="close-hint">按 [Space] 或 任意移動 關閉視窗</div>
+            <div class="close-hint">按 [Space] 或 任意方向鍵 關閉視窗</div>
         </div>
     </div>
 
@@ -460,12 +463,11 @@ with col_game:
     const guide = document.getElementById('guide-bar');
 
     const mode = "{mode_str}";
-    const targetArtist = "{target_artist_name}";
-    const rawExhibits = {exhibits_json};
+    const currentArtist = {exhibit_json};
 
-    // 玩家設定：如果在展廳則從門口步入，如果在大廳則坐在沙發旁
+    // 玩家小人初始位置
     const player = {{
-        x: mode === "gallery" ? 330 : 330,
+        x: 330,
         y: mode === "gallery" ? 440 : 380,
         speed: 3.6,
         dir: 'up',
@@ -473,29 +475,21 @@ with col_game:
     }};
 
     if (mode === "gallery") {{
-        guide.innerHTML = `🚶 [WASD / 方向鍵] 移動 ｜ [Space] 鑑賞【${{targetArtist}}】代表作`;
+        guide.innerHTML = `🚶 [WASD/方向鍵] 移動 ｜ 前方為【${{currentArtist.matched_name}}】專屬展門`;
     }} else {{
-        guide.innerHTML = `🛋️ 接待大廳漫步 ｜ 請於上方搜尋或點選名家領取門票`;
+        guide.innerHTML = `🛋️ 接待大廳漫步 ｜ 請於上方搜尋或點選標籤開啟展門`;
     }}
 
-    // 計算等距展位
-    const count = rawExhibits.length;
-    const itemW = 56;
-    const itemH = 68;
-    const spacing = canvas.width / (count + 1);
-
-    const exhibits = rawExhibits.map((item, index) => {{
-        return {{
-            ...item,
-            w: itemW,
-            h: itemH,
-            x: spacing * (index + 1) - itemW / 2,
-            y: 52
-        }};
-    }});
+    // 單一專屬展門的規格（完全居中放置於 X=330）
+    const singleDoor = {{
+        x: 290,
+        y: 45,
+        w: 80,
+        h: 95
+    }};
 
     const keys = {{}};
-    let currentNear = null;
+    let isNearDoor = false;
     let isModalOpen = false;
 
     window.addEventListener('keydown', (e) => {{
@@ -505,8 +499,8 @@ with col_game:
         keys[e.key.toLowerCase()] = true;
 
         if ((e.key === " " || e.key === "Enter") && mode === "gallery") {{
-            if (currentNear) {{
-                toggleModal(currentNear);
+            if (isNearDoor) {{
+                toggleModal();
             }}
         }}
     }});
@@ -515,22 +509,18 @@ with col_game:
         keys[e.key.toLowerCase()] = false;
     }});
 
-    function toggleModal(ex) {{
+    function toggleModal() {{
         if (isModalOpen) {{
             modal.style.display = 'none';
             isModalOpen = false;
         }} else {{
-            document.getElementById('modal-title').innerHTML = `${{ex.icon}} ${{ex.work}}`;
-            document.getElementById('modal-period').innerText = `【${{ex.name}}】${{ex.period}}`;
-            document.getElementById('modal-quote').innerText = ex.quote;
-            document.getElementById('modal-meta').innerHTML = `<b>代表作：</b>${{ex.rep}}<br><span style="color:#38BDF8; font-weight:bold; margin-top:4px; display:inline-block;">👉 右側已同步載入深度生平檔案</span>`;
+            document.getElementById('modal-title').innerHTML = `${{currentArtist.icon}} ${{currentArtist.work_name}}`;
+            document.getElementById('modal-period').innerText = `【${{currentArtist.matched_name}}】${{currentArtist.period}}`;
+            document.getElementById('modal-quote').innerText = currentArtist.quote;
+            document.getElementById('modal-meta').innerHTML = `<b>代表作品：</b>${{currentArtist.work_name}}<br><span style="color:#38BDF8; font-weight:bold; margin-top:4px; display:inline-block;">👉 右側已同步載入深度生平與完整傳世解析</span>`;
             
             const imgElem = document.getElementById('modal-img');
-            imgElem.src = ex.img;
-            // 雙重防破圖備援
-            imgElem.onerror = function() {{
-                this.src = "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?w=500&auto=format&fit=crop";
-            }};
+            imgElem.src = currentArtist.image;
             
             modal.style.display = 'block';
             isModalOpen = true;
@@ -553,19 +543,14 @@ with col_game:
         }}
 
         player.x = Math.max(30, Math.min(canvas.width - 30, player.x));
-        player.y = Math.max(mode === "gallery" ? 140 : 180, Math.min(canvas.height - 35, player.y));
+        player.y = Math.max(mode === "gallery" ? 145 : 180, Math.min(canvas.height - 35, player.y));
 
         if (mode === "gallery") {{
-            currentNear = null;
-            for (let ex of exhibits) {{
-                let dist = Math.hypot(player.x - (ex.x + ex.w / 2), player.y - (ex.y + ex.h / 2 + 28));
-                if (dist < 52) {{
-                    currentNear = ex;
-                    break;
-                }}
-            }}
+            // 偵測走近單一專屬展門
+            let dist = Math.hypot(player.x - (singleDoor.x + singleDoor.w / 2), player.y - (singleDoor.y + singleDoor.h));
+            isNearDoor = (dist < 60);
 
-            if (currentNear && !isModalOpen) {{
+            if (isNearDoor && !isModalOpen) {{
                 prompt.style.display = 'block';
                 prompt.style.left = player.x + 'px';
                 prompt.style.top = (player.y - 25) + 'px';
@@ -575,19 +560,16 @@ with col_game:
         }}
     }}
 
-    // 繪製接待大廳
+    // 接待大廳繪製
     function drawLobby() {{
-        // 大廳後壁
         ctx.fillStyle = '#0F172A';
         ctx.fillRect(0, 0, canvas.width, 160);
 
-        // 頂部天花板裝飾線
         ctx.fillStyle = '#1E293B';
         ctx.fillRect(0, 0, canvas.width, 18);
         ctx.fillStyle = '#334155';
         ctx.fillRect(0, 156, canvas.width, 4);
 
-        // 典雅迎賓大理石磁磚
         const tileSize = 44;
         for (let x = 0; x < canvas.width; x += tileSize) {{
             for (let y = 160; y < canvas.height; y += tileSize) {{
@@ -596,7 +578,7 @@ with col_game:
             }}
         }}
 
-        // 大廳正中央：迎賓服務櫃台 (Information Desk)
+        // 接待諮詢櫃台
         ctx.fillStyle = '#78350F';
         ctx.fillRect(230, 80, 200, 48);
         ctx.fillStyle = '#B45309';
@@ -606,7 +588,7 @@ with col_game:
         ctx.textAlign = 'center';
         ctx.fillText('🏛️ 美術館接待諮詢處', 330, 108);
 
-        // 兩側裝飾盆栽
+        // 兩側盆栽
         ctx.fillStyle = '#166534';
         ctx.beginPath();
         ctx.arc(80, 130, 24, 0, Math.PI * 2);
@@ -620,25 +602,22 @@ with col_game:
         ctx.fillStyle = '#991B1B';
         ctx.fillRect(80, 260, 40, 90);
         ctx.fillRect(540, 260, 40, 90);
-        ctx.fillStyle = '#B91C1C';
-        ctx.fillRect(76, 260, 8, 90);
-        ctx.fillRect(576, 260, 8, 90);
 
-        // 中央地毯引導進入通道
+        // 引導走道
         ctx.fillStyle = 'rgba(2, 132, 199, 0.25)';
         ctx.fillRect(280, 160, 100, canvas.height - 160);
 
-        // 迎賓引導字樣
+        // 引導字
         ctx.fillStyle = '#38BDF8';
         ctx.font = 'bold 15px sans-serif';
         ctx.textAlign = 'center';
-        ctx.fillText('✨ 請於上方搜尋欄輸入藝術家，或點選標籤開啟專屬展廊 ✨', 330, 220);
+        ctx.fillText('✨ 請於上方輸入藝術家姓名，或點選名家標籤開啟專屬展門 ✨', 330, 220);
         ctx.fillStyle = '#94A3B8';
         ctx.font = '12px sans-serif';
-        ctx.fillText('（小人目前在大廳休憩，領取門票後將即刻啟程參觀）', 330, 245);
+        ctx.fillText('（小人目前在大廳休息，選定後將開啟該藝術家的單一專屬展廳）', 330, 245);
     }}
 
-    // 繪製展覽長廊
+    // 單一名家專屬展廳繪製（只出現這一個人的展廳門與代表作畫框）
     function drawGallery() {{
         ctx.fillStyle = '#0F172A';
         ctx.fillRect(0, 0, canvas.width, 130);
@@ -656,8 +635,8 @@ with col_game:
             }}
         }}
 
-        // 紅地毯走道（寬 110，完全居中）
-        const carpetW = 110;
+        // 紅地毯走道直達正前方專屬大門
+        const carpetW = 120;
         const carpetX = (canvas.width - carpetW) / 2;
         ctx.fillStyle = '#881337';
         ctx.fillRect(carpetX, 132, carpetW, canvas.height - 132);
@@ -666,41 +645,34 @@ with col_game:
         ctx.fillRect(carpetX - 2, 132, 2, canvas.height - 132);
         ctx.fillRect(carpetX + carpetW, 132, 2, canvas.height - 132);
 
-        // 繪製各個展位
-        for (let ex of exhibits) {{
-            const isTarget = (ex.name === targetArtist);
+        // 專屬大門背景聚光燈
+        ctx.fillStyle = 'rgba(250, 204, 21, 0.28)';
+        ctx.beginPath();
+        ctx.arc(330, 85, 75, 0, Math.PI * 2);
+        ctx.fill();
 
-            // 聚光燈圓弧光暈
-            ctx.fillStyle = isTarget ? 'rgba(250, 204, 21, 0.25)' : 'rgba(56, 189, 248, 0.08)';
-            ctx.beginPath();
-            ctx.arc(ex.x + ex.w / 2, ex.y + ex.h / 2 + 10, isTarget ? 45 : 36, 0, Math.PI * 2);
-            ctx.fill();
+        // 繪製【唯一專屬展門】拱門架構
+        ctx.fillStyle = '#78350F';
+        ctx.fillRect(singleDoor.x, singleDoor.y, singleDoor.w, singleDoor.h);
+        ctx.fillStyle = '#D97706';
+        ctx.fillRect(singleDoor.x - 4, singleDoor.y - 4, singleDoor.w + 8, 8); // 門楣
 
-            // 畫框外層陰影
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
-            ctx.fillRect(ex.x + 3, ex.y + 3, ex.w, ex.h);
+        // 門內金色展覽通道
+        ctx.fillStyle = currentArtist.color || '#38BDF8';
+        ctx.fillRect(singleDoor.x + 8, singleDoor.y + 12, singleDoor.w - 16, singleDoor.h - 12);
 
-            // 實木外框
-            ctx.fillStyle = isTarget ? '#F59E0B' : ex.frame;
-            ctx.fillRect(ex.x, ex.y, ex.w, ex.h);
+        // 門內中央代表性標誌圖示
+        ctx.font = '34px Arial';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(currentArtist.icon || '🎨', 330, singleDoor.y + 45);
 
-            // 畫布中央色塊
-            ctx.fillStyle = ex.color;
-            ctx.fillRect(ex.x + 4, ex.y + 4, ex.w - 8, ex.h - 8);
-
-            // 展品圖騰
-            ctx.font = '22px Arial';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.fillText(ex.icon, ex.x + ex.w / 2, ex.y + ex.h / 2);
-
-            // 名牌小底座
-            ctx.fillStyle = isTarget ? '#F59E0B' : '#0284C7';
-            ctx.fillRect(ex.x - 2, ex.y + ex.h + 5, ex.w + 4, 18);
-            ctx.fillStyle = isTarget ? '#0F172A' : '#F8FAFC';
-            ctx.font = 'bold 11px sans-serif';
-            ctx.fillText(ex.name, ex.x + ex.w / 2, ex.y + ex.h + 14);
-        }}
+        // 專屬名家燙金銘牌
+        ctx.fillStyle = '#B45309';
+        ctx.fillRect(singleDoor.x - 14, singleDoor.y + singleDoor.h + 8, singleDoor.w + 28, 26);
+        ctx.fillStyle = '#FEF3C7';
+        ctx.font = 'bold 13px sans-serif';
+        ctx.fillText(`【${{currentArtist.matched_name}}】展廳門`, 330, singleDoor.y + singleDoor.h + 24);
     }}
 
     function drawPlayer() {{
@@ -752,50 +724,34 @@ with col_game:
 
     components.html(pixel_game_html, height=540)
 
-# 右側資訊欄：根據大廳或展覽模式呈現
+# 右側資訊卡片
 with col_info:
-    if is_in_gallery:
+    if is_in_gallery and target_artist_data:
         st.subheader("📖 藝術家脈絡與作品檔案")
-        search_keyword = current_query.lower()
-        target_data = None
+        st.markdown(f"## {target_artist_data['title']}")
+        st.info(f"🏷️ **身份地位：** {target_artist_data['identity']}")
         
-        for name, data in ARTISTS_DATABASE.items():
-            if search_keyword in name.lower() or search_keyword in data["title"].lower():
-                target_data = data
-                break
-        
-        if target_data:
-            st.markdown(f"## {target_data['title']}")
-            st.info(f"🏷️ **身份地位：** {target_data['identity']}")
-            
-            tab1, tab2 = st.tabs(["📜 深度生命脈絡與藝術轉折", "🖼️ 核心傳世代表作解析"])
-            with tab1:
-                st.markdown(target_data["extract"])
-                st.markdown(f"[🔗 前往維基百科閱讀權威典藏文獻]({target_data['link']})")
-            with tab2:
-                st.image(target_data["image"], caption=f"{target_data['title']} 代表作：{target_data['work_name']}", use_container_width=True)
-                st.markdown(target_data["representative"])
-                st.divider()
-                st.markdown(f"""
-                ⏳ **活躍年代：** {target_data['period']}  
-                🎨 **主要媒材：** {target_data['category']}
-                """)
-        else:
-            st.warning(f"目前資料庫中未直接收錄「{st.session_state.current_artist}」")
+        tab1, tab2 = st.tabs(["📜 深度生命脈絡與藝術轉折", "🖼️ 核心傳世代表作解析"])
+        with tab1:
+            st.markdown(target_artist_data["extract"])
+            st.markdown(f"[🔗 前往維基百科閱讀權威典藏文獻]({target_artist_data['link']})")
+        with tab2:
+            st.image(target_artist_data["image"], caption=f"{target_artist_data['title']} 代表作：{target_artist_data['work_name']}", use_container_width=True)
+            st.markdown(target_artist_data["representative"])
+            st.divider()
             st.markdown(f"""
-            > **系統動態特展機制已啟動：**  
-            > 左側美術館中央已為您策劃 **【{st.session_state.current_artist}】** 特展展位！  
-            > 系統正透過外部開放資料節點進行語義解析，建議您點擊上方熱門名家標籤，或使用標準關鍵字搜尋。
+            ⏳ **活躍年代：** {target_artist_data['period']}  
+            🎨 **主要媒材：** {target_data_category if (target_data_category := target_artist_data.get('category')) else '油畫 / 雕塑'}
             """)
     else:
         st.subheader("🏛️ 美術館迎賓服務處")
         st.markdown("""
         ### 歡迎光臨數位像素美術館！
-        本館收錄文藝復興、印象派至現代主義之劃時代藝術大師與雕塑家。
+        本館典藏文藝復興、印象派至現代主義之劃時代藝術大師與雕塑家。
         
         #### 🎫 參觀動線說明：
         1. **領取展覽門票**：請於上方 **「搜尋藝術家」** 輸入人名，或直接點選 **「熱門名家標籤」**。
-        2. **啟程漫遊展廊**：領取門票後，左側展廳將即時敞開大門，像素小人將由迎賓通道步入畫廊參觀！
-        3. **深度互動鑑賞**：使用鍵盤接近畫框並按下 **【空白鍵】**，即可鑑賞高解析代表作真跡並同步解鎖其生平脈絡。
+        2. **啟程漫遊專屬展廳**：領取門票後，左側畫面將只為您開啟該藝術家的**唯一專屬展廊大門**！
+        3. **深度互動鑑賞**：操縱小人走至展門正前方並按下 **【空白鍵 (Space)】**，即可欣賞高解析代表作真跡並同步解鎖其生平脈絡。
         """)
-        st.info("💡 試著點擊上方標籤「**梵谷**」或「**達文西**」，立即開啟展廳體驗！")
+        st.info("💡 試著點擊上方標籤「**梵谷**」、「**米開朗基羅**」或「**莫內**」，立即開啟獨立專屬展廳！")
