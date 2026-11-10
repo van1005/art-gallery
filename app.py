@@ -2,6 +2,7 @@ import streamlit as st
 import streamlit.components.v1 as components
 import json
 
+# 1. 頁面全域設定：寬版全螢幕模式
 st.set_page_config(
     page_title="跨時代全球藝術家作品與生命歷程互動圖譜",
     page_icon="🎨",
@@ -9,7 +10,7 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# 結構化深度全球藝術家與雕塑家資料庫（真實高解析名作典藏圖）
+# 2. 結構化深度全球藝術家與雕塑家資料庫
 ARTISTS_DATABASE = {
     "梵谷": {
         "title": "文森·梵谷 (Vincent van Gogh)",
@@ -132,7 +133,7 @@ ARTISTS_DATABASE = {
             "* **《格爾尼卡》 (Guernica, 1937)**：黑白灰純色調鋪陳的史詩級反戰名作，描繪西班牙內戰平民與動物慘遭轟炸的巨大悲鳴。\n\n"
             "* **《亞維農的少女》 (Les Demoiselles d'Avignon, 1907)**：立體主義開山之作，紐約現代藝術博物館鎮館之寶。\n\n"
             "* **《哭泣的女人》 (The Weeping Woman, 1937)**：以鋒利的立體色塊解構痛苦女性臉龐，展現深刻的精神崩潰感。\n\n"
-            "* **《盲人的晚餐》 (1903)**：早期「藍色時期」代表作，呈現社會邊緣底層人物的蒼涼孤苦。"
+            "* **《盲人的晚餐》 (1903)**：早期「藍色時期代表作，呈現社會邊緣底層人物的蒼涼孤苦。"
         ),
         "link": "https://zh.wikipedia.org/wiki/巴勃罗·毕加索"
     }
@@ -163,14 +164,14 @@ with st.sidebar:
         st.info("🛋️ 狀態：**接待大廳等待中**\n\n請在上方搜尋或點選標籤領取門票！")
 
     st.divider()
-    st.subheader("🎮 展廳互動指南")
+    st.subheader("🎮 展廳互動模式")
     st.markdown("""
-    * **未搜尋**：停留於接待大廳休憩。
-    * **搜尋人名後**：系統只會開放**該名家的專屬展廳大門**，小人走上前即可參觀！
-    * **操作鍵位**：`↑` `↓` `←` `→` 或 `W / A / S / D` 移動；按 `空白鍵` 查看傳世真跡大圖。
+    * **未搜尋**：停留於接待大廳。
+    * **搜尋人名後**：系統只會開放**該名家的專屬展廳大門**，小人直接走向該門參觀！
+    * **操作鍵位**：`↑` `↓` `←` `→` 或 `W / A / S / D` 移動；按 `空白鍵` 觸發展門互動並同步查看右側代表作。
     """)
 
-# 主標題
+# 主標題樣式
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;900&display=swap');
@@ -219,7 +220,7 @@ st.markdown("""
 <div class="custom-subtitle">痕跡與靈魂 <span class="cyan-accent">｜</span> 結合像素互動探索與多維生命脈絡之開放藝術平台</div>
 """, unsafe_allow_html=True)
 
-# 搜尋與標籤
+# 搜尋與標籤區
 col_search, col_tags = st.columns([2, 3])
 
 with col_search:
@@ -278,7 +279,7 @@ col_game, col_info = st.columns([3, 2], gap="large")
 with col_game:
     if is_in_gallery:
         st.subheader(f"🕹️ 【{target_artist_data['matched_name']}】專屬展廳大門")
-        st.caption("走進正前方專屬展位，按下【空白鍵 (Space)】欣賞該藝術家傳世真跡大圖！")
+        st.caption("走進正前方專屬展門，按【空白鍵 (Space)】敲門互動！右側已同步載入高清真跡！")
     else:
         st.subheader("🛋️ 美術館接待大廳 (Grand Entrance Lobby)")
         st.caption("小人目前在接待大廳中；請於上方搜尋或點選名家標籤以開啟專屬展廊！")
@@ -288,7 +289,6 @@ with col_game:
     <html>
     <head>
     <meta charset="utf-8">
-    <meta name="referrer" content="no-referrer">
     <style>
         body {{
             margin: 0;
@@ -348,80 +348,71 @@ with col_game:
             from {{ margin-top: 0px; }}
             to {{ margin-top: -6px; }}
         }}
-        /* 彈出卡片 */
+        /* 展門互動 RPG 卡片 */
         #rpg-modal {{
             position: absolute;
             top: 52%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 530px;
+            width: 480px;
             background: linear-gradient(145deg, #0F172A 0%, #1E293B 100%);
             border: 2px solid #38BDF8;
             box-shadow: 0 18px 45px rgba(0,0,0,0.9), 0 0 25px rgba(56, 189, 248, 0.4);
             border-radius: 12px;
-            padding: 16px 20px;
+            padding: 22px 24px;
             display: none;
             z-index: 100;
             color: #F8FAFC;
         }}
-        .modal-body {{
+        .modal-header {{
             display: flex;
-            gap: 16px;
             align-items: center;
+            gap: 12px;
+            margin-bottom: 8px;
         }}
-        .modal-img-box {{
-            flex: 0 0 180px;
-            height: 220px;
+        .modal-icon {{
+            font-size: 32px;
+            background: rgba(56, 189, 248, 0.15);
+            padding: 6px 12px;
             border-radius: 8px;
-            overflow: hidden;
-            border: 2px solid #475569;
-            background: #000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.6);
+            border: 1px solid #38BDF8;
         }}
-        .modal-img-box img {{
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            display: block;
-        }}
-        .modal-info {{
-            flex: 1;
-        }}
-        .modal-info h3 {{
-            margin: 0 0 4px 0;
+        .modal-header h3 {{
+            margin: 0;
             color: #38BDF8;
-            font-size: 18px;
+            font-size: 20px;
         }}
         .period-tag {{
             display: inline-block;
             background: #0369A1;
             color: #E0F2FE;
-            padding: 2px 8px;
+            padding: 3px 10px;
             border-radius: 4px;
-            font-size: 11px;
-            margin-bottom: 8px;
+            font-size: 12px;
+            margin-top: 4px;
         }}
         .quote {{
             font-style: italic;
             color: #CBD5E1;
-            font-size: 12.5px;
-            line-height: 1.45;
-            background: rgba(0, 0, 0, 0.35);
-            border-left: 3px solid #F59E0B;
-            padding: 6px 10px;
-            margin: 6px 0 8px 0;
-            border-radius: 0 4px 4px 0;
-        }}
-        .meta-list {{
-            font-size: 12px;
-            color: #94A3B8;
+            font-size: 13.5px;
             line-height: 1.5;
+            background: rgba(0, 0, 0, 0.35);
+            border-left: 3.5px solid #F59E0B;
+            padding: 10px 14px;
+            margin: 14px 0;
+            border-radius: 0 6px 6px 0;
+        }}
+        .notice-box {{
+            background: rgba(14, 165, 233, 0.1);
+            border: 1px dashed #38BDF8;
+            border-radius: 6px;
+            padding: 10px 14px;
+            font-size: 13px;
+            color: #E0F2FE;
+            line-height: 1.6;
         }}
         .close-hint {{
-            margin-top: 10px;
+            margin-top: 14px;
             text-align: right;
             font-size: 11px;
             color: #64748B;
@@ -433,19 +424,20 @@ with col_game:
     <div id="game-box">
         <canvas id="gameCanvas" width="660" height="520"></canvas>
         <div id="guide-bar">🚶 [WASD / 方向鍵] 移動</div>
-        <div id="interact-prompt">❗ [空白鍵] 鑑賞代表作</div>
+        <div id="interact-prompt">❗ [空白鍵] 敲門互動</div>
 
         <div id="rpg-modal">
-            <div class="modal-body">
-                <div class="modal-img-box">
-                    <img id="modal-img" src="" alt="館藏名作真跡" referrerpolicy="no-referrer">
-                </div>
-                <div class="modal-info">
-                    <h3 id="modal-title">🎨 作品名稱</h3>
+            <div class="modal-header">
+                <div class="modal-icon" id="modal-icon">🎨</div>
+                <div>
+                    <h3 id="modal-title">作品名稱</h3>
                     <span class="period-tag" id="modal-period">時代時期</span>
-                    <div class="quote" id="modal-quote">經典名言</div>
-                    <div class="meta-list" id="modal-meta">代表作列表</div>
                 </div>
+            </div>
+            <div class="quote" id="modal-quote">經典名言</div>
+            <div class="notice-box" id="modal-notice">
+                🖼️ <b>館藏真跡已同步展示於右方面板：</b><br>
+                請直接瀏覽右側檔案庫查看高畫質真跡畫作與深度生命脈絡！
             </div>
             <div class="close-hint">按 [Space] 或 任意方向鍵 關閉視窗</div>
         </div>
@@ -508,13 +500,10 @@ with col_game:
             modal.style.display = 'none';
             isModalOpen = false;
         }} else {{
-            document.getElementById('modal-title').innerHTML = `${{currentArtist.icon}} ${{currentArtist.work_name}}`;
+            document.getElementById('modal-icon').innerText = currentArtist.icon || '🎨';
+            document.getElementById('modal-title').innerText = `${{currentArtist.work_name}}`;
             document.getElementById('modal-period').innerText = `【${{currentArtist.matched_name}}】${{currentArtist.period}}`;
             document.getElementById('modal-quote').innerText = currentArtist.quote;
-            document.getElementById('modal-meta').innerHTML = `<b>代表作品：</b>${{currentArtist.work_name}}<br><span style="color:#38BDF8; font-weight:bold; margin-top:4px; display:inline-block;">👉 右側已同步載入深度生平與完整傳世解析</span>`;
-            
-            // 載入高清晰真實照片
-            document.getElementById('modal-img').src = currentArtist.image;
             
             modal.style.display = 'block';
             isModalOpen = true;
@@ -704,7 +693,7 @@ with col_game:
 
     components.html(pixel_game_html, height=540)
 
-# 右側資訊卡片
+# 右側資訊卡片（原生 Streamlit image，穩定高解析）
 with col_info:
     if is_in_gallery and target_artist_data:
         st.subheader("📖 藝術家脈絡與作品檔案")
@@ -721,7 +710,7 @@ with col_info:
             st.divider()
             st.markdown(f"""
             ⏳ **活躍年代：** {target_artist_data['period']}  
-            🎨 **主要媒材：** {target_data_category if (target_data_category := target_artist_data.get('category')) else '油畫 / 雕塑'}
+            🎨 **主要媒材：** {target_artist_data.get('category', '油畫 / 雕塑')}
             """)
     else:
         st.subheader("🏛️ 美術館迎賓服務處")
@@ -732,6 +721,6 @@ with col_info:
         #### 🎫 參觀動線說明：
         1. **領取展覽門票**：請於上方 **「搜尋藝術家」** 輸入人名，或直接點選 **「熱門名家標籤」**。
         2. **啟程漫遊專屬展廳**：領取門票後，左側畫面將只為您開啟該藝術家的**唯一專屬展廊大門**！
-        3. **深度互動鑑賞**：操縱小人走至展門正前方並按下 **【空白鍵 (Space)】**，即可欣賞代表作真跡並同步解鎖其生平脈絡。
+        3. **深度互動鑑賞**：操縱小人走至展門正前方並按下 **【空白鍵 (Space)】**，即可敲門解鎖名言，並同步欣賞右側高畫質真跡畫作與生平脈絡。
         """)
         st.info("💡 試著點擊上方標籤「**梵谷**」、「**米開朗基羅**」或「**莫內**」，立即開啟獨立專屬展廳！")
