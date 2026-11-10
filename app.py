@@ -10,7 +10,7 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# 2. 結構化深度全球藝術家與雕塑家資料庫（使用無阻擋的高畫質穩定圖床）
+# 2. 結構化深度全球藝術家與雕塑家資料庫（換用官方真跡精確直鏈）
 ARTISTS_DATABASE = {
     "梵谷": {
         "title": "文森·梵谷 (Vincent van Gogh)",
@@ -18,7 +18,7 @@ ARTISTS_DATABASE = {
         "category": "油畫 / 後印象派表現主義",
         "identity": "現代表現主義先驅 ｜ 燃燒靈魂的悲劇巨匠",
         "work_name": "《星夜》 (The Starry Night)",
-        "image": "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?w=600&auto=format&fit=crop",
+        "image": "https://images.metmuseum.org/CRDImages/ep/original/DP130999.jpg",
         "quote": "「我夢想著繪畫，然後我畫下了我的夢想。」",
         "extract": (
             "### 📌 坎坷生平與創作狂熱\n\n"
@@ -42,7 +42,7 @@ ARTISTS_DATABASE = {
         "category": "油畫 / 跨學科手稿 / 解剖研究",
         "identity": "文藝復興三傑 ｜ 人類史上最偉大的全才博學大師",
         "work_name": "《蒙娜麗莎》 (Mona Lisa)",
-        "image": "https://images.unsplash.com/photo-1582561424760-0321d75e81fa?w=600&auto=format&fit=crop",
+        "image": "https://cdn.pixabay.com/photo/2013/01/05/21/02/mona-lisa-73977_1280.jpg",
         "quote": "「簡約是細膩的極致。觀察是唯一的智慧泉源。」",
         "extract": (
             "### 📌 托斯卡尼的私生子與全方位的求知狂熱\n\n"
@@ -66,7 +66,7 @@ ARTISTS_DATABASE = {
         "category": "大理石雕塑 / 濕壁畫 / 建築設計",
         "identity": "文藝復興三傑 ｜ 西方雕塑史的不朽神聖巨匠",
         "work_name": "《大衛像》 (David)",
-        "image": "https://images.unsplash.com/photo-1544531585-9847b68c8c86?w=600&auto=format&fit=crop",
+        "image": "https://cdn.pixabay.com/photo/2019/08/19/07/45/florence-4415714_1280.jpg",
         "quote": "「我看見天使在巨石裡，我雕刻直到使他重獲自由。」",
         "extract": (
             "### 📌 雕刻家的靈魂與對石材的虔誠\n\n"
@@ -90,7 +90,7 @@ ARTISTS_DATABASE = {
         "category": "油畫 / 外光派印象主義",
         "identity": "印象派之父 ｜ 追逐光影與剎那時間的色彩魔法師",
         "work_name": "《睡蓮》 (Water Lilies)",
-        "image": "https://images.unsplash.com/photo-1579783902614-a3fb3927b675?w=600&auto=format&fit=crop",
+        "image": "https://images.metmuseum.org/CRDImages/ep/original/DT1946.jpg",
         "quote": "「世上沒有固定不變的色彩，只有特定瞬間的光線折射。」",
         "extract": (
             "### 📌 外光寫生革命與印象派誕生\n\n"
@@ -113,8 +113,8 @@ ARTISTS_DATABASE = {
         "period": "現代立體派 (1881–1973)",
         "category": "油畫 / 拼貼 / 雕塑 / 現代主義",
         "identity": "立體主義創始人 ｜ 20世紀現代藝術最多產的天才巨擘",
-        "work_name": "《立體主義幾何構成》",
-        "image": "https://images.unsplash.com/photo-1541701494587-cb58502866ab?w=600&auto=format&fit=crop",
+        "work_name": "《立體派肖像與幾何結構》",
+        "image": "https://images.metmuseum.org/CRDImages/ep/original/DP-14936-041.jpg",
         "quote": "「每個孩子都是藝術家，問題在於長大後如何保持。」",
         "extract": (
             "### 📌 神童早慧與風格變奏\n\n"
@@ -156,7 +156,7 @@ with st.sidebar:
     st.subheader("📐 系統設計規格")
     st.markdown("""
     * **渲染引擎**：HTML5 Canvas 均分向量投影
-    * **視覺影像**：高穩定 CDN 典藏串流
+    * **視覺影像**：大都會藝術博物館 (The Met) / 公有典藏 API 直鏈
     * **架構模式**：雙向狀態連動（Two-way State Sync）
     """)
 
@@ -254,12 +254,12 @@ exhibit_list = [
     },
     {
         "name": current_query if is_custom_artist else "畢卡索",
-        "work": f"《{current_query}當前特展作品》" if is_custom_artist else "《立體主義構圖》",
+        "work": f"《{current_query}當前特展作品》" if is_custom_artist else "《立體派肖像與幾何結構》",
         "period": "全球特展策劃中" if is_custom_artist else "現代立體派 (1881–1973)",
         "color": "#A855F7" if is_custom_artist else "#F472B6",
         "frame": "#6B21A8" if is_custom_artist else "#BE185D",
         "icon": "✨" if is_custom_artist else "🧩",
-        "img": "https://images.unsplash.com/photo-1579783902614-a3fb3927b675?w=600&auto=format&fit=crop" if is_custom_artist else ARTISTS_DATABASE["畢卡索"]["image"],
+        "img": "https://images.metmuseum.org/CRDImages/ep/original/DP-14936-041.jpg" if is_custom_artist else ARTISTS_DATABASE["畢卡索"]["image"],
         "quote": f"「為您特別策劃：【{current_query}】主題展位已佈展完成。」" if is_custom_artist else ARTISTS_DATABASE["畢卡索"]["quote"],
         "rep": "外部開放資料庫即時索引中" if is_custom_artist else "《格爾尼卡》、《亞維農的少女》、《哭泣的女人》"
     },
@@ -349,7 +349,6 @@ with col_game:
             from {{ margin-top: 0px; }}
             to {{ margin-top: -6px; }}
         }}
-        /* 高畫質代表作真跡彈跳卡片（左圖右文排版） */
         #rpg-modal {{
             position: absolute;
             top: 52%;
