@@ -1,6 +1,8 @@
 import streamlit as st
 import streamlit.components.v1 as components
 import json
+import base64
+import os
 
 # 1. 頁面全域設定：寬版全螢幕模式
 st.set_page_config(
@@ -10,7 +12,15 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# 2. 結構化深度資料庫（使用維基媒體權威真實作品標準直鏈）
+# 本地圖片優先轉 Base64 工具（零外部網路依賴、保證不破圖）
+def load_image_as_base64(local_path, fallback_url):
+    if os.path.exists(local_path):
+        with open(local_path, "rb") as f:
+            data = f.read()
+            return f"data:image/jpeg;base64,{base64.b64encode(data).decode('utf-8')}"
+    return fallback_url
+
+# 2. 結構化深度資料庫
 ARTISTS_DATABASE = {
     "梵谷": {
         "title": "文森·梵谷 (Vincent van Gogh)",
@@ -18,7 +28,8 @@ ARTISTS_DATABASE = {
         "category": "油畫 / 後印象派表現主義",
         "identity": "現代表現主義先驅 ｜ 燃燒靈魂的悲劇巨匠",
         "work_name": "《星夜》 (The Starry Night, 1889)",
-        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg/500px-Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg",
+        "local_file": "vangogh.jpg",
+        "fallback_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg/640px-Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg",
         "color": "#FBBF24", "frame": "#B45309", "icon": "🌌",
         "quote": "「我夢想著繪畫，然後我畫下了我的夢想。」",
         "extract": (
@@ -43,7 +54,8 @@ ARTISTS_DATABASE = {
         "category": "油畫 / 跨學科手稿 / 解剖研究",
         "identity": "文藝復興三傑 ｜ 人類史上最偉大的全才博學大師",
         "work_name": "《蒙娜麗莎》 (Mona Lisa, 約1503–1519)",
-        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg/500px-Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg",
+        "local_file": "davinci.jpg",
+        "fallback_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg/640px-Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg",
         "color": "#34D399", "frame": "#047857", "icon": "🖼️",
         "quote": "「簡約是細膩的極致。觀察是唯一的智慧泉源。」",
         "extract": (
@@ -68,7 +80,8 @@ ARTISTS_DATABASE = {
         "category": "大理石雕塑 / 濕壁畫 / 建築設計",
         "identity": "文藝復興三傑 ｜ 西方雕塑史的不朽神聖巨匠",
         "work_name": "《大衛像》 (David, 1501–1504)",
-        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/%27David%27_by_Michelangelo_Fir_JBU005_retouched.jpg/500px-%27David%27_by_Michelangelo_Fir_JBU005_retouched.jpg",
+        "local_file": "david.jpg",
+        "fallback_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/%27David%27_by_Michelangelo_Fir_JBU005_retouched.jpg/640px-%27David%27_by_Michelangelo_Fir_JBU005_retouched.jpg",
         "color": "#E2E8F0", "frame": "#475569", "icon": "🗿",
         "quote": "「我看見天使在巨石裡，我雕刻直到使他重獲自由。」",
         "extract": (
@@ -93,7 +106,8 @@ ARTISTS_DATABASE = {
         "category": "油畫 / 外光派印象主義",
         "identity": "印象派之父 ｜ 追逐光影與剎那時間的色彩魔法師",
         "work_name": "《睡蓮》 (Water Lilies)",
-        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Claude_Monet_-_Water_Lilies_-_Google_Art_Project.jpg/500px-Claude_Monet_-_Water_Lilies_-_Google_Art_Project.jpg",
+        "local_file": "monet.jpg",
+        "fallback_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Claude_Monet_-_Water_Lilies_-_Google_Art_Project.jpg/640px-Claude_Monet_-_Water_Lilies_-_Google_Art_Project.jpg",
         "color": "#60A5FA", "frame": "#1D4ED8", "icon": "🌸",
         "quote": "「世上沒有固定不變的色彩，只有特定瞬間的光線折射。」",
         "extract": (
@@ -117,8 +131,9 @@ ARTISTS_DATABASE = {
         "period": "現代立體派 (1881–1973)",
         "category": "油畫 / 拼貼 / 雕塑 / 現代主義",
         "identity": "立體主義創始人 ｜ 20世紀現代藝術最多產的天才巨擘",
-        "work_name": "《坐著的女人/幾何立體解構》",
-        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Pablo_Picasso%2C_1909-10%2C_Figure_dans_un_Fauteuil_%28Seated_Nude%2C_Femme_assise%29%2C_oil_on_canvas%2C_92.1_x_73_cm%2C_Tate_Modern%2C_London.jpg/500px-Pablo_Picasso%2C_1909-10%2C_Figure_dans_un_Fauteuil_%28Seated_Nude%2C_Femme_assise%29%2C_oil_on_canvas%2C_92.1_x_73_cm%2C_Tate_Modern%2C_London.jpg",
+        "work_name": "《格爾尼卡》 (Guernica, 1937)",
+        "local_file": "picasso.jpg",
+        "fallback_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Guernica_reproduction_at_the_UN.jpg/640px-Guernica_reproduction_at_the_UN.jpg",
         "color": "#F472B6", "frame": "#BE185D", "icon": "🧩",
         "quote": "「每個孩子都是藝術家，問題在於長大後如何保持。」",
         "extract": (
@@ -164,11 +179,11 @@ with st.sidebar:
         st.info("🛋️ 狀態：**接待大廳等待中**\n\n請在上方搜尋或點選標籤領取門票！")
 
     st.divider()
-    st.subheader("🎮 展廳互動模式")
+    st.subheader("🎮 展廳互動指南")
     st.markdown("""
-    * **未搜尋**：停留於接待大廳。
+    * **未搜尋**：停留於接待大廳休憩。
     * **搜尋人名後**：只開放**該名家的專屬展廳大門**，小人直接走向該門參觀！
-    * **操作鍵位**：`↑` `↓` `←` `→` 或 `W / A / S / D` 移動；按 `空白鍵` 即可在跳出視窗中鑑賞代表作真跡照片！
+    * **操作鍵位**：`↑` `↓` `←` `→` 或 `W / A / S / D` 移動；按 `空白鍵` 查看代表作真跡照片！
     """)
 
 # 5. 主標題樣式
@@ -261,7 +276,8 @@ if is_in_gallery and not target_artist_data:
         "category": "跨媒材藝術創作",
         "identity": "當前特展焦點藝術家",
         "work_name": f"《{current_query} 特展創作》",
-        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg/500px-Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg",
+        "local_file": "custom.jpg",
+        "fallback_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg/640px-Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg",
         "color": "#A855F7",
         "frame": "#6B21A8",
         "icon": "✨",
@@ -270,6 +286,13 @@ if is_in_gallery and not target_artist_data:
         "extract": "系統正透過外部開放資料節點進行語義解析中...",
         "link": "https://zh.wikipedia.org"
     }
+
+# 取得最終真跡圖片字串（若有本地上傳圖片則直接轉 Base64 嵌入）
+if target_artist_data:
+    target_artist_data["active_image"] = load_image_as_base64(
+        target_artist_data.get("local_file", ""),
+        target_artist_data.get("fallback_url", "")
+    )
 
 exhibit_json = json.dumps(target_artist_data, ensure_ascii=False) if target_artist_data else "{}"
 mode_str = "gallery" if is_in_gallery else "lobby"
@@ -284,7 +307,6 @@ with col_game:
         st.subheader("🛋️ 美術館接待大廳 (Grand Entrance Lobby)")
         st.caption("小人目前在接待大廳中；請於上方搜尋或點選名家標籤以開啟專屬展廊！")
 
-    # 關鍵：加上 <meta name="referrer" content="no-referrer">，徹底解鎖維基媒體公有領域真實名畫真跡
     pixel_game_html = f"""
     <!DOCTYPE html>
     <html>
@@ -379,6 +401,9 @@ with col_game:
             border: 2px solid #475569;
             background: #000;
             box-shadow: 0 4px 15px rgba(0,0,0,0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }}
         .modal-img-box img {{
             width: 100%;
@@ -512,8 +537,8 @@ with col_game:
             document.getElementById('modal-quote').innerText = currentArtist.quote;
             document.getElementById('modal-meta').innerHTML = `<b>傳世特色：</b>${{currentArtist.work_name}}<br><span style="color:#38BDF8; font-weight:bold; margin-top:4px; display:inline-block;">👉 右側已同步載入深度生平與完整傳世解析</span>`;
             
-            // 彈出視窗直接注入真實名作圖片，受 no-referrer 保護順暢載入
-            document.getElementById('modal-img').src = currentArtist.image;
+            // 彈出視窗注入真跡照片（本地 Base64 或有效直連）
+            document.getElementById('modal-img').src = currentArtist.active_image;
             
             modal.style.display = 'block';
             isModalOpen = true;
@@ -703,16 +728,15 @@ with col_game:
 
     components.html(pixel_game_html, height=540)
 
-# 7. 右側資訊欄：透過 HTML 標籤加入 referrerpolicy="no-referrer"，確保維基真跡大圖百分之百顯示
+# 7. 右側資訊欄
 with col_info:
     if is_in_gallery and target_artist_data:
         st.subheader(f"🖼️ 【{target_artist_data['matched_name']}】代表作解析")
         
-        # 使用自帶 no-referrer 的 HTML 渲染，繞過 Streamlit 伺服器端請求限制，直接由瀏覽器載入
         st.markdown(
             f"""
             <div style="text-align: center; margin-bottom: 12px;">
-                <img src="{target_artist_data['image']}" referrerpolicy="no-referrer" style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.5);">
+                <img src="{target_artist_data['active_image']}" referrerpolicy="no-referrer" style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.5);">
                 <div style="font-size: 13px; color: #94A3B8; margin-top: 6px;">傳世代表作真跡：{target_artist_data['work_name']}</div>
             </div>
             """,
