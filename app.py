@@ -1,8 +1,6 @@
 import streamlit as st
 import streamlit.components.v1 as components
 import json
-import base64
-import urllib.request
 
 # 1. 頁面全域設定：寬版全螢幕模式
 st.set_page_config(
@@ -12,7 +10,7 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# 2. 結構化深度資料庫（真實名作公有領域標準來源）
+# 2. 結構化深度資料庫（透過全球無防盜鏈代理載入真正的博物館真跡）
 ARTISTS_DATABASE = {
     "梵谷": {
         "title": "文森·梵谷 (Vincent van Gogh)",
@@ -20,7 +18,7 @@ ARTISTS_DATABASE = {
         "category": "油畫 / 後印象派表現主義",
         "identity": "現代表現主義先驅 ｜ 燃燒靈魂的悲劇巨匠",
         "work_name": "《星夜》 (The Starry Night)",
-        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg/640px-Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg",
+        "image": "https://wsrv.nl/?url=upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg/640px-Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg",
         "color": "#FBBF24", "frame": "#B45309", "icon": "🌌",
         "quote": "「我夢想著繪畫，然後我畫下了我的夢想。」",
         "extract": (
@@ -45,7 +43,7 @@ ARTISTS_DATABASE = {
         "category": "油畫 / 跨學科手稿 / 解剖研究",
         "identity": "文藝復興三傑 ｜ 人類史上最偉大的全才博學大師",
         "work_name": "《蒙娜麗莎》 (Mona Lisa)",
-        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg/640px-Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg",
+        "image": "https://wsrv.nl/?url=upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg/640px-Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg",
         "color": "#34D399", "frame": "#047857", "icon": "🖼️",
         "quote": "「簡約是細膩的極致。觀察是唯一的智慧泉源。」",
         "extract": (
@@ -70,7 +68,7 @@ ARTISTS_DATABASE = {
         "category": "大理石雕塑 / 濕壁畫 / 建築設計",
         "identity": "文藝復興三傑 ｜ 西方雕塑史的不朽神聖巨匠",
         "work_name": "《大衛像》 (David)",
-        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Michelangelo%27s_David_-_waist_up.jpg/640px-Michelangelo%27s_David_-_waist_up.jpg",
+        "image": "https://wsrv.nl/?url=upload.wikimedia.org/wikipedia/commons/thumb/8/80/Michelangelo%27s_David_-_waist_up.jpg/640px-Michelangelo%27s_David_-_waist_up.jpg",
         "color": "#E2E8F0", "frame": "#475569", "icon": "🗿",
         "quote": "「我看見天使在巨石裡，我雕刻直到使他重獲自由。」",
         "extract": (
@@ -95,7 +93,7 @@ ARTISTS_DATABASE = {
         "category": "油畫 / 外光派印象主義",
         "identity": "印象派之父 ｜ 追逐光影與剎那時間的色彩魔法師",
         "work_name": "《睡蓮》 (Water Lilies)",
-        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Claude_Monet_-_Water_Lilies_-_Google_Art_Project.jpg/640px-Claude_Monet_-_Water_Lilies_-_Google_Art_Project.jpg",
+        "image": "https://wsrv.nl/?url=upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Claude_Monet_-_Water_Lilies_-_Google_Art_Project.jpg/640px-Claude_Monet_-_Water_Lilies_-_Google_Art_Project.jpg",
         "color": "#60A5FA", "frame": "#1D4ED8", "icon": "🌸",
         "quote": "「世上沒有固定不變的色彩，只有特定瞬間的光線折射。」",
         "extract": (
@@ -119,8 +117,8 @@ ARTISTS_DATABASE = {
         "period": "現代立體派 (1881–1973)",
         "category": "油畫 / 拼貼 / 雕塑 / 現代主義",
         "identity": "立體主義創始人 ｜ 20世紀現代藝術最多產的天才巨擘",
-        "work_name": "《坐著的女人/幾何立體解構》",
-        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Pablo_Picasso%2C_1909-10%2C_Figure_dans_un_Fauteuil_%28Seated_Nude%2C_Femme_assise%29%2C_oil_on_canvas%2C_92.1_x_73_cm%2C_Tate_Modern%2C_London.jpg/640px-Pablo_Picasso%2C_1909-10%2C_Figure_dans_un_Fauteuil_%28Seated_Nude%2C_Femme_assise%29%2C_oil_on_canvas%2C_92.1_x_73_cm%2C_Tate_Modern%2C_London.jpg",
+        "work_name": "《格爾尼卡》 (Guernica)",
+        "image": "https://wsrv.nl/?url=upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Guernica_reproduction_at_the_UN.jpg/640px-Guernica_reproduction_at_the_UN.jpg",
         "color": "#F472B6", "frame": "#BE185D", "icon": "🧩",
         "quote": "「每個孩子都是藝術家，問題在於長大後如何保持。」",
         "extract": (
@@ -141,21 +139,7 @@ ARTISTS_DATABASE = {
     }
 }
 
-# 3. 核心工具：後端快取下載並轉 Base64（完全免疫 iframe 跨來源阻擋）
-@st.cache_data(show_spinner=False)
-def get_image_base64(url):
-    try:
-        req = urllib.request.Request(
-            url, 
-            headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'}
-        )
-        with urllib.request.urlopen(req, timeout=5) as resp:
-            data = resp.read()
-            return f"data:image/jpeg;base64,{base64.b64encode(data).decode('utf-8')}"
-    except Exception:
-        return url
-
-# 4. 狀態管理
+# 3. 狀態管理
 if "current_artist" not in st.session_state:
     st.session_state.current_artist = ""
 
@@ -165,7 +149,7 @@ def select_artist(name):
 def reset_to_lobby():
     st.session_state.current_artist = ""
 
-# 5. 側邊欄
+# 4. 側邊欄
 with st.sidebar:
     st.title("🏛️ 策展導覽台")
     st.caption("數位像素美術館 ｜ 互動探索系統")
@@ -180,14 +164,14 @@ with st.sidebar:
         st.info("🛋️ 狀態：**接待大廳等待中**\n\n請在上方搜尋或點選標籤領取門票！")
 
     st.divider()
-    st.subheader("🎮 展廳互動模式")
+    st.subheader("🎮 展廳互動指南")
     st.markdown("""
     * **未搜尋**：停留於接待大廳休憩。
-    * **搜尋人名後**：系統只開放**該名家的專屬展廳大門**，小人直接走向該門參觀！
+    * **搜尋人名後**：系統只會開放**該名家的專屬展廳大門**，小人直接走向該門參觀！
     * **操作鍵位**：`↑` `↓` `←` `→` 或 `W / A / S / D` 移動；按 `空白鍵` 查看真跡大圖與名言。
     """)
 
-# 6. 主標題樣式
+# 5. 主標題樣式
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;900&display=swap');
@@ -236,7 +220,7 @@ st.markdown("""
 <div class="custom-subtitle">痕跡與靈魂 <span class="cyan-accent">｜</span> 結合像素互動探索與多維生命脈絡之開放藝術平台</div>
 """, unsafe_allow_html=True)
 
-# 7. 搜尋與標籤
+# 6. 搜尋與標籤區
 col_search, col_tags = st.columns([2, 3])
 
 with col_search:
@@ -277,7 +261,7 @@ if is_in_gallery and not target_artist_data:
         "category": "跨媒材藝術創作",
         "identity": "當前特展焦點藝術家",
         "work_name": f"《{current_query} 特展創作》",
-        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg/640px-Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg",
+        "image": "https://wsrv.nl/?url=upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg/640px-Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg",
         "color": "#A855F7",
         "frame": "#6B21A8",
         "icon": "✨",
@@ -286,10 +270,6 @@ if is_in_gallery and not target_artist_data:
         "extract": "系統正透過外部開放資料節點進行語義解析中...",
         "link": "https://zh.wikipedia.org"
     }
-
-# 將真實作品圖片轉換成 Base64 嵌入（徹底根絕破圖與阻擋）
-if target_artist_data:
-    target_artist_data["base64_img"] = get_image_base64(target_artist_data["image_url"])
 
 exhibit_json = json.dumps(target_artist_data, ensure_ascii=False) if target_artist_data else "{}"
 mode_str = "gallery" if is_in_gallery else "lobby"
@@ -533,8 +513,8 @@ with col_game:
             document.getElementById('modal-quote').innerText = currentArtist.quote;
             document.getElementById('modal-meta').innerHTML = `<b>代表作：</b>${{currentArtist.work_name}}<br><span style="color:#38BDF8; font-weight:bold; margin-top:4px; display:inline-block;">👉 右側已同步載入深度生平與完整傳世解析</span>`;
             
-            // 直接以 Base64 資料載入真實真跡照片，完全無跨域阻擋問題
-            document.getElementById('modal-img').src = currentArtist.base64_img || currentArtist.image_url;
+            // 透過無防盜鏈限制之開源 CDN 直發真實名作
+            document.getElementById('modal-img').src = currentArtist.image;
             
             modal.style.display = 'block';
             isModalOpen = true;
@@ -724,7 +704,7 @@ with col_game:
 
     components.html(pixel_game_html, height=540)
 
-# 右側資訊卡片
+# 8. 右側資訊卡片
 with col_info:
     if is_in_gallery and target_artist_data:
         st.subheader("📖 藝術家脈絡與作品檔案")
@@ -736,7 +716,7 @@ with col_info:
             st.markdown(target_artist_data["extract"])
             st.markdown(f"[🔗 前往維基百科閱讀權威典藏文獻]({target_artist_data['link']})")
         with tab2:
-            st.image(target_artist_data["image_url"], caption=f"{target_artist_data['title']} 代表作：{target_artist_data['work_name']}", use_container_width=True)
+            st.image(target_artist_data["image"], caption=f"{target_artist_data['title']} 代表作：{target_artist_data['work_name']}", use_container_width=True)
             st.markdown(target_artist_data["representative"])
             st.divider()
             st.markdown(f"""
