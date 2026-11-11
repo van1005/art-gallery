@@ -207,43 +207,43 @@ with st.sidebar:
     st.divider()
     st.subheader("🎮 展廳互動指南")
     st.markdown("""
-    * **未搜尋**：漫步於歐式實木接待大廳。
+    * **未搜尋**：漫步於古典實木接待大廳。
     * **搜尋人名後**：只開放**該名家的專屬復古展廳拱門**！
     * **操作鍵位**：`↑` `↓` `←` `→` 或 `W / A / S / D` 移動；按 `空白鍵` 查看真實代表作真跡！
     """)
 
-# 5. 主標題樣式（古典優雅襯線體）
+# 5. 主標題樣式（維持藍色調，加深為沉穩深藍色系）
 st.markdown("""
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Noto+Serif+TC:wght@600;900&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;900&display=swap');
 
     .custom-main-title {
-        font-family: 'Cinzel', 'Noto Serif TC', serif;
+        font-family: 'Noto Serif TC', 'PingFang TC', 'Microsoft JhengHei', serif;
         font-size: 2.7rem;
         font-weight: 900;
         letter-spacing: 2px;
         line-height: 1.25;
         margin-bottom: 0.3rem;
-        background: linear-gradient(135deg, #FFF6E9 0%, #D4AF37 45%, #AA771C 100%);
+        background: linear-gradient(135deg, #7DD3FC 0%, #0284C7 35%, #0369A1 70%, #0C4A6E 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
-        text-shadow: 0px 4px 20px rgba(212, 175, 55, 0.35);
+        text-shadow: 0px 4px 18px rgba(3, 105, 161, 0.45);
     }
     .custom-subtitle {
-        font-family: 'Noto Serif TC', serif;
+        font-family: 'Noto Serif TC', 'PingFang TC', 'Microsoft JhengHei', serif;
         font-size: 1.1rem;
-        color: #CBB9A1;
+        color: #94A3B8;
         letter-spacing: 1.5px;
         margin-bottom: 1.2rem;
     }
-    .gold-accent { color: #D4AF37; font-weight: bold; }
+    .blue-accent { color: #38BDF8; font-weight: bold; }
 
     .stTabs [data-baseweb="tab-panel"] p,
     .stTabs [data-baseweb="tab-panel"] li,
     .stTabs [data-baseweb="tab-panel"] a {
         font-size: 1.35rem !important;
         line-height: 1.95 !important;
-        color: #E6DFD5 !important;
+        color: #E2E8F0 !important;
     }
     div[data-testid="stAlert"] p {
         font-size: 1.25rem !important;
@@ -251,14 +251,14 @@ st.markdown("""
     }
     .stTabs [data-baseweb="tab-panel"] h3 {
         font-size: 1.6rem !important;
-        color: #E2B755 !important;
+        color: #38BDF8 !important;
         margin-top: 1.4rem !important;
         margin-bottom: 0.7rem !important;
     }
 </style>
 
 <div class="custom-main-title">跨時代全球藝術家作品與生命歷程互動圖譜</div>
-<div class="custom-subtitle">痕跡與靈魂 <span class="gold-accent">｜</span> 結合像素古典漫遊與多維生命脈絡之開放藝術平台</div>
+<div class="custom-subtitle">痕跡與靈魂 <span class="blue-accent">｜</span> 結合像素古典漫遊與多維生命脈絡之開放藝術平台</div>
 """, unsafe_allow_html=True)
 
 # 6. 搜尋與標籤區
@@ -313,7 +313,7 @@ with col_game:
         st.subheader(f"🏛️ 【{target_artist_data['matched_name']}】專屬古典展廳大門")
         st.caption("操縱紳士漫步至正前方古典拱門，按【空白鍵 (Space)】鑑賞真實館藏代表作！")
     else:
-        st.subheader("🛋️ 歐式實木接待大廳 (Grand Entrance Lobby)")
+        st.subheader("🛋️ 古典實木接待大廳 (Grand Entrance Lobby)")
         st.caption("紳士漫步於古典實木大廳中；請於上方搜尋或點選名家標籤以開啟專屬展廊！")
 
     pixel_game_html = f"""
@@ -330,7 +330,7 @@ with col_game:
             display: flex;
             justify-content: center;
             align-items: center;
-            font-family: 'Cinzel', 'Noto Serif TC', serif;
+            font-family: 'Noto Serif TC', serif;
             overflow: hidden;
             user-select: none;
         }}
@@ -338,7 +338,7 @@ with col_game:
             position: relative;
             width: 660px;
             height: 520px;
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.95), 0 0 25px rgba(212, 175, 55, 0.3);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.95), 0 0 25px rgba(2, 132, 199, 0.35);
             border: 3px solid #5C3A21;
             border-radius: 10px;
             overflow: hidden;
@@ -353,11 +353,11 @@ with col_game:
             top: 12px;
             left: 12px;
             background: rgba(26, 18, 11, 0.95);
-            color: #E2B755;
+            color: #38BDF8;
             padding: 6px 14px;
             border-radius: 6px;
             font-size: 12px;
-            border: 1px solid #8B5A2B;
+            border: 1px solid #0284C7;
             pointer-events: none;
             letter-spacing: 0.5px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.6);
@@ -367,7 +367,7 @@ with col_game:
             display: none;
             color: #FFF6E9;
             background: rgba(46, 26, 14, 0.96);
-            border: 1.5px solid #D4AF37;
+            border: 1.5px solid #0284C7;
             padding: 5px 12px;
             border-radius: 20px;
             font-size: 12px;
@@ -390,8 +390,8 @@ with col_game:
             transform: translate(-50%, -50%);
             width: 560px;
             background: linear-gradient(145deg, #1A120B 0%, #2A1A10 100%);
-            border: 2px solid #D4AF37;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.98), 0 0 25px rgba(212, 175, 55, 0.4);
+            border: 2px solid #0284C7;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.98), 0 0 25px rgba(2, 132, 199, 0.4);
             border-radius: 12px;
             padding: 16px 20px;
             display: none;
@@ -426,26 +426,26 @@ with col_game:
         }}
         .modal-info h3 {{
             margin: 0 0 4px 0;
-            color: #D4AF37;
+            color: #38BDF8;
             font-size: 18px;
         }}
         .period-tag {{
             display: inline-block;
             background: #5C3A21;
-            color: #FEE7B0;
+            color: #E0F2FE;
             padding: 2px 8px;
             border-radius: 4px;
             font-size: 11px;
             margin-bottom: 8px;
-            border: 1px solid #8B5A2B;
+            border: 1px solid #0284C7;
         }}
         .quote {{
             font-style: italic;
-            color: #E6DFD5;
+            color: #E2E8F0;
             font-size: 12.5px;
             line-height: 1.45;
             background: rgba(0, 0, 0, 0.45);
-            border-left: 3.5px solid #D4AF37;
+            border-left: 3.5px solid #0284C7;
             padding: 6px 10px;
             margin: 6px 0 8px 0;
             border-radius: 0 4px 4px 0;
@@ -458,7 +458,7 @@ with col_game:
         .nav-btn {{
             background: #5C3A21;
             color: #FFF6E9;
-            border: 1px solid #D4AF37;
+            border: 1px solid #0284C7;
             padding: 4px 8px;
             font-size: 11px;
             border-radius: 4px;
@@ -466,14 +466,14 @@ with col_game:
             transition: all 0.2s;
         }}
         .nav-btn:hover {{
-            background: #D4AF37;
-            color: #1A120B;
+            background: #0284C7;
+            color: #FFFFFF;
         }}
         .close-hint {{
             margin-top: 10px;
             text-align: right;
             font-size: 11px;
-            color: #A38F7A;
+            color: #94A3B8;
         }}
     </style>
     </head>
@@ -522,7 +522,7 @@ with col_game:
     if (mode === "gallery") {{
         guide.innerHTML = `🚶 [WASD / 方向鍵] 紳士漫步 ｜ 前方為【${{currentArtist.matched_name}}】古典拱門`;
     }} else {{
-        guide.innerHTML = `🛋️ 歐式接待大廳 ｜ 請於上方搜尋或點選名家領取門票`;
+        guide.innerHTML = `🛋️ 古典接待大廳 ｜ 請於上方搜尋或點選名家領取門票`;
     }}
 
     const singleDoor = {{
@@ -627,17 +627,17 @@ with col_game:
         }}
     }}
 
-    // 繪製歐式古典實木接待大廳
+    // 繪製古典實木接待大廳（無「歐式」字樣）
     function drawLobby() {{
-        // 古典英倫墨綠牆面
+        // 古典沉穩深綠牆面
         ctx.fillStyle = '#162820';
         ctx.fillRect(0, 0, canvas.width, 160);
 
-        // 天花板雕花與實木踢腳線
+        // 天花板飾線與實木踢腳線
         ctx.fillStyle = '#422817';
         ctx.fillRect(0, 0, canvas.width, 16);
-        ctx.fillStyle = '#D4AF37';
-        ctx.fillRect(0, 16, canvas.width, 3);
+        ctx.fillStyle = '#0284C7';
+        ctx.fillRect(0, 16, canvas.width, 2.5);
         ctx.fillStyle = '#2A180D';
         ctx.fillRect(0, 156, canvas.width, 4);
 
@@ -655,12 +655,12 @@ with col_game:
         ctx.fillRect(230, 80, 200, 48);
         ctx.fillStyle = '#8B5A2B';
         ctx.fillRect(226, 76, 208, 8);
-        ctx.fillStyle = '#D4AF37';
+        ctx.fillStyle = '#0284C7';
         ctx.fillRect(226, 84, 208, 2);
         ctx.fillStyle = '#FFF6E9';
         ctx.font = 'bold 13px serif';
         ctx.textAlign = 'center';
-        ctx.fillText('🏛️ 歐式古典接待諮詢處', 330, 108);
+        ctx.fillText('🏛️ 美術館接待諮詢處', 330, 108);
 
         // 典雅復古盆栽
         ctx.fillStyle = '#1B4D3E';
@@ -676,32 +676,32 @@ with col_game:
         ctx.fillStyle = '#5C1D24';
         ctx.fillRect(80, 260, 40, 90);
         ctx.fillRect(540, 260, 40, 90);
-        ctx.fillStyle = '#D4AF37';
-        ctx.fillRect(76, 260, 4, 90);
-        ctx.fillRect(580, 260, 4, 90);
+        ctx.fillStyle = '#0284C7';
+        ctx.fillRect(76, 260, 3, 90);
+        ctx.fillRect(580, 260, 3, 90);
 
-        // 中央古典金色導引道
-        ctx.fillStyle = 'rgba(212, 175, 55, 0.15)';
+        // 中央典雅導引道
+        ctx.fillStyle = 'rgba(2, 132, 199, 0.15)';
         ctx.fillRect(280, 160, 100, canvas.height - 160);
 
-        ctx.fillStyle = '#E2B755';
+        ctx.fillStyle = '#38BDF8';
         ctx.font = 'bold 15px serif';
         ctx.textAlign = 'center';
         ctx.fillText('✨ 請於上方搜尋藝術家，或點選名家標籤開啟專屬拱門 ✨', 330, 220);
-        ctx.fillStyle = '#CBB9A1';
+        ctx.fillStyle = '#94A3B8';
         ctx.font = '12px serif';
         ctx.fillText('（紳士目前在大廳休憩，領取門票後將步入專屬展廳）', 330, 245);
     }}
 
-    // 繪製歐式古典木質展覽長廊
+    // 繪製古典木質展覽長廊
     function drawGallery() {{
-        // 古典英倫墨綠牆面
+        // 古典沉穩深綠牆面
         ctx.fillStyle = '#162820';
         ctx.fillRect(0, 0, canvas.width, 130);
 
         ctx.fillStyle = '#422817';
         ctx.fillRect(0, 0, canvas.width, 14);
-        ctx.fillStyle = '#D4AF37';
+        ctx.fillStyle = '#0284C7';
         ctx.fillRect(0, 14, canvas.width, 2);
         ctx.fillStyle = '#2A180D';
         ctx.fillRect(0, 126, canvas.width, 6);
@@ -721,13 +721,13 @@ with col_game:
         ctx.fillStyle = '#5C1D24';
         ctx.fillRect(carpetX, 132, carpetW, canvas.height - 132);
 
-        // 兩側雕花金邊
-        ctx.fillStyle = '#D4AF37';
-        ctx.fillRect(carpetX - 3, 132, 3, canvas.height - 132);
-        ctx.fillRect(carpetX + carpetW, 132, 3, canvas.height - 132);
+        // 兩側飾邊
+        ctx.fillStyle = '#0284C7';
+        ctx.fillRect(carpetX - 2.5, 132, 2.5, canvas.height - 132);
+        ctx.fillRect(carpetX + carpetW, 132, 2.5, canvas.height - 132);
 
-        // 暖黃聚光燈光暈
-        ctx.fillStyle = 'rgba(212, 175, 55, 0.22)';
+        // 柔和聚光燈光暈
+        ctx.fillStyle = 'rgba(2, 132, 199, 0.2)';
         ctx.beginPath();
         ctx.arc(330, 85, 80, 0, Math.PI * 2);
         ctx.fill();
@@ -735,10 +735,10 @@ with col_game:
         // 古典實木雕花大門拱框
         ctx.fillStyle = '#4A2E1B';
         ctx.fillRect(singleDoor.x, singleDoor.y, singleDoor.w, singleDoor.h);
-        ctx.fillStyle = '#D4AF37';
+        ctx.fillStyle = '#0284C7';
         ctx.fillRect(singleDoor.x - 4, singleDoor.y - 4, singleDoor.w + 8, 8);
 
-        // 門扉中央貴族色塊
+        // 門扉中央色塊
         ctx.fillStyle = '#2A1A10';
         ctx.fillRect(singleDoor.x + 8, singleDoor.y + 12, singleDoor.w - 16, singleDoor.h - 12);
 
@@ -747,10 +747,10 @@ with col_game:
         ctx.textBaseline = 'middle';
         ctx.fillText(currentArtist.icon || '🎨', 330, singleDoor.y + 45);
 
-        // 燙金銘牌
+        // 復古銘牌
         ctx.fillStyle = '#8B5A2B';
         ctx.fillRect(singleDoor.x - 14, singleDoor.y + singleDoor.h + 8, singleDoor.w + 28, 26);
-        ctx.strokeStyle = '#D4AF37';
+        ctx.strokeStyle = '#0284C7';
         ctx.lineWidth = 1.5;
         ctx.strokeRect(singleDoor.x - 14, singleDoor.y + singleDoor.h + 8, singleDoor.w + 28, 26);
         
@@ -759,7 +759,7 @@ with col_game:
         ctx.fillText(`【${{currentArtist.matched_name}}】展廳門`, 330, singleDoor.y + singleDoor.h + 24);
     }}
 
-    // 繪製穿著19世紀歐洲紳士燕尾服的小人（含高頂禮帽與領結）
+    // 繪製身著19世紀古典禮服的像素紳士
     function drawPlayer() {{
         // 地面柔和陰影
         ctx.fillStyle = 'rgba(0, 0, 0, 0.55)';
@@ -774,31 +774,28 @@ with col_game:
         ctx.fillRect(player.x - 6, player.y + 3 + bob, 5, 9);
         ctx.fillRect(player.x + 1, player.y + 3 + bob, 5, 9);
 
-        // 2. 歐洲深藍黑色燕尾禮服大衣 (Tailcoat / Frock Coat)
+        // 2. 深藍黑色雙排扣燕尾禮服大衣
         ctx.fillStyle = '#1E293B';
         ctx.fillRect(player.x - 7, player.y - 6 + bob, 14, 11);
 
-        // 3. 象牙白襯衫前襟與酒紅小領結 (White Shirt & Bowtie)
+        // 3. 象牙白襯衫前襟與酒紅小領結
         ctx.fillStyle = '#F8FAFC';
         ctx.fillRect(player.x - 2, player.y - 6 + bob, 4, 6);
-        ctx.fillStyle = '#991B1B'; // 酒紅小領結
+        ctx.fillStyle = '#991B1B';
         ctx.fillRect(player.x - 2, player.y - 6 + bob, 4, 2);
 
         // 4. 臉部膚色
         ctx.fillStyle = '#FED7AA';
         ctx.fillRect(player.x - 5, player.y - 15 + bob, 10, 9);
 
-        // 5. 歐洲紳士高頂禮帽 (Victorian Top Hat)
-        // 禮帽帽簷
+        // 5. 古典紳士高頂禮帽
         ctx.fillStyle = '#0F172A';
         ctx.fillRect(player.x - 9, player.y - 18 + bob, 18, 3);
-        // 禮帽帽身
         ctx.fillRect(player.x - 6, player.y - 27 + bob, 12, 10);
-        // 禮帽紅色緞帶飾圈
-        ctx.fillStyle = '#881337';
+        ctx.fillStyle = '#881337'; // 禮帽暗紅緞帶
         ctx.fillRect(player.x - 6, player.y - 20 + bob, 12, 2.5);
 
-        // 6. 紳士眼睛視向
+        // 6. 眼神朝向
         ctx.fillStyle = '#1A120B';
         if (player.dir === 'down') {{
             ctx.fillRect(player.x - 3, player.y - 11 + bob, 2, 2.5);
@@ -830,7 +827,7 @@ with col_game:
 
     components.html(pixel_game_html, height=540)
 
-# 7. 右側資訊欄：完整展示這三件真實作品大圖與解析
+# 7. 右側資訊欄
 with col_info:
     if is_in_gallery and target_artist_data:
         st.subheader(f"🖼️ 【{target_artist_data['matched_name']}】代表作全覽")
@@ -844,9 +841,9 @@ with col_info:
                     st.markdown(
                         f"""
                         <div style="text-align: center; margin-bottom: 10px;">
-                            <img src="{art['b64']}" style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.6); border: 2px solid #8B5A2B;">
+                            <img src="{art['b64']}" style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.6); border: 2px solid #5C3A21;">
                             <div style="font-size: 13.5px; color: #FFF6E9; margin-top: 6px; font-weight: bold;">{art['name']}</div>
-                            <div style="font-size: 12.5px; color: #CBB9A1; margin-top: 3px;">{art['desc']}</div>
+                            <div style="font-size: 12.5px; color: #94A3B8; margin-top: 3px;">{art['desc']}</div>
                         </div>
                         """,
                         unsafe_allow_html=True
@@ -867,7 +864,7 @@ with col_info:
             🎨 **主要媒材：** {target_artist_data.get('category', '油畫 / 雕塑')}
             """)
     else:
-        st.subheader("🏛️ 歐式美術館迎賓服務處")
+        st.subheader("🏛️ 美術館迎賓服務處")
         st.markdown("""
         ### 歡迎光臨跨時代數位美術館！
         本館典藏文藝復興、印象派至現代主義之劃時代藝術大師與雕塑家。
