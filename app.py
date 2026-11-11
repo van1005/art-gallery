@@ -10,7 +10,7 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# 2. 結構化深度資料庫（修正所有有效維基真實代表作檔案路徑）
+# 2. 結構化深度資料庫（使用維基媒體權威真實作品標準直鏈）
 ARTISTS_DATABASE = {
     "梵谷": {
         "title": "文森·梵谷 (Vincent van Gogh)",
@@ -18,7 +18,7 @@ ARTISTS_DATABASE = {
         "category": "油畫 / 後印象派表現主義",
         "identity": "現代表現主義先驅 ｜ 燃燒靈魂的悲劇巨匠",
         "work_name": "《星夜》 (The Starry Night, 1889)",
-        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg/640px-Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg/500px-Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg",
         "color": "#FBBF24", "frame": "#B45309", "icon": "🌌",
         "quote": "「我夢想著繪畫，然後我畫下了我的夢想。」",
         "extract": (
@@ -43,7 +43,7 @@ ARTISTS_DATABASE = {
         "category": "油畫 / 跨學科手稿 / 解剖研究",
         "identity": "文藝復興三傑 ｜ 人類史上最偉大的全才博學大師",
         "work_name": "《蒙娜麗莎》 (Mona Lisa, 約1503–1519)",
-        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg/640px-Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg/500px-Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg",
         "color": "#34D399", "frame": "#047857", "icon": "🖼️",
         "quote": "「簡約是細膩的極致。觀察是唯一的智慧泉源。」",
         "extract": (
@@ -68,7 +68,7 @@ ARTISTS_DATABASE = {
         "category": "大理石雕塑 / 濕壁畫 / 建築設計",
         "identity": "文藝復興三傑 ｜ 西方雕塑史的不朽神聖巨匠",
         "work_name": "《大衛像》 (David, 1501–1504)",
-        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Michelangelo%27s_David_-_right_view_2.jpg/640px-Michelangelo%27s_David_-_right_view_2.jpg",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/%27David%27_by_Michelangelo_Fir_JBU005_retouched.jpg/500px-%27David%27_by_Michelangelo_Fir_JBU005_retouched.jpg",
         "color": "#E2E8F0", "frame": "#475569", "icon": "🗿",
         "quote": "「我看見天使在巨石裡，我雕刻直到使他重獲自由。」",
         "extract": (
@@ -92,8 +92,8 @@ ARTISTS_DATABASE = {
         "period": "印象派奠基人 (1840–1926)",
         "category": "油畫 / 外光派印象主義",
         "identity": "印象派之父 ｜ 追逐光影與剎那時間的色彩魔法師",
-        "work_name": "《睡蓮》 (Water Lilies, 1916)",
-        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Claude_Monet_-_Water_Lilies_-_Google_Art_Project.jpg/640px-Claude_Monet_-_Water_Lilies_-_Google_Art_Project.jpg",
+        "work_name": "《睡蓮》 (Water Lilies)",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Claude_Monet_-_Water_Lilies_-_Google_Art_Project.jpg/500px-Claude_Monet_-_Water_Lilies_-_Google_Art_Project.jpg",
         "color": "#60A5FA", "frame": "#1D4ED8", "icon": "🌸",
         "quote": "「世上沒有固定不變的色彩，只有特定瞬間的光線折射。」",
         "extract": (
@@ -117,8 +117,8 @@ ARTISTS_DATABASE = {
         "period": "現代立體派 (1881–1973)",
         "category": "油畫 / 拼貼 / 雕塑 / 現代主義",
         "identity": "立體主義創始人 ｜ 20世紀現代藝術最多產的天才巨擘",
-        "work_name": "《亞維農的少女》 (Les Demoiselles d'Avignon, 1907)",
-        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Guernica_reproduction_at_the_UN.jpg/640px-Guernica_reproduction_at_the_UN.jpg",
+        "work_name": "《坐著的女人/幾何立體解構》",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Pablo_Picasso%2C_1909-10%2C_Figure_dans_un_Fauteuil_%28Seated_Nude%2C_Femme_assise%29%2C_oil_on_canvas%2C_92.1_x_73_cm%2C_Tate_Modern%2C_London.jpg/500px-Pablo_Picasso%2C_1909-10%2C_Figure_dans_un_Fauteuil_%28Seated_Nude%2C_Femme_assise%29%2C_oil_on_canvas%2C_92.1_x_73_cm%2C_Tate_Modern%2C_London.jpg",
         "color": "#F472B6", "frame": "#BE185D", "icon": "🧩",
         "quote": "「每個孩子都是藝術家，問題在於長大後如何保持。」",
         "extract": (
@@ -164,10 +164,10 @@ with st.sidebar:
         st.info("🛋️ 狀態：**接待大廳等待中**\n\n請在上方搜尋或點選標籤領取門票！")
 
     st.divider()
-    st.subheader("🎮 展廳互動指南")
+    st.subheader("🎮 展廳互動模式")
     st.markdown("""
-    * **未搜尋**：停留於接待大廳休憩。
-    * **搜尋人名後**：系統只會開放**該名家的專屬展廳大門**，小人直接走向該門參觀！
+    * **未搜尋**：停留於接待大廳。
+    * **搜尋人名後**：只開放**該名家的專屬展廳大門**，小人直接走向該門參觀！
     * **操作鍵位**：`↑` `↓` `←` `→` 或 `W / A / S / D` 移動；按 `空白鍵` 即可在跳出視窗中鑑賞代表作真跡照片！
     """)
 
@@ -261,7 +261,7 @@ if is_in_gallery and not target_artist_data:
         "category": "跨媒材藝術創作",
         "identity": "當前特展焦點藝術家",
         "work_name": f"《{current_query} 特展創作》",
-        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg/640px-Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg/500px-Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg",
         "color": "#A855F7",
         "frame": "#6B21A8",
         "icon": "✨",
@@ -284,6 +284,7 @@ with col_game:
         st.subheader("🛋️ 美術館接待大廳 (Grand Entrance Lobby)")
         st.caption("小人目前在接待大廳中；請於上方搜尋或點選名家標籤以開啟專屬展廊！")
 
+    # 關鍵：加上 <meta name="referrer" content="no-referrer">，徹底解鎖維基媒體公有領域真實名畫真跡
     pixel_game_html = f"""
     <!DOCTYPE html>
     <html>
@@ -511,7 +512,7 @@ with col_game:
             document.getElementById('modal-quote').innerText = currentArtist.quote;
             document.getElementById('modal-meta').innerHTML = `<b>傳世特色：</b>${{currentArtist.work_name}}<br><span style="color:#38BDF8; font-weight:bold; margin-top:4px; display:inline-block;">👉 右側已同步載入深度生平與完整傳世解析</span>`;
             
-            // 彈出視窗直接注入正確真跡圖片網址
+            // 彈出視窗直接注入真實名作圖片，受 no-referrer 保護順暢載入
             document.getElementById('modal-img').src = currentArtist.image;
             
             modal.style.display = 'block';
@@ -702,11 +703,12 @@ with col_game:
 
     components.html(pixel_game_html, height=540)
 
-# 7. 右側資訊欄：加上 referrerpolicy="no-referrer" 直出維基真跡，左右同步完全正常顯示
+# 7. 右側資訊欄：透過 HTML 標籤加入 referrerpolicy="no-referrer"，確保維基真跡大圖百分之百顯示
 with col_info:
     if is_in_gallery and target_artist_data:
         st.subheader(f"🖼️ 【{target_artist_data['matched_name']}】代表作解析")
         
+        # 使用自帶 no-referrer 的 HTML 渲染，繞過 Streamlit 伺服器端請求限制，直接由瀏覽器載入
         st.markdown(
             f"""
             <div style="text-align: center; margin-bottom: 12px;">
@@ -742,4 +744,4 @@ with col_info:
         2. **啟程漫遊專屬展廳**：領取門票後，左側畫面將只為您開啟該藝術家的**唯一專屬展廊大門**！
         3. **深度互動鑑賞**：操縱小人走至展門正前方並按下 **【空白鍵 (Space)】**，即可在跳出的卡片中欣賞真實代表作真跡照片並同步解鎖其生平脈絡。
         """)
-        st.info("💡 試著點擊上方標籤「**達文西**」、「**梵谷**」、「**米開朗基羅**」、「**莫內**」或「**畢卡索**」，立即開啟獨立專屬展廳！")
+        st.info("💡 試著點擊上方標籤「**達文西**」、「**梵谷**」或「**米開朗基羅**」，立即開啟獨立專屬展廳！")
