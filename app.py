@@ -10,15 +10,15 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# 2. 結構化深度資料庫（透過全球無防盜鏈代理載入真正的博物館真跡）
+# 2. 結構化深度資料庫（維基媒體官方原生直連真實真跡）
 ARTISTS_DATABASE = {
     "梵谷": {
         "title": "文森·梵谷 (Vincent van Gogh)",
         "period": "後印象派 (1853–1890)",
         "category": "油畫 / 後印象派表現主義",
         "identity": "現代表現主義先驅 ｜ 燃燒靈魂的悲劇巨匠",
-        "work_name": "《星夜》 (The Starry Night)",
-        "image": "https://wsrv.nl/?url=upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg/640px-Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg",
+        "work_name": "《星夜》 (The Starry Night, 1889)",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg/800px-Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg",
         "color": "#FBBF24", "frame": "#B45309", "icon": "🌌",
         "quote": "「我夢想著繪畫，然後我畫下了我的夢想。」",
         "extract": (
@@ -42,8 +42,8 @@ ARTISTS_DATABASE = {
         "period": "文藝復興全盛期 (1452–1519)",
         "category": "油畫 / 跨學科手稿 / 解剖研究",
         "identity": "文藝復興三傑 ｜ 人類史上最偉大的全才博學大師",
-        "work_name": "《蒙娜麗莎》 (Mona Lisa)",
-        "image": "https://wsrv.nl/?url=upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg/640px-Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg",
+        "work_name": "《蒙娜麗莎》 (Mona Lisa, 約1503–1519)",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg/640px-Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg",
         "color": "#34D399", "frame": "#047857", "icon": "🖼️",
         "quote": "「簡約是細膩的極致。觀察是唯一的智慧泉源。」",
         "extract": (
@@ -67,8 +67,8 @@ ARTISTS_DATABASE = {
         "period": "文藝復興全盛期 (1475–1564)",
         "category": "大理石雕塑 / 濕壁畫 / 建築設計",
         "identity": "文藝復興三傑 ｜ 西方雕塑史的不朽神聖巨匠",
-        "work_name": "《大衛像》 (David)",
-        "image": "https://wsrv.nl/?url=upload.wikimedia.org/wikipedia/commons/thumb/8/80/Michelangelo%27s_David_-_waist_up.jpg/640px-Michelangelo%27s_David_-_waist_up.jpg",
+        "work_name": "《大衛像》 (David, 1501–1504)",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Michelangelo%27s_David_-_waist_up.jpg/640px-Michelangelo%27s_David_-_waist_up.jpg",
         "color": "#E2E8F0", "frame": "#475569", "icon": "🗿",
         "quote": "「我看見天使在巨石裡，我雕刻直到使他重獲自由。」",
         "extract": (
@@ -92,8 +92,8 @@ ARTISTS_DATABASE = {
         "period": "印象派奠基人 (1840–1926)",
         "category": "油畫 / 外光派印象主義",
         "identity": "印象派之父 ｜ 追逐光影與剎那時間的色彩魔法師",
-        "work_name": "《睡蓮》 (Water Lilies)",
-        "image": "https://wsrv.nl/?url=upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Claude_Monet_-_Water_Lilies_-_Google_Art_Project.jpg/640px-Claude_Monet_-_Water_Lilies_-_Google_Art_Project.jpg",
+        "work_name": "《睡蓮池》 (Water Lilies, 1919)",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Claude_Monet_-_Water_Lilies_-_Google_Art_Project.jpg/640px-Claude_Monet_-_Water_Lilies_-_Google_Art_Project.jpg",
         "color": "#60A5FA", "frame": "#1D4ED8", "icon": "🌸",
         "quote": "「世上沒有固定不變的色彩，只有特定瞬間的光線折射。」",
         "extract": (
@@ -117,8 +117,8 @@ ARTISTS_DATABASE = {
         "period": "現代立體派 (1881–1973)",
         "category": "油畫 / 拼貼 / 雕塑 / 現代主義",
         "identity": "立體主義創始人 ｜ 20世紀現代藝術最多產的天才巨擘",
-        "work_name": "《格爾尼卡》 (Guernica)",
-        "image": "https://wsrv.nl/?url=upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Guernica_reproduction_at_the_UN.jpg/640px-Guernica_reproduction_at_the_UN.jpg",
+        "work_name": "《格爾尼卡》 (Guernica, 1937)",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Guernica_reproduction_at_the_UN.jpg/640px-Guernica_reproduction_at_the_UN.jpg",
         "color": "#F472B6", "frame": "#BE185D", "icon": "🧩",
         "quote": "「每個孩子都是藝術家，問題在於長大後如何保持。」",
         "extract": (
@@ -168,7 +168,7 @@ with st.sidebar:
     st.markdown("""
     * **未搜尋**：停留於接待大廳休憩。
     * **搜尋人名後**：系統只會開放**該名家的專屬展廳大門**，小人直接走向該門參觀！
-    * **操作鍵位**：`↑` `↓` `←` `→` 或 `W / A / S / D` 移動；按 `空白鍵` 查看真跡大圖與名言。
+    * **操作鍵位**：`↑` `↓` `←` `→` 或 `W / A / S / D` 移動；按 `空白鍵` 觸發展門互動並同步點亮右側真跡！
     """)
 
 # 5. 主標題樣式
@@ -261,7 +261,7 @@ if is_in_gallery and not target_artist_data:
         "category": "跨媒材藝術創作",
         "identity": "當前特展焦點藝術家",
         "work_name": f"《{current_query} 特展創作》",
-        "image": "https://wsrv.nl/?url=upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg/640px-Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg/640px-Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg",
         "color": "#A855F7",
         "frame": "#6B21A8",
         "icon": "✨",
@@ -279,7 +279,7 @@ col_game, col_info = st.columns([3, 2], gap="large")
 with col_game:
     if is_in_gallery:
         st.subheader(f"🕹️ 【{target_artist_data['matched_name']}】專屬展廳大門")
-        st.caption("走進正前方專屬展位，按下【空白鍵 (Space)】欣賞該藝術家傳世真跡大圖！")
+        st.caption("走進正前方專屬展門，按【空白鍵 (Space)】敲門互動！右側即刻鎖定高畫質真跡！")
     else:
         st.subheader("🛋️ 美術館接待大廳 (Grand Entrance Lobby)")
         st.caption("小人目前在接待大廳中；請於上方搜尋或點選名家標籤以開啟專屬展廊！")
@@ -348,80 +348,71 @@ with col_game:
             from {{ margin-top: 0px; }}
             to {{ margin-top: -6px; }}
         }}
-        /* 真實代表作彈跳卡片（左側真跡圖片 + 右側資訊） */
+        /* 展門互動 RPG 燙金銘牌卡片（不含易被阻擋之 img，純原生 CSS 呈現） */
         #rpg-modal {{
             position: absolute;
             top: 52%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 550px;
+            width: 480px;
             background: linear-gradient(145deg, #0F172A 0%, #1E293B 100%);
             border: 2px solid #38BDF8;
-            box-shadow: 0 18px 45px rgba(0,0,0,0.9), 0 0 25px rgba(56, 189, 248, 0.4);
+            box-shadow: 0 18px 45px rgba(0,0,0,0.95), 0 0 25px rgba(56, 189, 248, 0.4);
             border-radius: 12px;
-            padding: 18px 20px;
+            padding: 22px 24px;
             display: none;
             z-index: 100;
             color: #F8FAFC;
         }}
-        .modal-body {{
-            display: flex;
-            gap: 16px;
-            align-items: center;
-        }}
-        .modal-img-box {{
-            flex: 0 0 190px;
-            height: 230px;
-            border-radius: 8px;
-            overflow: hidden;
-            border: 2px solid #475569;
-            background: #000;
+        .modal-header {{
             display: flex;
             align-items: center;
-            justify-content: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.6);
+            gap: 12px;
+            margin-bottom: 10px;
         }}
-        .modal-img-box img {{
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
+        .modal-icon {{
+            font-size: 34px;
+            background: rgba(56, 189, 248, 0.15);
+            padding: 8px 14px;
+            border-radius: 10px;
+            border: 1.5px solid #38BDF8;
         }}
-        .modal-info {{
-            flex: 1;
-        }}
-        .modal-info h3 {{
-            margin: 0 0 4px 0;
+        .modal-header h3 {{
+            margin: 0;
             color: #38BDF8;
-            font-size: 18px;
+            font-size: 21px;
         }}
         .period-tag {{
             display: inline-block;
             background: #0369A1;
             color: #E0F2FE;
-            padding: 2px 8px;
+            padding: 3px 10px;
             border-radius: 4px;
-            font-size: 11px;
-            margin-bottom: 8px;
+            font-size: 12px;
+            margin-top: 4px;
         }}
         .quote {{
             font-style: italic;
             color: #CBD5E1;
-            font-size: 12.5px;
-            line-height: 1.45;
-            background: rgba(0, 0, 0, 0.35);
-            border-left: 3px solid #F59E0B;
-            padding: 6px 10px;
-            margin: 6px 0 8px 0;
-            border-radius: 0 4px 4px 0;
-        }}
-        .meta-list {{
-            font-size: 12px;
-            color: #94A3B8;
+            font-size: 13.5px;
             line-height: 1.5;
+            background: rgba(0, 0, 0, 0.35);
+            border-left: 3.5px solid #F59E0B;
+            padding: 10px 14px;
+            margin: 14px 0;
+            border-radius: 0 6px 6px 0;
+        }}
+        .notice-box {{
+            background: rgba(14, 165, 233, 0.12);
+            border: 1px dashed #38BDF8;
+            border-radius: 8px;
+            padding: 12px 14px;
+            font-size: 13.5px;
+            color: #E0F2FE;
+            line-height: 1.6;
         }}
         .close-hint {{
-            margin-top: 10px;
+            margin-top: 14px;
             text-align: right;
             font-size: 11px;
             color: #64748B;
@@ -433,19 +424,20 @@ with col_game:
     <div id="game-box">
         <canvas id="gameCanvas" width="660" height="520"></canvas>
         <div id="guide-bar">🚶 [WASD / 方向鍵] 移動</div>
-        <div id="interact-prompt">❗ [空白鍵] 鑑賞代表作真跡</div>
+        <div id="interact-prompt">❗ [空白鍵] 敲門互動</div>
 
         <div id="rpg-modal">
-            <div class="modal-body">
-                <div class="modal-img-box">
-                    <img id="modal-img" src="" alt="真實代表作真跡">
-                </div>
-                <div class="modal-info">
-                    <h3 id="modal-title">🎨 作品名稱</h3>
+            <div class="modal-header">
+                <div class="modal-icon" id="modal-icon">🎨</div>
+                <div>
+                    <h3 id="modal-title">作品名稱</h3>
                     <span class="period-tag" id="modal-period">時代時期</span>
-                    <div class="quote" id="modal-quote">經典名言</div>
-                    <div class="meta-list" id="modal-meta">代表作列表</div>
                 </div>
+            </div>
+            <div class="quote" id="modal-quote">經典名言</div>
+            <div class="notice-box">
+                🖼️ <b>館藏真跡畫作與完整解析：</b><br>
+                請看右側面板，已為您直接展示<b>高解析度真跡大圖</b>與生平脈絡！
             </div>
             <div class="close-hint">按 [Space] 或 任意方向鍵 關閉視窗</div>
         </div>
@@ -508,13 +500,10 @@ with col_game:
             modal.style.display = 'none';
             isModalOpen = false;
         }} else {{
-            document.getElementById('modal-title').innerHTML = `${{currentArtist.icon}} ${{currentArtist.work_name}}`;
+            document.getElementById('modal-icon').innerText = currentArtist.icon || '🎨';
+            document.getElementById('modal-title').innerText = `${{currentArtist.work_name}}`;
             document.getElementById('modal-period').innerText = `【${{currentArtist.matched_name}}】${{currentArtist.period}}`;
             document.getElementById('modal-quote').innerText = currentArtist.quote;
-            document.getElementById('modal-meta').innerHTML = `<b>代表作：</b>${{currentArtist.work_name}}<br><span style="color:#38BDF8; font-weight:bold; margin-top:4px; display:inline-block;">👉 右側已同步載入深度生平與完整傳世解析</span>`;
-            
-            // 透過無防盜鏈限制之開源 CDN 直發真實名作
-            document.getElementById('modal-img').src = currentArtist.image;
             
             modal.style.display = 'block';
             isModalOpen = true;
@@ -704,19 +693,26 @@ with col_game:
 
     components.html(pixel_game_html, height=540)
 
-# 8. 右側資訊卡片
+# 8. 右側資訊欄：直接置頂真實真跡大圖，不再破圖！
 with col_info:
     if is_in_gallery and target_artist_data:
-        st.subheader("📖 藝術家脈絡與作品檔案")
-        st.markdown(f"## {target_artist_data['title']}")
+        st.subheader(f"🖼️ 【{target_artist_data['matched_name']}】館藏真實真跡")
+        
+        # 1. 這裡使用 Streamlit 原生 Python 渲染，百分之百穩定顯示真實真跡！
+        st.image(
+            target_artist_data["image"], 
+            caption=f"傳世代表真跡：{target_artist_data['work_name']}", 
+            use_container_width=True
+        )
+        
+        st.markdown(f"### {target_artist_data['title']}")
         st.info(f"🏷️ **身份地位：** {target_artist_data['identity']}")
         
-        tab1, tab2 = st.tabs(["📜 深度生命脈絡與藝術轉折", "🖼️ 核心傳世代表作解析"])
+        tab1, tab2 = st.tabs(["📜 深度生命脈絡與轉折", "🎨 傳世代表作解析與媒材"])
         with tab1:
             st.markdown(target_artist_data["extract"])
             st.markdown(f"[🔗 前往維基百科閱讀權威典藏文獻]({target_artist_data['link']})")
         with tab2:
-            st.image(target_artist_data["image"], caption=f"{target_artist_data['title']} 代表作：{target_artist_data['work_name']}", use_container_width=True)
             st.markdown(target_artist_data["representative"])
             st.divider()
             st.markdown(f"""
