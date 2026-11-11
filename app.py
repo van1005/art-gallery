@@ -12,15 +12,21 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# 本地圖片優先轉 Base64 工具（零外部網路依賴、保證不破圖）
-def load_image_as_base64(local_path, fallback_url):
-    if os.path.exists(local_path):
-        with open(local_path, "rb") as f:
-            data = f.read()
-            return f"data:image/jpeg;base64,{base64.b64encode(data).decode('utf-8')}"
+# 本地圖片轉 Base64 工具（直接讀取 GitHub 根目錄檔案，徹底避免跨域阻擋）
+def load_image_as_base64(local_files, fallback_url):
+    if isinstance(local_files, str):
+        local_files = [local_files]
+    for filename in local_files:
+        if os.path.exists(filename):
+            try:
+                with open(filename, "rb") as f:
+                    data = f.read()
+                    return f"data:image/jpeg;base64,{base64.b64encode(data).decode('utf-8')}"
+            except Exception:
+                pass
     return fallback_url
 
-# 2. 結構化深度資料庫
+# 2. 結構化深度資料庫（直接對齊 GitHub 上的實際圖片檔名）
 ARTISTS_DATABASE = {
     "梵谷": {
         "title": "文森·梵谷 (Vincent van Gogh)",
@@ -28,7 +34,7 @@ ARTISTS_DATABASE = {
         "category": "油畫 / 後印象派表現主義",
         "identity": "現代表現主義先驅 ｜ 燃燒靈魂的悲劇巨匠",
         "work_name": "《星夜》 (The Starry Night, 1889)",
-        "local_file": "vangogh.jpg",
+        "local_candidates": ["vangogh.jpg", "星夜.jpg", "梵谷_星夜.jpg"],
         "fallback_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg/640px-Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg",
         "color": "#FBBF24", "frame": "#B45309", "icon": "🌌",
         "quote": "「我夢想著繪畫，然後我畫下了我的夢想。」",
@@ -54,7 +60,7 @@ ARTISTS_DATABASE = {
         "category": "油畫 / 跨學科手稿 / 解剖研究",
         "identity": "文藝復興三傑 ｜ 人類史上最偉大的全才博學大師",
         "work_name": "《蒙娜麗莎》 (Mona Lisa, 約1503–1519)",
-        "local_file": "davinci.jpg",
+        "local_candidates": ["davinci.jpg", "蒙娜麗莎.jpg", "達文西_蒙娜麗莎.jpg"],
         "fallback_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg/640px-Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg",
         "color": "#34D399", "frame": "#047857", "icon": "🖼️",
         "quote": "「簡約是細膩的極致。觀察是唯一的智慧泉源。」",
@@ -80,7 +86,8 @@ ARTISTS_DATABASE = {
         "category": "大理石雕塑 / 濕壁畫 / 建築設計",
         "identity": "文藝復興三傑 ｜ 西方雕塑史的不朽神聖巨匠",
         "work_name": "《大衛像》 (David, 1501–1504)",
-        "local_file": "david.jpg",
+        # 對齊你在 GitHub 上傳的真實檔案名稱
+        "local_candidates": ["米開朗基羅_大衛.jpg", "david.jpg", "Michelangelos_David.jpg"],
         "fallback_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/%27David%27_by_Michelangelo_Fir_JBU005_retouched.jpg/640px-%27David%27_by_Michelangelo_Fir_JBU005_retouched.jpg",
         "color": "#E2E8F0", "frame": "#475569", "icon": "🗿",
         "quote": "「我看見天使在巨石裡，我雕刻直到使他重獲自由。」",
@@ -106,7 +113,7 @@ ARTISTS_DATABASE = {
         "category": "油畫 / 外光派印象主義",
         "identity": "印象派之父 ｜ 追逐光影與剎那時間的色彩魔法師",
         "work_name": "《睡蓮》 (Water Lilies)",
-        "local_file": "monet.jpg",
+        "local_candidates": ["monet.jpg", "睡蓮.jpg", "莫內_睡蓮.jpg"],
         "fallback_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Claude_Monet_-_Water_Lilies_-_Google_Art_Project.jpg/640px-Claude_Monet_-_Water_Lilies_-_Google_Art_Project.jpg",
         "color": "#60A5FA", "frame": "#1D4ED8", "icon": "🌸",
         "quote": "「世上沒有固定不變的色彩，只有特定瞬間的光線折射。」",
@@ -132,7 +139,7 @@ ARTISTS_DATABASE = {
         "category": "油畫 / 拼貼 / 雕塑 / 現代主義",
         "identity": "立體主義創始人 ｜ 20世紀現代藝術最多產的天才巨擘",
         "work_name": "《格爾尼卡》 (Guernica, 1937)",
-        "local_file": "picasso.jpg",
+        "local_candidates": ["picasso.jpg", "格爾尼卡.jpg", "畢卡索_格爾尼卡.jpg"],
         "fallback_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Guernica_reproduction_at_the_UN.jpg/640px-Guernica_reproduction_at_the_UN.jpg",
         "color": "#F472B6", "frame": "#BE185D", "icon": "🧩",
         "quote": "「每個孩子都是藝術家，問題在於長大後如何保持。」",
@@ -183,7 +190,7 @@ with st.sidebar:
     st.markdown("""
     * **未搜尋**：停留於接待大廳休憩。
     * **搜尋人名後**：只開放**該名家的專屬展廳大門**，小人直接走向該門參觀！
-    * **操作鍵位**：`↑` `↓` `←` `→` 或 `W / A / S / D` 移動；按 `空白鍵` 查看代表作真跡照片！
+    * **操作鍵位**：`↑` `↓` `←` `→` 或 `W / A / S / D` 移動；按 `空白鍵` 即可在跳出視窗中鑑賞代表作真跡照片！
     """)
 
 # 5. 主標題樣式
@@ -276,7 +283,7 @@ if is_in_gallery and not target_artist_data:
         "category": "跨媒材藝術創作",
         "identity": "當前特展焦點藝術家",
         "work_name": f"《{current_query} 特展創作》",
-        "local_file": "custom.jpg",
+        "local_candidates": ["custom.jpg"],
         "fallback_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg/640px-Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg",
         "color": "#A855F7",
         "frame": "#6B21A8",
@@ -287,10 +294,10 @@ if is_in_gallery and not target_artist_data:
         "link": "https://zh.wikipedia.org"
     }
 
-# 取得最終真跡圖片字串（若有本地上傳圖片則直接轉 Base64 嵌入）
+# 優先讀取本機圖片（如 米開朗基羅_大衛.jpg）轉 Base64
 if target_artist_data:
     target_artist_data["active_image"] = load_image_as_base64(
-        target_artist_data.get("local_file", ""),
+        target_artist_data.get("local_candidates", []),
         target_artist_data.get("fallback_url", "")
     )
 
@@ -408,7 +415,7 @@ with col_game:
         .modal-img-box img {{
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: contain;
             display: block;
         }}
         .modal-info {{
@@ -537,7 +544,7 @@ with col_game:
             document.getElementById('modal-quote').innerText = currentArtist.quote;
             document.getElementById('modal-meta').innerHTML = `<b>傳世特色：</b>${{currentArtist.work_name}}<br><span style="color:#38BDF8; font-weight:bold; margin-top:4px; display:inline-block;">👉 右側已同步載入深度生平與完整傳世解析</span>`;
             
-            // 彈出視窗注入真跡照片（本地 Base64 或有效直連）
+            // 彈出視窗注入真跡照片（本地 Base64 優先，保證不破圖）
             document.getElementById('modal-img').src = currentArtist.active_image;
             
             modal.style.display = 'block';
