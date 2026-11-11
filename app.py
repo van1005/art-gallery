@@ -13,7 +13,7 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# 2. 自動尋找專案內檔案並轉換為 Base64；若無本地檔則回傳可靠直連網址
+# 2. 自動尋找專案內檔案並轉換為 Base64（優先讀取本地圖片，徹底避開跨域阻擋）
 ROOT_DIR = Path(__file__).resolve().parent
 
 def resolve_artwork_image(keywords, fallback_url):
@@ -26,14 +26,49 @@ def resolve_artwork_image(keywords, fallback_url):
                         with open(file, "rb") as f:
                             data = f.read()
                             ext = file.suffix.lower().replace(".", "")
-                            mime = "jpeg" if ext in ["jpg", "jpeg"] else ext
+                            mime = "png" if ext == "png" else "jpeg"
                             return f"data:image/{mime};base64,{base64.b64encode(data).decode('utf-8')}"
     except Exception:
         pass
     return fallback_url
 
-# 3. 結構化深度資料庫（結合米開朗基羅本地檔案 + 其他名家驗證可用的典藏直連）
+# 3. 結構化深度資料庫（完美對齊 GitHub 上的米開朗基羅與莫內實體檔案）
 ARTISTS_DATABASE = {
+    "莫內": {
+        "title": "克勞德·莫內 (Claude Monet)",
+        "period": "印象派奠基人 (1840–1926)",
+        "category": "油畫 / 外光派印象主義",
+        "identity": "印象派之父 ｜ 追逐光影與剎那時間的色彩魔法師",
+        "color": "#AA5D4C", "frame": "#547791", "icon": "🌸",
+        "quote": "「世上沒有固定不變的色彩，只有特定瞬間的光線折射。」",
+        # 對齊你在 GitHub 上傳的真實莫內圖片檔名
+        "artworks": [
+            {
+                "name": "《印象·日出》 (Impression, Sunrise, 1872)",
+                "keywords": ["impressi", "日出", "sunrise"],
+                "desc": "印象派定名之作。以勒阿弗爾港口的迷濛晨霧與橙紅旭日，徹底打破學院派精細勾勒的傳統，開啟現代視覺革命。",
+                "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/Monet_-_Impression%2C_Sunrise.jpg/640px-Monet_-_Impression%2C_Sunrise.jpg"
+            },
+            {
+                "name": "《阿讓特伊雪景》 (Snow at Argenteuil, 1875)",
+                "keywords": ["argente", "snow", "雪景"],
+                "desc": "外光派代表名作。莫內以敏銳的色彩直覺捕捉冬天積雪上的微藍冷光與夕陽暖調，呈現出空氣中流動的真實溫度。",
+                "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Monet_Snow_at_Argenteuil.jpg/640px-Monet_Snow_at_Argenteuil.jpg"
+            }
+        ],
+        "extract": (
+            "### 📌 外光寫生革命與印象派誕生\n\n"
+            "莫內出生於巴黎，自幼展露過人素描天賦，後師從尤金·布丹走出畫室，進入戶外大自然從事「外光寫生（En plein air）」。1874年，莫內與雷諾瓦等人舉辦獨立展覽，展出其名作《印象·日出》，遭受保守藝評家嘲諷，這群革新者反而自豪地以「印象派」為名，正式掀起近代美術史最偉大的視覺革命。\n\n"
+            "### 🎨 光影的瞬間性與連作系列\n\n"
+            "莫內突破了傳統繪畫以物體固有色上色的慣例，改用短促碎裂的純色筆觸直接並列在畫布上，讓色彩在觀者眼中自然融合；晚年打造睡蓮水上花園，即使飽受眼疾之苦，依然憑藉純粹色彩直覺創作超大尺幅壁畫，直接啟蒙後世抽象表現主義。"
+        ),
+        "representative": (
+            "* **《印象·日出》 (1872)**：印象派定名之作，捕捉晨霧與光影瞬間。\n\n"
+            "* **《阿讓特伊雪景》 (1875)**：外光雪景經典，呈現藍紫光影與冷冽氛圍。\n\n"
+            "* **《睡蓮》系列 (1897–1926)**：長達三十餘年對吉維尼池塘的極致凝視。"
+        ),
+        "link": "https://zh.wikipedia.org/wiki/克洛德·莫奈"
+    },
     "米開朗基羅": {
         "title": "米開朗基羅 (Michelangelo Buonarroti)",
         "period": "文藝復興全盛期 (1475–1564)",
@@ -41,11 +76,12 @@ ARTISTS_DATABASE = {
         "identity": "文藝復興三傑 ｜ 西方雕塑史的不朽神聖巨匠",
         "color": "#AA5D4C", "frame": "#547791", "icon": "🗿",
         "quote": "「我看見天使在巨石裡，我雕刻直到使他重獲自由。」",
+        # 對齊你在 GitHub 上傳的真實米開朗基羅圖片檔名
         "artworks": [
             {
                 "name": "《大衛像》 (David, 1501–1504)",
                 "keywords": ["大衛", "david"],
-                "desc": "文藝復興雕塑的巔峰代表作，高達5公尺，精準捕捉迎戰巨人歌利亞前蓄勢待發的堅定眼神與肌理張力。",
+                "desc": "文藝復興雕塑的巔峰代表作，高達5公尺，精準捕捉迎戰巨人歌利亞前蓄勢待發的堅定眼神與肌肉張力。",
                 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Michelangelo%27s_David_-_right_view_2.jpg/640px-Michelangelo%27s_David_-_right_view_2.jpg"
             },
             {
@@ -65,15 +101,12 @@ ARTISTS_DATABASE = {
             "### 📌 雕刻家的靈魂與對石材的虔誠\n\n"
             "米開朗基羅出生於卡普雷塞，深受佛羅倫斯美第奇家族的人文主義薰陶。他畢生自視為「純粹的雕刻家」，認為雕刻的真諦不是塑造形體，而是將隱藏並禁錮在沉重冷硬大理石中的靈魂釋放出來。他對人體結構與肌肉張力的掌握達到神聖無比的高度。\n\n"
             "### 🗿 雄渾震撼的英雄人體美學\n\n"
-            "米開朗基羅的作品充滿了強大的男性力量美感與緊繃的內在張力（Terribilità）。在教皇朱利奧二世的委託下，他歷時四年仰頭在西斯汀禮拜堂天頂獨力創作出宏偉的《創世紀》濕壁畫，將神性創生與人類痛苦抗爭的龐大場面展現得淋漓盡致；其晚年設計的聖伯多祿大殿圓頂更奠定歐洲巴洛克與古典建築的典範。\n\n"
-            "### 🏛️ 西方雕塑的極致象徵\n\n"
-            "他將人體的解剖力學與靈魂深處的悲劇命運完美結合，被同時代人尊稱為「神聖的米開朗基羅（Il Divino）」，對西方美術史產生了無可撼動的深遠影響。"
+            "米開朗基羅的作品充滿了強大的男性力量美感與緊繃的內在張力（Terribilità）。在教皇朱利奧二世的委託下，他歷時四年仰頭在西斯汀禮拜堂天頂獨力創作出宏偉的《創世紀》濕壁畫，將神性創生與人類痛苦抗爭的龐大場面展現得淋漓盡致；其晚年設計的聖伯多祿大殿圓頂更奠定歐洲巴洛克與古典建築的典範。"
         ),
         "representative": (
             "* **《大衛像》 (David, 1501–1504)**：文藝復興雕塑的絕對代表作，捕捉少年英雄堅定無畏的眼神。\n\n"
             "* **《聖殤》 (Pietà, 1498–1499)**：大理石雕塑的至高典範，展現超越世俗痛苦的神聖寧靜。\n\n"
-            "* **《創世紀：創造亞當》 (1508–1512)**：神人指尖相碰瞬間傳遞生命的永恆經典。\n\n"
-            "* **《最後的審判》 (1536–1541)**：西斯汀祭壇後壁宏偉畫作，展現翻騰壯烈的救贖與審判。"
+            "* **《創世紀：創造亞當》 (1508–1512)**：神人指尖相碰瞬間傳遞生命的永恆經典。"
         ),
         "link": "https://zh.wikipedia.org/wiki/米开朗基罗"
     },
@@ -94,14 +127,13 @@ ARTISTS_DATABASE = {
         ],
         "extract": (
             "### 📌 坎坷生平與創作狂熱\n\n"
-            "梵谷出生於荷蘭南部，早年曾任藝術品店員、教師與傳教士，直到接近三十歲才正式投身繪畫。他一生飽受精神疾病、貧困與不被理解的孤獨折磨，但在其生命的最後十年間，以驚人的創作狂熱完成兩千餘幅作品。\n\n"
+            "梵谷一生飽受精神疾病與孤獨折磨，但在其生命的最後十年間，以驚人的創作狂熱完成兩千餘幅作品。\n\n"
             "### 🎨 厚塗旋渦與情感表現\n\n"
-            "梵谷完全顛覆了傳統寫實色彩的用法，大膽採用鮮烈的高彩度原色與厚塗技法（Impasto），將內心劇烈起伏的情感直接傾注於畫布之上，開啟了20世紀現代表現主義的大門。"
+            "梵谷完全顛覆了傳統寫實色彩的用法，大膽採用鮮烈的高彩度原色與厚塗技法（Impasto），開啟了20世紀現代表現主義的大門。"
         ),
         "representative": (
             "* **《星夜》 (1889)**：超凡旋渦星雲與生命探索。\n\n"
-            "* **《向日葵》系列 (1888–1889)**：金黃色調歌頌陽光與生命力。\n\n"
-            "* **《麥田群鴉》 (1890)**：深邃動盪的天空與告別象徵。"
+            "* **《向日葵》系列 (1888–1889)**：金黃色調歌頌陽光與生命力。"
         ),
         "link": "https://zh.wikipedia.org/wiki/文森特·梵高"
     },
@@ -128,37 +160,9 @@ ARTISTS_DATABASE = {
         ),
         "representative": (
             "* **《蒙娜麗莎》 (約1503–1519)**：暈塗法的巔峰之作。\n\n"
-            "* **《最後的晚餐》 (1495–1498)**：嚴格單點透視與瞬間戲劇張力。\n\n"
-            "* **《維特魯威人》 (約1490)**：人體黃金比例的經典圖標。"
+            "* **《最後的晚餐》 (1495–1498)**：嚴格單點透視與瞬間戲劇張力。"
         ),
         "link": "https://zh.wikipedia.org/wiki/列奥纳多·达·芬奇"
-    },
-    "莫內": {
-        "title": "克勞德·莫內 (Claude Monet)",
-        "period": "印象派奠基人 (1840–1926)",
-        "category": "油畫 / 外光派印象主義",
-        "identity": "印象派之父 ｜ 追逐光影與剎那時間的色彩魔法師",
-        "color": "#AA5D4C", "frame": "#547791", "icon": "🌸",
-        "quote": "「世上沒有固定不變的色彩，只有特定瞬間的光線折射。」",
-        "artworks": [
-            {
-                "name": "《睡蓮》 (Water Lilies)",
-                "keywords": ["睡蓮", "monet", "water"],
-                "desc": "長達三十餘年對吉維尼池塘的極致凝視，消解地平線與空間輪廓的印象派巨作。",
-                "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Claude_Monet_-_Water_Lilies_-_Google_Art_Project.jpg/640px-Claude_Monet_-_Water_Lilies_-_Google_Art_Project.jpg"
-            }
-        ],
-        "extract": (
-            "### 📌 外光寫生革命與印象派誕生\n\n"
-            "走入自然進行外光寫生，以《印象·日出》震撼歐洲畫壇，正式奠定印象派。\n\n"
-            "### 🌸 晚年吉維尼花園與抽象先聲\n\n"
-            "晚年憑藉色彩直覺創作超大尺幅《睡蓮》，直接啟蒙了後世的抽象表現主義。"
-        ),
-        "representative": (
-            "* **《印象·日出》 (1872)**：印象派定名之作。\n\n"
-            "* **《睡蓮》系列 (1897–1926)**：池塘光影熔鑄的極致凝視。"
-        ),
-        "link": "https://zh.wikipedia.org/wiki/克洛德·莫奈"
     },
     "畢卡索": {
         "title": "巴勃羅·畢卡索 (Pablo Picasso)",
@@ -277,7 +281,7 @@ with col_search:
     user_input = st.text_input(
         "🔍 搜尋藝術家（輸入後即刻開放專屬拱門）：",
         value=st.session_state.current_artist,
-        placeholder="請輸入藝術家姓名（例如：米開朗基羅、達文西、梵谷...）"
+        placeholder="請輸入藝術家姓名（例如：莫內、米開朗基羅、達文西、梵谷...）"
     )
     if user_input != st.session_state.current_artist:
         st.session_state.current_artist = user_input
@@ -303,7 +307,7 @@ for name, d in ARTISTS_DATABASE.items():
         target_artist_data["matched_name"] = name
         break
 
-# 取得可用作品影像（米開朗基羅優先匹配本地，其他人保證有直連圖片）
+# 自動精準檢索本地圖片（莫內與米開朗基羅完全支援本地轉換）
 if target_artist_data:
     processed_artworks = []
     for art in target_artist_data.get("artworks", []):
@@ -391,7 +395,7 @@ with col_game:
             from {{ margin-top: 0px; }}
             to {{ margin-top: -6px; }}
         }}
-        /* 彈跳視窗：第三組色票搭配 */
+        /* 彈跳視窗：支援多作品切換與圖片展示 */
         #rpg-modal {{
             position: absolute;
             top: 50%;
@@ -638,11 +642,9 @@ with col_game:
 
     // 繪製古典接待大廳
     function drawLobby() {{
-        // 牆面：文藝復興灰藍 #547791
         ctx.fillStyle = '#547791';
         ctx.fillRect(0, 0, canvas.width, 160);
 
-        // 天花板線條與踢腳線
         ctx.fillStyle = '#374E5F';
         ctx.fillRect(0, 0, canvas.width, 16);
         ctx.fillStyle = '#B9D9F6';
@@ -650,7 +652,6 @@ with col_game:
         ctx.fillStyle = '#B7B082';
         ctx.fillRect(0, 156, canvas.width, 4);
 
-        // 地磚：羊皮紙米白 #E2E1B5 與 復古古銅金 #B7B082 交錯棋盤
         const tileSize = 44;
         for (let x = 0; x < canvas.width; x += tileSize) {{
             for (let y = 160; y < canvas.height; y += tileSize) {{
@@ -659,7 +660,6 @@ with col_game:
             }}
         }}
 
-        // 大廳中央諮詢處：龐貝赤陶紅 #AA5D4C 搭配 晴空柔粉藍 #B9D9F6 頂線
         ctx.fillStyle = '#AA5D4C';
         ctx.fillRect(230, 80, 200, 48);
         ctx.fillStyle = '#B9D9F6';
@@ -669,7 +669,6 @@ with col_game:
         ctx.textAlign = 'center';
         ctx.fillText('🏛️ 美術館接待諮詢處', 330, 108);
 
-        // 典雅景觀植栽盆
         ctx.fillStyle = '#374E5F';
         ctx.beginPath();
         ctx.arc(80, 130, 24, 0, Math.PI * 2);
@@ -679,7 +678,6 @@ with col_game:
         ctx.fillRect(70, 130, 20, 25);
         ctx.fillRect(570, 130, 20, 25);
 
-        // 長沙發：文藝復興灰藍 #547791 搭配 龐貝赤陶紅飾邊 #AA5D4C
         ctx.fillStyle = '#547791';
         ctx.fillRect(80, 260, 40, 90);
         ctx.fillRect(540, 260, 40, 90);
@@ -687,7 +685,6 @@ with col_game:
         ctx.fillRect(76, 260, 4, 90);
         ctx.fillRect(580, 260, 4, 90);
 
-        // 中央古典導引道：柔粉藍光芒
         ctx.fillStyle = 'rgba(185, 217, 246, 0.35)';
         ctx.fillRect(280, 160, 100, canvas.height - 160);
 
@@ -702,7 +699,6 @@ with col_game:
 
     // 繪製古典展覽長廊
     function drawGallery() {{
-        // 牆面：文藝復興灰藍 #547791
         ctx.fillStyle = '#547791';
         ctx.fillRect(0, 0, canvas.width, 130);
 
@@ -713,7 +709,6 @@ with col_game:
         ctx.fillStyle = '#B7B082';
         ctx.fillRect(0, 126, canvas.width, 6);
 
-        // 地面棋盤地磚
         const tileSize = 40;
         for (let x = 0; x < canvas.width; x += tileSize) {{
             for (let y = 132; y < canvas.height; y += tileSize) {{
@@ -722,30 +717,25 @@ with col_game:
             }}
         }}
 
-        // 迎賓長地毯：龐貝赤陶紅 #AA5D4C
         const carpetW = 120;
         const carpetX = (canvas.width - carpetW) / 2;
         ctx.fillStyle = '#AA5D4C';
         ctx.fillRect(carpetX, 132, carpetW, canvas.height - 132);
 
-        // 兩側柔粉藍邊飾 #B9D9F6
         ctx.fillStyle = '#B9D9F6';
         ctx.fillRect(carpetX - 3, 132, 3, canvas.height - 132);
         ctx.fillRect(carpetX + carpetW, 132, 3, canvas.height - 132);
 
-        // 柔和光暈
         ctx.fillStyle = 'rgba(185, 217, 246, 0.3)';
         ctx.beginPath();
         ctx.arc(330, 85, 80, 0, Math.PI * 2);
         ctx.fill();
 
-        // 拱門外框：灰藍 #547791 搭配 晴空柔粉藍飾邊 #B9D9F6
         ctx.fillStyle = '#374E5F';
         ctx.fillRect(singleDoor.x, singleDoor.y, singleDoor.w, singleDoor.h);
         ctx.fillStyle = '#B9D9F6';
         ctx.fillRect(singleDoor.x - 4, singleDoor.y - 4, singleDoor.w + 8, 8);
 
-        // 門內景深：赤陶紅底色
         ctx.fillStyle = '#AA5D4C';
         ctx.fillRect(singleDoor.x + 8, singleDoor.y + 12, singleDoor.w - 16, singleDoor.h - 12);
 
@@ -754,7 +744,6 @@ with col_game:
         ctx.textBaseline = 'middle';
         ctx.fillText(currentArtist.icon || '🎨', 330, singleDoor.y + 45);
 
-        // 銘牌：文藝復興灰藍底 + 羊皮紙米白字
         ctx.fillStyle = '#547791';
         ctx.fillRect(singleDoor.x - 14, singleDoor.y + singleDoor.h + 8, singleDoor.w + 28, 26);
         ctx.strokeStyle = '#B9D9F6';
@@ -775,33 +764,27 @@ with col_game:
 
         const bob = Math.sin(player.walkFrame) * 2;
 
-        // 紳士長褲與皮鞋
         ctx.fillStyle = '#25333E';
         ctx.fillRect(player.x - 6, player.y + 3 + bob, 5, 9);
         ctx.fillRect(player.x + 1, player.y + 3 + bob, 5, 9);
 
-        // 燕尾大衣：文藝復興灰藍 #547791
         ctx.fillStyle = '#547791';
         ctx.fillRect(player.x - 7, player.y - 6 + bob, 14, 11);
 
-        // 羊皮紙白襯衫與赤陶紅領結
         ctx.fillStyle = '#E2E1B5';
         ctx.fillRect(player.x - 2, player.y - 6 + bob, 4, 6);
         ctx.fillStyle = '#AA5D4C';
         ctx.fillRect(player.x - 2, player.y - 6 + bob, 4, 2);
 
-        // 臉部膚色
         ctx.fillStyle = '#FED7AA';
         ctx.fillRect(player.x - 5, player.y - 15 + bob, 10, 9);
 
-        // 古典高頂禮帽
         ctx.fillStyle = '#25333E';
         ctx.fillRect(player.x - 9, player.y - 18 + bob, 18, 3);
         ctx.fillRect(player.x - 6, player.y - 27 + bob, 12, 10);
         ctx.fillStyle = '#AA5D4C';
         ctx.fillRect(player.x - 6, player.y - 20 + bob, 12, 2.5);
 
-        // 眼神朝向
         ctx.fillStyle = '#1A120B';
         if (player.dir === 'down') {{
             ctx.fillRect(player.x - 3, player.y - 11 + bob, 2, 2.5);
@@ -833,7 +816,7 @@ with col_game:
 
     components.html(pixel_game_html, height=540)
 
-# 8. 右側資訊欄：以帶有 referrerpolicy="no-referrer" 的容器安全渲染，確保所有名家作品皆能穩定顯示
+# 8. 右側資訊欄：安全渲染真實真跡
 with col_info:
     if is_in_gallery and target_artist_data:
         st.subheader(f"🖼️ 【{target_artist_data['matched_name']}】代表作全覽")
@@ -880,4 +863,5 @@ with col_info:
         2. **啟程漫遊專屬展廳**：領取門票後，左側畫面將只為您開啟該藝術家的**唯一專屬展廊拱門**！
         3. **深度互動鑑賞**：操縱紳士走至展門正前方並按下 **【空白鍵 (Space)】**，即可欣賞代表作真跡照片並同步解鎖其生平脈絡。
         """)
-        st.info("💡 試著點擊上方標籤「**米開朗基羅**」、「**達文西**」或「**梵谷**」，立即開啟獨立專屬展廳！")
+        st.info("💡 試著點擊上方標籤「**米開朗基羅**」、「**莫內**」或「**梵谷**」，立即開啟獨立專屬展廳！")
+    
