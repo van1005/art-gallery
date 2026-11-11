@@ -3,6 +3,7 @@ import streamlit.components.v1 as components
 import json
 import base64
 import os
+from pathlib import Path
 
 # 1. 頁面全域設定：寬版全螢幕模式
 st.set_page_config(
@@ -12,18 +13,28 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# 本地圖片優先轉 Base64 工具（直接讀取 GitHub 根目錄檔案，徹底避免跨域阻擋）
-def file_to_base64(filepath, fallback_url):
-    if os.path.exists(filepath):
-        try:
-            with open(filepath, "rb") as f:
-                data = f.read()
-                return f"data:image/jpeg;base64,{base64.b64encode(data).decode('utf-8')}"
-        except Exception:
-            pass
+# 2. 自動尋找專案內檔案並轉換為 Base64（徹底解決路徑與編碼問題）
+ROOT_DIR = Path(__file__).resolve().parent
+
+def find_and_load_image(keywords, fallback_url):
+    # 遍歷專案根目錄下的所有檔案進行關鍵字匹配
+    try:
+        for file in ROOT_DIR.iterdir():
+            if file.is_file():
+                filename_lower = file.name.lower()
+                for kw in keywords:
+                    if kw.lower() in filename_lower:
+                        with open(file, "rb") as f:
+                            data = f.read()
+                            # 判定圖片格式
+                            ext = file.suffix.lower().replace(".", "")
+                            mime = "jpeg" if ext in ["jpg", "jpeg"] else ext
+                            return f"data:image/{mime};base64,{base64.b64encode(data).decode('utf-8')}"
+    except Exception:
+        pass
     return fallback_url
 
-# 2. 結構化深度資料庫（直接對齊 GitHub 上的真實檔案）
+# 3. 結構化深度資料庫
 ARTISTS_DATABASE = {
     "米開朗基羅": {
         "title": "米開朗基羅 (Michelangelo Buonarroti)",
@@ -35,19 +46,19 @@ ARTISTS_DATABASE = {
         "artworks": [
             {
                 "name": "《大衛像》 (David, 1501–1504)",
-                "file": "米開朗基羅_大衛.jpg",
+                "keywords": ["大衛", "david"],
                 "desc": "文藝復興雕塑的巔峰代表作，高達5公尺，精準捕捉迎戰巨人歌利亞前蓄勢待發的堅定眼神與肌理張力。",
                 "fallback": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Michelangelo%27s_David_-_right_view_2.jpg/640px-Michelangelo%27s_David_-_right_view_2.jpg"
             },
             {
                 "name": "《聖殤》 (Pietà, 1498–1499)",
-                "file": "米開朗基羅的《聖殤》_5450_裁剪清理版.jpg",
+                "keywords": ["聖殤", "pieta", "5450"],
                 "desc": "聖伯多祿大殿鎮館之寶，以極致優雅的大理石褶皺展現聖母哀悼耶穌基督的靜謐與悲憫。",
                 "fallback": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Michelangelo%27s_Pieta_5450_cropncleaned.jpg/640px-Michelangelo%27s_Pieta_5450_cropncleaned.jpg"
             },
             {
                 "name": "《創世紀：創造亞當》 (1508–1512)",
-                "file": "Creación_de_Adán_(Miguel_Ángel).jpg",
+                "keywords": ["亞當", "adan", "creacion", "adam"],
                 "desc": "西斯汀禮拜堂天頂壁畫核心，上帝與亞當即將觸碰的食指成為西方文明最具象徵性的構圖。",
                 "fallback": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/Michelangelo_-_Creation_of_Adam_%28cropped%29.jpg/640px-Michelangelo_-_Creation_of_Adam_%28cropped%29.jpg"
             }
@@ -78,7 +89,7 @@ ARTISTS_DATABASE = {
         "artworks": [
             {
                 "name": "《星夜》 (The Starry Night, 1889)",
-                "file": "vangogh.jpg",
+                "keywords": ["星夜", "vangogh", "gogh", "starry"],
                 "desc": "紐約現代藝術博物館藏，以旋渦天體、柏樹與靜謐小鎮展現深層的精神掙扎與超凡想像。",
                 "fallback": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg/640px-Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg"
             }
@@ -87,7 +98,7 @@ ARTISTS_DATABASE = {
             "### 📌 坎坷生平與創作狂熱\n\n"
             "梵谷出生於荷蘭南部，早年曾任藝術品店員、教師與傳教士，直到接近三十歲才正式投身繪畫。他一生飽受精神疾病、貧困與不被理解的孤獨折磨，但在其生命的最後十年間，以驚人的創作狂熱完成兩千餘幅作品。\n\n"
             "### 🎨 厚塗旋渦與情感表現\n\n"
-            "梵谷完全顛覆了傳統寫實色彩的用法，大膽採用鮮烈的高彩度原色與厚塗技法（Impasto），將內心劇烈起伏的情感直接傾注於畫布之上，開啟了20世紀現代表現主義的大門。"
+            "梵谷完全顛覆了傳統寫實色彩的用法，大膽採用鮮烈的高彩度原色與厚塗技法（Impasto），開啟了20世紀現代表現主義的大門。"
         ),
         "representative": (
             "* **《星夜》 (1889)**：超凡旋渦星雲與生命探索。\n\n"
@@ -106,7 +117,7 @@ ARTISTS_DATABASE = {
         "artworks": [
             {
                 "name": "《蒙娜麗莎》 (Mona Lisa, 約1503–1519)",
-                "file": "davinci.jpg",
+                "keywords": ["蒙娜麗莎", "davinci", "mona", "lisa"],
                 "desc": "羅浮宮鎮館之寶，以劃時代的暈塗法與神秘微笑聞名全球。",
                 "fallback": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg/640px-Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg"
             }
@@ -134,7 +145,7 @@ ARTISTS_DATABASE = {
         "artworks": [
             {
                 "name": "《睡蓮》 (Water Lilies)",
-                "file": "monet.jpg",
+                "keywords": ["睡蓮", "monet", "water"],
                 "desc": "長達三十餘年對吉維尼池塘的極致凝視，消解地平線與空間輪廓的印象派巨作。",
                 "fallback": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Claude_Monet_-_Water_Lilies_-_Google_Art_Project.jpg/640px-Claude_Monet_-_Water_Lilies_-_Google_Art_Project.jpg"
             }
@@ -161,7 +172,7 @@ ARTISTS_DATABASE = {
         "artworks": [
             {
                 "name": "《格爾尼卡》 (Guernica, 1937)",
-                "file": "picasso.jpg",
+                "keywords": ["格爾尼卡", "picasso", "guernica"],
                 "desc": "黑白灰純色調鋪陳的史詩級反戰名作，描繪西班牙內戰平民慘遭轟炸的巨大悲鳴。",
                 "fallback": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Guernica_reproduction_at_the_UN.jpg/640px-Guernica_reproduction_at_the_UN.jpg"
             }
@@ -180,7 +191,7 @@ ARTISTS_DATABASE = {
     }
 }
 
-# 3. 狀態管理
+# 4. 狀態管理
 if "current_artist" not in st.session_state:
     st.session_state.current_artist = ""
 
@@ -190,7 +201,7 @@ def select_artist(name):
 def reset_to_lobby():
     st.session_state.current_artist = ""
 
-# 4. 側邊欄
+# 5. 側邊欄
 with st.sidebar:
     st.title("🏛️ 策展導覽台")
     st.caption("數位像素美術館 ｜ 古典漫遊系統")
@@ -212,7 +223,7 @@ with st.sidebar:
     * **操作鍵位**：`↑` `↓` `←` `→` 或 `W / A / S / D` 移動；按 `空白鍵` 查看真實代表作真跡！
     """)
 
-# 5. 主標題樣式（深藍漸層，對齊第三組色票基調）
+# 6. 主標題樣式（深藍漸層，對齊第三組色票基調）
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;900&display=swap');
@@ -261,7 +272,7 @@ st.markdown("""
 <div class="custom-subtitle">痕跡與靈魂 <span class="blue-accent">｜</span> 結合像素古典漫遊與多維生命脈絡之開放藝術平台</div>
 """, unsafe_allow_html=True)
 
-# 6. 搜尋與標籤區
+# 7. 搜尋與標籤區
 col_search, col_tags = st.columns([2, 3])
 
 with col_search:
@@ -294,12 +305,12 @@ for name, d in ARTISTS_DATABASE.items():
         target_artist_data["matched_name"] = name
         break
 
-# 本地圖片優先轉 Base64 處理
+# 自動精準檢索本地圖片並注入 Base64
 if target_artist_data:
     processed_artworks = []
     for art in target_artist_data.get("artworks", []):
         art_copy = art.copy()
-        art_copy["b64"] = file_to_base64(art.get("file", ""), art.get("fallback", ""))
+        art_copy["b64"] = find_and_load_image(art.get("keywords", []), art.get("fallback", ""))
         processed_artworks.append(art_copy)
     target_artist_data["artworks"] = processed_artworks
 
@@ -316,7 +327,6 @@ with col_game:
         st.subheader("🛋️ 古典接待大廳 (Grand Entrance Lobby)")
         st.caption("紳士漫步於古典大廳中；請於上方搜尋或點選名家標籤以開啟專屬展廊！")
 
-    # 全面應用圖二第三組色票：#B9D9F6, #547791, #AA5D4C, #E2E1B5, #B7B082
     pixel_game_html = f"""
     <!DOCTYPE html>
     <html>
@@ -628,13 +638,13 @@ with col_game:
         }}
     }}
 
-    // 繪製古典接待大廳（套用圖二第三組色票）
+    // 繪製古典接待大廳
     function drawLobby() {{
         // 牆面：文藝復興灰藍 #547791
         ctx.fillStyle = '#547791';
         ctx.fillRect(0, 0, canvas.width, 160);
 
-        // 天花板線條與踢腳線：晴空柔粉藍 #B9D9F6 與 復古古銅金 #B7B082
+        // 天花板線條與踢腳線
         ctx.fillStyle = '#374E5F';
         ctx.fillRect(0, 0, canvas.width, 16);
         ctx.fillStyle = '#B9D9F6';
@@ -692,7 +702,7 @@ with col_game:
         ctx.fillText('（紳士目前在大廳休憩，領取門票後將步入專屬展廳）', 330, 245);
     }}
 
-    // 繪製古典展覽長廊（套用圖二第三組色票）
+    // 繪製古典展覽長廊
     function drawGallery() {{
         // 牆面：文藝復興灰藍 #547791
         ctx.fillStyle = '#547791';
@@ -790,7 +800,7 @@ with col_game:
         ctx.fillStyle = '#25333E';
         ctx.fillRect(player.x - 9, player.y - 18 + bob, 18, 3);
         ctx.fillRect(player.x - 6, player.y - 27 + bob, 12, 10);
-        ctx.fillStyle = '#AA5D4C'; // 赤陶紅緞帶
+        ctx.fillStyle = '#AA5D4C';
         ctx.fillRect(player.x - 6, player.y - 20 + bob, 12, 2.5);
 
         // 眼神朝向
@@ -825,27 +835,21 @@ with col_game:
 
     components.html(pixel_game_html, height=540)
 
-# 7. 右側資訊欄
+# 8. 右側資訊欄：改用 Streamlit 原生 st.image 渲染 Base64 圖片，保證不再破圖
 with col_info:
     if is_in_gallery and target_artist_data:
         st.subheader(f"🖼️ 【{target_artist_data['matched_name']}】代表作全覽")
         
         artworks = target_artist_data.get("artworks", [])
         if artworks:
+            # 建立多作品切換分頁
             art_tabs = st.tabs([art["name"].split(' ')[0] for art in artworks])
             for i, tab in enumerate(art_tabs):
                 with tab:
                     art = artworks[i]
-                    st.markdown(
-                        f"""
-                        <div style="text-align: center; margin-bottom: 10px;">
-                            <img src="{art['b64']}" style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.6); border: 2px solid #547791;">
-                            <div style="font-size: 13.5px; color: #E2E1B5; margin-top: 6px; font-weight: bold;">{art['name']}</div>
-                            <div style="font-size: 12.5px; color: #B9D9F6; margin-top: 3px;">{art['desc']}</div>
-                        </div>
-                        """,
-                        unsafe_allow_html=True
-                    )
+                    # 使用 Streamlit 原生 image 渲染 Base64
+                    st.image(art["b64"], caption=art["name"], use_container_width=True)
+                    st.markdown(f"**作品解析：** {art['desc']}")
         
         st.markdown(f"### {target_artist_data['title']}")
         st.info(f"🏷️ **身份地位：** {target_artist_data['identity']}")
