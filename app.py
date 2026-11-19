@@ -13,10 +13,10 @@ st.set_page_config(
 )
 
 # ============================================================
-# 網站外觀模組（原 web_style.py，已合併進來）
+# 網站外觀（樣式、導覽列、主視覺、頁尾）
 # ============================================================
 CSS = """
-@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700;900&family=Noto+Sans+TC:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;600;700;900&family=Noto+Sans+TC:wght@400;500;700&family=LXGW+WenKai+TC:wght@300;400;700&display=swap');
 
 :root {
   --bg: #1B2630;
@@ -104,7 +104,6 @@ html { scroll-behavior: smooth; }
   padding-left: 14px; border-left: 4px solid var(--rust);
 }
 .section-sub { color: var(--gold); font-size: .95rem; margin: 0 0 14px 18px; }
-h2, h3 { font-family: 'Noto Serif TC', serif !important; color: var(--sky) !important; }
 
 /* ---------- 5. 搜尋框、按鈕 → 網站風格 ---------- */
 .stTextInput input {
@@ -127,10 +126,6 @@ h2, h3 { font-family: 'Noto Serif TC', serif !important; color: var(--sky) !impo
 .stButton > button:focus:not(:active) { border-color: var(--sky); color: var(--sky); }
 
 /* ---------- 6. 卡片化 ---------- */
-.card {
-  background: rgba(47,62,74,.55); border: 1px solid rgba(185,217,246,.14);
-  border-radius: 16px; padding: 18px;
-}
 .artwork-card { text-align: center; margin-bottom: 14px; }
 .artwork-card img {
   max-width: 100%; border-radius: 10px; border: 1px solid rgba(185,217,246,.3);
@@ -138,25 +133,18 @@ h2, h3 { font-family: 'Noto Serif TC', serif !important; color: var(--sky) !impo
 }
 .artwork-card img:hover { transform: scale(1.025); }
 .artwork-card .t { font-weight: 700; color: var(--cream); margin-top: 10px; }
-.artwork-card .d { font-size: .9rem; color: var(--sky); margin-top: 4px; line-height: 1.6; }
+.artwork-card .d { font-size: .95rem; color: var(--sky); margin-top: 4px; line-height: 1.7; }
 
-/* ---------- 7. 分頁、提示框、內文 ---------- */
+/* ---------- 7. 分頁、提示框 ---------- */
 .stTabs [data-baseweb="tab-list"] { gap: 6px; border-bottom: 1px solid rgba(185,217,246,.2); }
 .stTabs [data-baseweb="tab"] { color: var(--cream); border-radius: 10px 10px 0 0; padding: 8px 16px; }
 .stTabs [aria-selected="true"] { color: var(--sky) !important; background: rgba(84,119,145,.25); }
 .stTabs [data-baseweb="tab-highlight"] { background-color: var(--rust) !important; }
-.stTabs [data-baseweb="tab-panel"] p, .stTabs [data-baseweb="tab-panel"] li {
-  font-size: 1.12rem !important; line-height: 1.95 !important; color: var(--cream) !important;
-}
-.stTabs [data-baseweb="tab-panel"] h3 { font-size: 1.35rem !important; margin: 1.2rem 0 .6rem !important; }
 .stTabs [data-baseweb="tab-panel"] a { color: var(--sky) !important; }
 div[data-testid="stAlert"] {
   background: rgba(84,119,145,.22); border: 1px solid rgba(185,217,246,.25); border-radius: 12px;
 }
-div[data-testid="stAlert"] p { color: var(--cream) !important; font-size: 1.05rem !important; line-height: 1.7 !important; }
 hr { border-color: rgba(185,217,246,.14) !important; }
-
-/* 遊戲 iframe 圓角 */
 iframe { border-radius: 14px; }
 
 /* ---------- 8. 頁尾 ---------- */
@@ -167,7 +155,31 @@ iframe { border-radius: 14px; }
 }
 .site-footer b { color: var(--sky); font-family: 'Noto Serif TC', serif; }
 
-/* ---------- 9. 手機版 ---------- */
+/* ---------- 9. 字體（內文：霞鶩文楷；標題：思源宋體） ---------- */
+.stMarkdown, .stMarkdown p, .stMarkdown li, [data-testid="stCaptionContainer"],
+.stTextInput label p, .stTextInput input, .stButton button p,
+div[data-testid="stAlert"] p, .stTabs [data-baseweb="tab"] p,
+.stTabs [data-baseweb="tab-panel"] p, .stTabs [data-baseweb="tab-panel"] li {
+  font-family: 'LXGW WenKai TC', 'Noto Sans TC', 'PingFang TC', 'Microsoft JhengHei', sans-serif !important;
+  letter-spacing: .05em;
+}
+.stMarkdown p, .stMarkdown li { font-size: 1.1rem; line-height: 1.95; color: #E6E3C8; }
+.stTabs [data-baseweb="tab-panel"] p, .stTabs [data-baseweb="tab-panel"] li {
+  font-size: 1.15rem !important; line-height: 1.95 !important; color: #E6E3C8 !important;
+}
+div[data-testid="stAlert"] p { font-size: 1.05rem !important; line-height: 1.8 !important; color: var(--cream) !important; }
+.stMarkdown strong, .stTabs [data-baseweb="tab-panel"] strong { font-weight: 700; color: #F3E7B8; }
+[data-testid="stCaptionContainer"] p { font-size: .95rem !important; color: #B7B082 !important; }
+
+h1, h2, h3, h4, [data-testid="stHeading"] h3 {
+  font-family: 'Noto Serif TC', serif !important; font-weight: 600 !important;
+  letter-spacing: .08em; color: var(--sky) !important;
+}
+[data-testid="stHeading"] h3 { font-size: 1.4rem !important; }
+.stMarkdown h3, .stTabs [data-baseweb="tab-panel"] h3 { font-size: 1.3rem !important; margin: 1.2rem 0 .6rem !important; }
+.stMarkdown h4 { font-size: 1.12rem !important; color: #B7B082 !important; }
+
+/* ---------- 10. 手機版 ---------- */
 @media (max-width: 760px) {
   .site-nav { padding: 12px 16px; }
   .site-nav .links { display: none; }
@@ -225,7 +237,7 @@ def render_footer():
     st.markdown(
         '<a id="about"></a><div class="site-footer">'
         '<b>ART·MUSEUM 數位美術館</b><br>'
-        '操作說明：方向鍵 / WASD 移動，走到拱門前按空白鍵鑑賞真跡<br>'
+        '操作說明：方向鍵 / WASD 移動（或直接點擊地面），走近掛畫按空白鍵鑑賞真跡<br>'
         '資料來源：Wikipedia、Wikimedia Commons ｜ © 2026 跨時代藝術家互動圖譜'
         '</div>',
         unsafe_allow_html=True,
@@ -486,283 +498,406 @@ if current_query and not is_in_gallery:
 exhibit_json = json.dumps(target_artist_data, ensure_ascii=False) if target_artist_data else "{}"
 mode_str = "gallery" if is_in_gallery else "lobby"
 
-# 8. 像素遊戲 HTML（用 .replace 代入變數，JS 大括號不必跳脫）
+# 8. 擬真展廳遊戲（透視地板、燈光、掛畫、可點擊移動）
 PIXEL_GAME_HTML = """
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="utf-8">
 <meta name="referrer" content="no-referrer">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700&family=LXGW+WenKai+TC:wght@400;700&display=swap" rel="stylesheet">
 <style>
-    body { margin:0; padding:0; background-color:transparent; display:flex; justify-content:center;
-           align-items:center; font-family:'Noto Serif TC', serif; overflow:hidden; user-select:none; }
-    #game-box { position:relative; width:660px; height:520px; border:3px solid #547791; border-radius:10px;
-                overflow:hidden; background:#547791;
-                box-shadow:0 14px 45px rgba(0,0,0,.95), 0 0 25px rgba(170,93,76,.35); }
-    canvas { display:block; image-rendering:pixelated; }
-    #guide-bar { position:absolute; top:12px; left:12px; background:rgba(84,119,145,.96); color:#E2E1B5;
-                 padding:6px 14px; border-radius:6px; font-size:12px; border:1px solid #B9D9F6;
-                 pointer-events:none; letter-spacing:.5px; box-shadow:0 2px 8px rgba(0,0,0,.6); }
-    #interact-prompt { position:absolute; display:none; color:#FFF; background:rgba(170,93,76,.96);
-                       border:1.5px solid #B9D9F6; padding:5px 12px; border-radius:20px; font-size:12px;
-                       font-weight:bold; pointer-events:none; transform:translate(-50%,-100%);
-                       white-space:nowrap; box-shadow:0 4px 15px rgba(0,0,0,.8); animation:bounce .8s infinite alternate; }
-    @keyframes bounce { from { margin-top:0px; } to { margin-top:-6px; } }
-    #rpg-modal { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:560px;
-                 background:linear-gradient(145deg,#547791 0%,#374E5F 100%); border:2px solid #B9D9F6;
-                 box-shadow:0 20px 50px rgba(0,0,0,.98), 0 0 25px rgba(185,217,246,.4); border-radius:12px;
-                 padding:16px 20px; display:none; z-index:100; color:#E2E1B5; }
-    .modal-body { display:flex; gap:16px; align-items:center; }
-    .modal-img-box { flex:0 0 210px; height:250px; border-radius:8px; overflow:hidden; border:2px solid #B7B082;
-                     background:#25333E; box-shadow:0 4px 15px rgba(0,0,0,.7); display:flex;
+    body { margin:0; padding:0; background:transparent; display:flex; justify-content:center; align-items:center;
+           font-family:'LXGW WenKai TC','Noto Serif TC',serif; overflow:hidden; user-select:none; outline:none; }
+    #game-box { position:relative; width:660px; height:520px; border-radius:14px; overflow:hidden;
+                border:1px solid rgba(185,217,246,.45); background:#1b2630; cursor:pointer;
+                box-shadow:0 18px 50px rgba(0,0,0,.8), 0 0 0 4px rgba(84,119,145,.25); }
+    canvas { display:block; }
+    #guide-bar { position:absolute; top:12px; left:12px; background:rgba(20,28,35,.72); color:#E2E1B5;
+                 padding:6px 14px; border-radius:20px; font-size:12.5px; border:1px solid rgba(185,217,246,.4);
+                 pointer-events:none; letter-spacing:.5px; backdrop-filter:blur(6px); }
+    #interact-prompt { position:absolute; display:none; color:#fff; background:rgba(170,93,76,.95);
+                       border:1.5px solid #f1e3b0; padding:5px 14px; border-radius:20px; font-size:12.5px;
+                       pointer-events:none; transform:translate(-50%,-100%); white-space:nowrap;
+                       box-shadow:0 6px 18px rgba(0,0,0,.6); animation:bounce .8s infinite alternate; }
+    @keyframes bounce { from { margin-top:0; } to { margin-top:-6px; } }
+    @keyframes pop { from { opacity:0; transform:translate(-50%,-46%) scale(.94); } to { opacity:1; transform:translate(-50%,-50%) scale(1); } }
+    #rpg-modal { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:570px;
+                 background:linear-gradient(145deg,rgba(47,62,74,.97),rgba(27,38,48,.97));
+                 border:1px solid #d8b86a; border-radius:16px; padding:18px 22px; display:none; z-index:100;
+                 color:#E2E1B5; box-shadow:0 24px 60px rgba(0,0,0,.9); animation:pop .25s ease-out; }
+    .modal-body { display:flex; gap:18px; align-items:center; }
+    .modal-img-box { flex:0 0 215px; height:255px; border-radius:6px; overflow:hidden; background:#10171d;
+                     border:6px solid #c9a85c; box-shadow:0 8px 22px rgba(0,0,0,.7); display:flex;
                      align-items:center; justify-content:center; }
     .modal-img-box img { width:100%; height:100%; object-fit:contain; display:block; }
     .modal-info { flex:1; }
-    .modal-info h3 { margin:0 0 4px 0; color:#B9D9F6; font-size:18px; }
-    .period-tag { display:inline-block; background:#AA5D4C; color:#FFF; padding:2px 8px; border-radius:4px;
-                  font-size:11px; margin-bottom:8px; border:1px solid #B7B082; }
-    .quote { font-style:italic; color:#E2E1B5; font-size:12.5px; line-height:1.45; background:rgba(37,51,62,.6);
-             border-left:3.5px solid #AA5D4C; padding:6px 10px; margin:6px 0 8px 0; border-radius:0 4px 4px 0; }
-    .nav-dots { display:flex; gap:6px; margin-top:8px; }
-    .nav-btn { background:#AA5D4C; color:#FFF; border:1px solid #B9D9F6; padding:4px 8px; font-size:11px;
-               border-radius:4px; cursor:pointer; transition:all .2s; }
-    .nav-btn:hover { background:#B9D9F6; color:#2F3E4A; }
-    .close-hint { margin-top:10px; text-align:right; font-size:11px; color:#B7B082; }
+    .modal-info h3 { margin:0 0 6px 0; color:#B9D9F6; font-size:18px; font-family:'Noto Serif TC',serif; font-weight:700; line-height:1.4; }
+    .period-tag { display:inline-block; background:#AA5D4C; color:#fff; padding:2px 10px; border-radius:20px;
+                  font-size:11.5px; margin-bottom:8px; }
+    .quote { font-size:13.5px; line-height:1.7; color:#E2E1B5; border-left:3px solid #AA5D4C;
+             padding:4px 0 4px 12px; margin:6px 0 8px 0; }
+    #modal-desc { font-size:13px; color:#c9c39a; line-height:1.75; }
+    .nav-dots { display:flex; gap:6px; margin-top:10px; flex-wrap:wrap; }
+    .nav-btn { background:transparent; color:#E2E1B5; border:1px solid rgba(185,217,246,.5); padding:3px 12px;
+               font-size:12px; border-radius:20px; cursor:pointer; font-family:inherit; }
+    .nav-btn.on, .nav-btn:hover { background:#AA5D4C; border-color:#AA5D4C; color:#fff; }
+    .close-hint { margin-top:12px; text-align:right; font-size:11.5px; color:#B7B082; }
 </style>
 </head>
-<body>
+<body tabindex="0">
 <div id="game-box">
-    <canvas id="gameCanvas" width="660" height="520"></canvas>
-    <div id="guide-bar">🚶 [WASD / 方向鍵] 移動紳士</div>
-    <div id="interact-prompt">❗ [空白鍵] 鑑賞代表作真跡</div>
+    <canvas id="gameCanvas"></canvas>
+    <div id="guide-bar"></div>
+    <div id="interact-prompt"></div>
     <div id="rpg-modal">
         <div class="modal-body">
-            <div class="modal-img-box">
-                <img id="modal-img" src="" alt="真實作品真跡大圖" referrerpolicy="no-referrer">
-            </div>
+            <div class="modal-img-box"><img id="modal-img" src="" alt="作品" referrerpolicy="no-referrer"></div>
             <div class="modal-info">
-                <h3 id="modal-title">🎨 作品名稱</h3>
-                <span class="period-tag" id="modal-period">時代時期</span>
-                <div class="quote" id="modal-quote">經典名言</div>
-                <div id="modal-desc" style="font-size:12px; color:#B7B082; line-height:1.45;">作品解析</div>
+                <h3 id="modal-title"></h3>
+                <span class="period-tag" id="modal-period"></span>
+                <div class="quote" id="modal-quote"></div>
+                <div id="modal-desc"></div>
                 <div class="nav-dots" id="modal-nav"></div>
             </div>
         </div>
-        <div class="close-hint">按 [Space] 或 任意方向鍵 關閉視窗</div>
+        <div class="close-hint">按 [空白鍵] 或 移動角色 關閉視窗</div>
     </div>
 </div>
 
 <script>
+const W = 660, H = 520, WALL = 190, VPY = 60;
 const canvas = document.getElementById('gameCanvas');
+const dpr = Math.min(window.devicePixelRatio || 1, 2);
+canvas.width = W * dpr; canvas.height = H * dpr;
+canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
 const ctx = canvas.getContext('2d');
-const prompt = document.getElementById('interact-prompt');
+ctx.scale(dpr, dpr);
+ctx.imageSmoothingQuality = 'high';
+
+const promptEl = document.getElementById('interact-prompt');
 const modal = document.getElementById('rpg-modal');
 const guide = document.getElementById('guide-bar');
+const SERIF = '"Noto Serif TC","LXGW WenKai TC",serif';
 
 const mode = "__MODE__";
 const currentArtist = __ARTIST__;
+const arts = currentArtist.artworks || [];
+const imgs = arts.map(a => { const im = new Image(); im.referrerPolicy = 'no-referrer'; im.src = a.final_src; return im; });
 
-const player = { x: 330, y: mode === "gallery" ? 440 : 380, speed: 3.6, dir: 'up', walkFrame: 0 };
+const T = mode === 'gallery'
+  ? { wallTop:'#3a5063', wallBot:'#263847', panel:'#1e2d39', floorA:'#80593a', floorB:'#6d4b32', rug:['#8a3232','#5c2025'] }
+  : { wallTop:'#557590', wallBot:'#3a566d', panel:'#2d4458', floorA:'#ebe5cb', floorB:'#bdb798', rug:['#a24f40','#6f2f2b'] };
 
-if (mode === "gallery") {
-    guide.innerHTML = `🚶 [WASD / 方向鍵] 紳士漫步 ｜ 前方為【${currentArtist.matched_name}】古典拱門`;
-} else {
-    guide.innerHTML = `🛋️ 古典接待大廳 ｜ 請於上方搜尋或點選名家領取門票`;
-}
+guide.innerHTML = mode === 'gallery'
+  ? '🚶 方向鍵 / WASD 或點擊地面移動 ｜ 走近掛畫按空白鍵'
+  : '🏛️ 接待大廳 ｜ 請於上方搜尋或點選名家（先點一下畫面）';
 
-const singleDoor = { x: 290, y: 45, w: 80, h: 95 };
-
+const player = { x: 330, y: mode === 'gallery' ? 440 : 400, speed: 3.2, dir: 'up', walkFrame: 0, moving: false };
 const keys = {};
-let isNearDoor = false;
-let isModalOpen = false;
-let currentArtIndex = 0;
+let target = null, nearIdx = -1, isModalOpen = false;
 
-window.addEventListener('keydown', (e) => {
-    if (["ArrowUp","ArrowDown","ArrowLeft","ArrowRight"," "].includes(e.key)) { e.preventDefault(); }
-    keys[e.key.toLowerCase()] = true;
-    if ((e.key === " " || e.key === "Enter") && mode === "gallery") {
-        if (isNearDoor) { toggleModal(); }
+/* ---------- 小工具 ---------- */
+function rr(x, y, w, h, r) {
+  ctx.beginPath(); ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r);
+  ctx.arcTo(x + w, y + h, x, y + h, r); ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath();
+}
+function lg(x0, y0, x1, y1, stops) {
+  const g = ctx.createLinearGradient(x0, y0, x1, y1);
+  stops.forEach(s => g.addColorStop(s[0], s[1])); return g;
+}
+function ell(x, y, rx, ry, color) {
+  ctx.fillStyle = color; ctx.beginPath(); ctx.ellipse(x, y, rx, ry, 0, 0, Math.PI * 2); ctx.fill();
+}
+function P(y, bx) { return 330 + (bx - 330) * (y - VPY) / (H - VPY); }
+function hash(n) { const s = Math.sin(n * 12.9898) * 43758.5453; return s - Math.floor(s); }
+
+/* ---------- 牆面 ---------- */
+function drawWall() {
+  ctx.fillStyle = lg(0, 0, 0, WALL, [[0, T.wallTop], [1, T.wallBot]]); ctx.fillRect(0, 0, W, WALL);
+  ctx.fillStyle = 'rgba(255,255,255,.035)';
+  for (let x = 0; x < W; x += 44) { ctx.fillRect(x, 20, 2, 140); ctx.beginPath(); ctx.arc(x + 22, 90, 5, 0, 7); ctx.fill(); }
+  ctx.fillStyle = lg(0, 0, 0, 18, [[0, '#14202a'], [1, '#2a3d4b']]); ctx.fillRect(0, 0, W, 18);
+  ctx.fillStyle = lg(0, 18, 0, 22, [[0, '#e6c97a'], [1, '#8a6f35']]); ctx.fillRect(0, 18, W, 4);
+  ctx.fillStyle = T.panel; ctx.fillRect(0, 160, W, 30);
+  ctx.fillStyle = lg(0, 158, 0, 162, [[0, '#e6c97a'], [1, '#8a6f35']]); ctx.fillRect(0, 158, W, 4);
+  ctx.strokeStyle = 'rgba(230,201,122,.28)'; ctx.lineWidth = 1;
+  for (let x = 14; x < W; x += 110) ctx.strokeRect(x, 168, 94, 12);
+  ctx.fillStyle = lg(0, 180, 0, 190, [[0, '#10181f'], [1, '#222f3a']]); ctx.fillRect(0, 180, W, 10);
+}
+
+/* ---------- 地板 ---------- */
+function quad(y1, y2, bx1, bx2, fill) {
+  ctx.beginPath(); ctx.moveTo(P(y1, bx1), y1); ctx.lineTo(P(y1, bx2), y1);
+  ctx.lineTo(P(y2, bx2), y2); ctx.lineTo(P(y2, bx1), y2); ctx.closePath(); ctx.fillStyle = fill; ctx.fill();
+}
+function drawFloor() {
+  const n = 9, step = 110;
+  for (let i = 0; i < n; i++) {
+    const y1 = WALL + (H - WALL) * Math.pow(i / n, 1.6), y2 = WALL + (H - WALL) * Math.pow((i + 1) / n, 1.6);
+    for (let k = -5; k < 5; k++) {
+      const base = mode === 'gallery' ? (k & 1 ? T.floorA : T.floorB) : (((i + k) & 1) ? T.floorA : T.floorB);
+      quad(y1, y2, 330 + k * step, 330 + (k + 1) * step, base);
+      quad(y1, y2, 330 + k * step, 330 + (k + 1) * step, 'rgba(0,0,0,' + (hash(i * 11 + k * 7) * 0.1) + ')');
+      ctx.strokeStyle = 'rgba(0,0,0,.14)'; ctx.lineWidth = .6; ctx.stroke();
     }
+  }
+  ctx.fillStyle = lg(0, WALL, 0, WALL + 130, [[0, 'rgba(0,0,0,.4)'], [1, 'rgba(0,0,0,0)']]); ctx.fillRect(0, WALL, W, 130);
+  const g = ctx.createRadialGradient(330, 330, 20, 330, 330, 280);
+  g.addColorStop(0, 'rgba(255,244,210,.22)'); g.addColorStop(1, 'rgba(255,244,210,0)');
+  ctx.fillStyle = g; ctx.fillRect(0, WALL, W, H - WALL);
+}
+function drawRug() {
+  const y1 = WALL, y2 = H, half = 74;
+  const path = h => { ctx.beginPath(); ctx.moveTo(P(y1, 330 - h), y1); ctx.lineTo(P(y1, 330 + h), y1);
+    ctx.lineTo(P(y2, 330 + h), y2); ctx.lineTo(P(y2, 330 - h), y2); ctx.closePath(); };
+  path(half); ctx.fillStyle = lg(0, y1, 0, y2, [[0, T.rug[1]], [1, T.rug[0]]]); ctx.fill();
+  ctx.strokeStyle = '#d4b46a'; ctx.lineWidth = 3; ctx.stroke();
+  path(half - 12); ctx.strokeStyle = 'rgba(212,180,106,.55)'; ctx.lineWidth = 1.2; ctx.stroke();
+  [0.22, 0.5, 0.82].forEach(t => {
+    const y = y1 + (y2 - y1) * Math.pow(t, 1.5), s = (y - VPY) / (H - VPY);
+    ctx.strokeStyle = 'rgba(212,180,106,.5)'; ctx.lineWidth = 1.2;
+    ctx.beginPath(); ctx.ellipse(330, y, 38 * s, 12 * s, 0, 0, Math.PI * 2); ctx.stroke();
+    ell(330, y, 8 * s, 3 * s, 'rgba(212,180,106,.5)');
+  });
+}
+
+/* ---------- 擺設 ---------- */
+function column(cx) {
+  const w = 40, top = 26, bot = 186;
+  ell(cx + 8, bot + 10, 36, 8, 'rgba(0,0,0,.3)');
+  ctx.fillStyle = lg(cx - w / 2, 0, cx + w / 2, 0, [[0, '#9c9577'], [.35, '#f1ebd1'], [.7, '#cfc8a8'], [1, '#7e775d']]);
+  ctx.fillRect(cx - w / 2, top, w, bot - top);
+  ctx.fillStyle = 'rgba(0,0,0,.07)';
+  for (let i = 1; i < 4; i++) ctx.fillRect(cx - w / 2 + i * w / 4 - 1, top, 2, bot - top);
+  ctx.fillStyle = lg(0, top - 10, 0, top + 2, [[0, '#efe8cc'], [1, '#bdb694']]); rr(cx - w / 2 - 7, top - 10, w + 14, 13, 3); ctx.fill();
+  ctx.fillStyle = lg(0, bot - 4, 0, bot + 9, [[0, '#d8d2b2'], [1, '#9d967a']]); rr(cx - w / 2 - 9, bot - 4, w + 18, 13, 3); ctx.fill();
+}
+function plant(x, y) {
+  ell(x, y + 4, 24, 6, 'rgba(0,0,0,.3)');
+  for (let i = 0; i < 9; i++) {
+    const a = (-80 + i * 20) * Math.PI / 180, len = 32 + hash(i + x) * 22;
+    ctx.save(); ctx.translate(x, y - 30); ctx.rotate(a);
+    ctx.fillStyle = lg(0, 0, 0, -len, [[0, '#1f5a3a'], [1, '#4f9a5c']]);
+    ctx.beginPath(); ctx.ellipse(0, -len / 2, 7, len / 2, 0, 0, Math.PI * 2); ctx.fill(); ctx.restore();
+  }
+  ctx.fillStyle = lg(x - 16, 0, x + 16, 0, [[0, '#7a3f2e'], [.5, '#c97a5c'], [1, '#6b3526']]);
+  ctx.beginPath(); ctx.moveTo(x - 15, y - 28); ctx.lineTo(x + 15, y - 28); ctx.lineTo(x + 10, y + 3); ctx.lineTo(x - 10, y + 3); ctx.closePath(); ctx.fill();
+  ctx.fillStyle = '#d99a7a'; rr(x - 17, y - 32, 34, 7, 3); ctx.fill();
+}
+function frameBox(cx, cy, w, h, drawInner) {
+  ctx.save(); ctx.shadowColor = 'rgba(0,0,0,.6)'; ctx.shadowBlur = 16; ctx.shadowOffsetY = 7;
+  ctx.fillStyle = lg(cx - w / 2 - 8, cy - h / 2 - 8, cx + w / 2 + 8, cy + h / 2 + 8, [[0, '#f0d78a'], [.5, '#a98a42'], [1, '#e6c97a']]);
+  ctx.fillRect(cx - w / 2 - 8, cy - h / 2 - 8, w + 16, h + 16); ctx.restore();
+  ctx.fillStyle = '#16100a'; ctx.fillRect(cx - w / 2 - 3, cy - h / 2 - 3, w + 6, h + 6);
+  ctx.save(); ctx.beginPath(); ctx.rect(cx - w / 2, cy - h / 2, w, h); ctx.clip();
+  drawInner(cx - w / 2, cy - h / 2, w, h);
+  ctx.fillStyle = lg(cx - w / 2, cy - h / 2, cx + w / 2, cy + h / 2, [[0, 'rgba(255,255,255,.13)'], [.4, 'rgba(255,255,255,0)'], [1, 'rgba(0,0,0,.12)']]);
+  ctx.fillRect(cx - w / 2, cy - h / 2, w, h); ctx.restore();
+}
+function pictureLight(cx, topY, w) {
+  const g = ctx.createLinearGradient(0, topY, 0, topY + 90);
+  g.addColorStop(0, 'rgba(255,236,170,.28)'); g.addColorStop(1, 'rgba(255,236,170,0)');
+  ctx.fillStyle = g; ctx.beginPath(); ctx.moveTo(cx - 14, topY); ctx.lineTo(cx + 14, topY);
+  ctx.lineTo(cx + w / 2 + 14, topY + 90); ctx.lineTo(cx - w / 2 - 14, topY + 90); ctx.closePath(); ctx.fill();
+  ctx.fillStyle = lg(0, topY - 5, 0, topY + 1, [[0, '#f0d78a'], [1, '#8a6f35']]); rr(cx - 22, topY - 5, 44, 6, 3); ctx.fill();
+  ctx.fillStyle = '#8a6f35'; ctx.fillRect(cx - 1.5, topY - 12, 3, 8);
+}
+function plaque(cx, y, text) {
+  ctx.font = '11px ' + SERIF;
+  const w = Math.max(80, ctx.measureText(text).width + 22);
+  ctx.fillStyle = '#17120c'; rr(cx - w / 2, y, w, 17, 3); ctx.fill();
+  ctx.strokeStyle = '#c9a85c'; ctx.lineWidth = 1; ctx.stroke();
+  ctx.fillStyle = '#ecdcab'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(text, cx, y + 9);
+}
+function shortName(n) { return n.split(' (')[0].split('(')[0]; }
+
+function artSlots() {
+  const n = arts.length; return arts.map((a, i) => 330 + (i - (n - 1) / 2) * 175);
+}
+function drawGalleryWall() {
+  ctx.fillStyle = 'rgba(8,14,20,.6)'; rr(230, 28, 200, 24, 12); ctx.fill();
+  ctx.strokeStyle = '#d4b46a'; ctx.lineWidth = 1; ctx.stroke();
+  ctx.fillStyle = '#ecdcab'; ctx.font = 'bold 14px ' + SERIF; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillText((currentArtist.icon || '') + ' 【' + currentArtist.matched_name + '】專屬展廳', 330, 41);
+  const cs = artSlots();
+  arts.forEach((a, i) => {
+    const im = imgs[i], ok = im.complete && im.naturalWidth > 0;
+    let w = 120, h = 84;
+    if (ok) { const r = im.naturalWidth / im.naturalHeight; if (r > 128 / 88) { w = 128; h = 128 / r; } else { h = 88; w = 88 * r; } }
+    pictureLight(cs[i], 40, w);
+    frameBox(cs[i], 104, w, h, (x, y, ww, hh) => {
+      if (ok) ctx.drawImage(im, x, y, ww, hh);
+      else { ctx.fillStyle = lg(x, y, x + ww, y + hh, [[0, '#5a7a92'], [1, '#2a3a48']]); ctx.fillRect(x, y, ww, hh); }
+    });
+    plaque(cs[i], 163, shortName(a.name));
+    const pool = ctx.createRadialGradient(cs[i], 235, 4, cs[i], 235, 85);
+    pool.addColorStop(0, 'rgba(255,238,180,.16)'); pool.addColorStop(1, 'rgba(255,238,180,0)');
+    ctx.save(); ctx.translate(0, 0); ctx.fillStyle = pool; ctx.fillRect(cs[i] - 90, 195, 180, 80); ctx.restore();
+  });
+}
+function drawLobbyWall() {
+  frameBox(135, 100, 84, 62, (x, y, w, h) => {
+    ctx.fillStyle = lg(x, y, x, y + h, [[0, '#f2b36b'], [.55, '#c8604a'], [1, '#2f3e5c']]); ctx.fillRect(x, y, w, h);
+    ell(x + w * .5, y + h * .5, 14, 14, 'rgba(255,240,200,.85)');
+  });
+  frameBox(525, 100, 84, 62, (x, y, w, h) => {
+    ctx.fillStyle = lg(x, y, x + w, y + h, [[0, '#1f3b5c'], [.5, '#4f86a8'], [1, '#b9d9f6']]); ctx.fillRect(x, y, w, h);
+    ctx.fillStyle = 'rgba(255,255,255,.35)'; ctx.fillRect(x, y + h * .62, w, 3); ctx.fillRect(x, y + h * .74, w, 2);
+  });
+  pictureLight(135, 44, 84); pictureLight(525, 44, 84);
+}
+function desk() {
+  const x = 215, w = 230, top = 124, bot = 190;
+  ell(330, bot + 5, 128, 8, 'rgba(0,0,0,.35)');
+  ctx.fillStyle = lg(0, top, 0, bot, [[0, '#7d5638'], [1, '#442b1d']]); ctx.fillRect(x, top, w, bot - top);
+  ctx.strokeStyle = 'rgba(230,201,122,.5)'; ctx.lineWidth = 1;
+  for (let i = 0; i < 3; i++) ctx.strokeRect(x + 10 + i * 74, top + 12, 62, bot - top - 22);
+  ctx.fillStyle = lg(0, top - 9, 0, top + 2, [[0, '#dcb583'], [1, '#a67c52']]); rr(x - 9, top - 9, w + 18, 11, 3); ctx.fill();
+  ctx.fillStyle = '#e6c97a'; ctx.font = 'bold 15px ' + SERIF; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillText('接待諮詢處', 330, top + 34);
+  ctx.fillStyle = '#3a2a1a'; ctx.fillRect(x + 28, top - 14, 4, 6);
+  ctx.fillStyle = '#2f6b4f'; ctx.beginPath(); ctx.moveTo(x + 18, top - 14); ctx.lineTo(x + 42, top - 14); ctx.lineTo(x + 36, top - 28); ctx.lineTo(x + 24, top - 28); ctx.closePath(); ctx.fill();
+  const g = ctx.createRadialGradient(x + 30, top - 12, 2, x + 30, top - 12, 46);
+  g.addColorStop(0, 'rgba(255,236,170,.4)'); g.addColorStop(1, 'rgba(255,236,170,0)'); ctx.fillStyle = g; ctx.fillRect(x - 20, top - 60, 100, 90);
+  ctx.fillStyle = '#e8e2c8'; ctx.fillRect(x + w - 62, top - 13, 34, 4); ctx.fillStyle = '#AA5D4C'; ctx.fillRect(x + w - 60, top - 17, 30, 4);
+}
+function chandelier(t) {
+  const fl = 0.9 + 0.1 * Math.sin(t / 280);
+  ctx.strokeStyle = '#8a7a4a'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(330, 0); ctx.lineTo(330, 44); ctx.stroke();
+  ctx.save(); ctx.globalCompositeOperation = 'lighter';
+  const g = ctx.createRadialGradient(330, 58, 6, 330, 58, 190);
+  g.addColorStop(0, 'rgba(255,226,150,' + (0.34 * fl) + ')'); g.addColorStop(1, 'rgba(255,226,150,0)');
+  ctx.fillStyle = g; ctx.fillRect(100, 0, 460, 300); ctx.restore();
+  ctx.strokeStyle = '#e0bf6c'; ctx.lineWidth = 4; ctx.beginPath(); ctx.ellipse(330, 58, 54, 11, 0, 0, Math.PI * 2); ctx.stroke();
+  for (let a = 0; a < 8; a++) {
+    const x = 330 + Math.cos(a * Math.PI / 4) * 54, y = 58 + Math.sin(a * Math.PI / 4) * 11;
+    ctx.strokeStyle = 'rgba(255,255,255,.55)'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x, y + 12); ctx.stroke();
+    ell(x, y - 3, 3.4, 3.4, '#fff6cf'); ell(x, y + 13, 2, 2.6, 'rgba(210,235,255,.85)');
+  }
+  ell(330, 72, 5, 6, '#e0bf6c');
+}
+
+/* ---------- 紳士 ---------- */
+function drawPlayer() {
+  const s = (0.7 + 0.4 * (player.y - 215) / (H - 215)) * 1.2;
+  const sw = player.moving ? Math.sin(player.walkFrame) : 0;
+  ctx.save(); ctx.translate(player.x, player.y); ctx.scale(s, s);
+  ell(0, 2, 16, 5, 'rgba(0,0,0,.4)');
+  ctx.fillStyle = '#1c2630'; rr(-8, -14 + Math.max(0, sw) * -2, 6, 15, 2); ctx.fill(); rr(2, -14 + Math.max(0, -sw) * -2, 6, 15, 2); ctx.fill();
+  ctx.fillStyle = '#0d1218'; rr(-9, -2 + Math.max(0, sw) * -2, 8, 4, 2); ctx.fill(); rr(1, -2 + Math.max(0, -sw) * -2, 8, 4, 2); ctx.fill();
+  if (player.dir === 'right' || player.dir === 'left') { const d = player.dir === 'right' ? 1 : -1;
+    ctx.strokeStyle = '#d4b46a'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(d * 12, -22 + sw * 2); ctx.lineTo(d * 16, 0); ctx.stroke(); }
+  ctx.fillStyle = lg(-10, 0, 10, 0, [[0, '#2f4a61'], [.5, '#5b86a6'], [1, '#2a4257']]); rr(-10, -36, 20, 24, 5); ctx.fill();
+  ctx.fillStyle = '#f1ead2'; ctx.beginPath(); ctx.moveTo(-3.5, -36); ctx.lineTo(3.5, -36); ctx.lineTo(0, -22); ctx.closePath(); ctx.fill();
+  ctx.fillStyle = '#AA5D4C'; ctx.fillRect(-3, -35, 6, 3);
+  ctx.fillStyle = '#2f4a61'; rr(-14, -35 + sw * 2, 5, 17, 2.5); ctx.fill(); rr(9, -35 - sw * 2, 5, 17, 2.5); ctx.fill();
+  ctx.fillStyle = '#f3d3b0'; ctx.beginPath(); ctx.arc(0, -43, 8, 0, 7); ctx.fill();
+  ctx.fillStyle = '#1b1f27'; ctx.beginPath(); ctx.ellipse(0, -49, 13, 3.2, 0, 0, 7); ctx.fill(); rr(-7.5, -64, 15, 16, 2); ctx.fill();
+  ctx.fillStyle = '#AA5D4C'; ctx.fillRect(-7.5, -54, 15, 3.5);
+  ctx.fillStyle = '#1a120b';
+  if (player.dir === 'down') { ell(-3, -42, 1.2, 1.6, '#1a120b'); ell(3, -42, 1.2, 1.6, '#1a120b'); }
+  else if (player.dir === 'left') ell(-4, -42, 1.2, 1.6, '#1a120b');
+  else if (player.dir === 'right') ell(4, -42, 1.2, 1.6, '#1a120b');
+  ctx.restore();
+}
+
+/* ---------- 灰塵光點、暗角、提示 ---------- */
+const dust = Array.from({ length: 30 }, (_, i) => ({ x: hash(i) * W, y: hash(i + 50) * 400, v: 0.1 + hash(i + 9) * 0.25, r: 0.8 + hash(i + 3) * 1.4 }));
+function drawDust() {
+  dust.forEach(d => { d.y += d.v * 0.3; d.x += Math.sin((d.y + d.r * 50) / 40) * 0.15; if (d.y > 480) d.y = 20;
+    ctx.fillStyle = 'rgba(255,244,210,' + (0.18 + d.r * 0.08) + ')'; ctx.beginPath(); ctx.arc(d.x, d.y, d.r, 0, 7); ctx.fill(); });
+}
+function vignette() {
+  const g = ctx.createRadialGradient(330, 270, 170, 330, 270, 440);
+  g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(1, 'rgba(0,0,0,.5)'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+}
+function lobbyHud() {
+  ctx.fillStyle = 'rgba(14,20,26,.72)'; rr(95, 482, 470, 26, 13); ctx.fill();
+  ctx.strokeStyle = 'rgba(212,180,106,.7)'; ctx.lineWidth = 1; ctx.stroke();
+  ctx.fillStyle = '#ecdcab'; ctx.font = '13px ' + SERIF; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillText('✨ 請於上方搜尋藝術家，或點選名家標籤開啟專屬展廳 ✨', 330, 495);
+}
+
+/* ---------- 互動 ---------- */
+function showArt(i) {
+  const a = arts[i];
+  document.getElementById('modal-img').src = a.final_src;
+  document.getElementById('modal-title').innerHTML = (currentArtist.icon || '') + ' ' + a.name;
+  document.getElementById('modal-desc').innerText = a.desc;
+  document.querySelectorAll('.nav-btn').forEach((b, j) => b.classList.toggle('on', j === i));
+}
+function openModal(i) {
+  document.getElementById('modal-period').innerText = '【' + currentArtist.matched_name + '】' + currentArtist.period;
+  document.getElementById('modal-quote').innerText = currentArtist.quote;
+  const nav = document.getElementById('modal-nav'); nav.innerHTML = '';
+  if (arts.length > 1) arts.forEach((a, j) => { const b = document.createElement('button'); b.className = 'nav-btn';
+    b.innerText = '作品 ' + (j + 1); b.onclick = e => { e.stopPropagation(); showArt(j); }; nav.appendChild(b); });
+  showArt(i); modal.style.display = 'block'; isModalOpen = true;
+}
+function closeModal() { modal.style.display = 'none'; isModalOpen = false; }
+
+window.addEventListener('keydown', e => {
+  if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', ' '].includes(e.key)) e.preventDefault();
+  keys[e.key.toLowerCase()] = true;
+  if ((e.key === ' ' || e.key === 'Enter') && mode === 'gallery') {
+    if (isModalOpen) closeModal(); else if (nearIdx >= 0) openModal(nearIdx);
+  }
 });
-window.addEventListener('keyup', (e) => { keys[e.key.toLowerCase()] = false; });
-
-function switchArtwork(idx) {
-    currentArtIndex = idx;
-    const art = currentArtist.artworks[idx];
-    document.getElementById('modal-img').src = art.final_src;
-    document.getElementById('modal-title').innerHTML = `${currentArtist.icon} ${art.name}`;
-    document.getElementById('modal-desc').innerText = art.desc;
-}
-
-function toggleModal() {
-    if (isModalOpen) {
-        modal.style.display = 'none';
-        isModalOpen = false;
-    } else {
-        currentArtIndex = 0;
-        const artworks = currentArtist.artworks || [];
-        if (artworks.length > 0) { switchArtwork(0); }
-        document.getElementById('modal-period').innerText = `【${currentArtist.matched_name}】${currentArtist.period}`;
-        document.getElementById('modal-quote').innerText = currentArtist.quote;
-
-        const nav = document.getElementById('modal-nav');
-        nav.innerHTML = '';
-        if (artworks.length > 1) {
-            artworks.forEach((a, i) => {
-                const btn = document.createElement('button');
-                btn.className = 'nav-btn';
-                btn.innerText = `作品 ${i+1}`;
-                btn.onclick = () => switchArtwork(i);
-                nav.appendChild(btn);
-            });
-        }
-        modal.style.display = 'block';
-        isModalOpen = true;
-    }
-}
+window.addEventListener('keyup', e => { keys[e.key.toLowerCase()] = false; });
+document.getElementById('game-box').addEventListener('mousedown', e => {
+  window.focus(); document.body.focus();
+  if (e.target.closest('#rpg-modal')) return;
+  const r = canvas.getBoundingClientRect();
+  target = { x: Math.max(30, Math.min(W - 30, e.clientX - r.left)), y: Math.max(215, Math.min(470, e.clientY - r.top)) };
+});
 
 function update() {
-    let moving = false;
-    if (keys['arrowup'] || keys['w']) { player.y -= player.speed; player.dir = 'up'; moving = true; }
-    if (keys['arrowdown'] || keys['s']) { player.y += player.speed; player.dir = 'down'; moving = true; }
-    if (keys['arrowleft'] || keys['a']) { player.x -= player.speed; player.dir = 'left'; moving = true; }
-    if (keys['arrowright'] || keys['d']) { player.x += player.speed; player.dir = 'right'; moving = true; }
+  let dx = 0, dy = 0;
+  if (keys['arrowup'] || keys['w']) dy -= 1; if (keys['arrowdown'] || keys['s']) dy += 1;
+  if (keys['arrowleft'] || keys['a']) dx -= 1; if (keys['arrowright'] || keys['d']) dx += 1;
+  if (dx || dy) target = null;
+  else if (target) { const vx = target.x - player.x, vy = target.y - player.y, d = Math.hypot(vx, vy);
+    if (d < 4) target = null; else { dx = vx / d; dy = vy / d; } }
+  player.moving = !!(dx || dy);
+  if (player.moving) {
+    const len = Math.hypot(dx, dy) || 1;
+    player.x += dx / len * player.speed; player.y += dy / len * player.speed;
+    player.dir = Math.abs(dx) > Math.abs(dy) ? (dx < 0 ? 'left' : 'right') : (dy < 0 ? 'up' : 'down');
+    player.walkFrame += 0.28; if (isModalOpen) closeModal();
+  }
+  player.x = Math.max(30, Math.min(W - 30, player.x));
+  player.y = Math.max(215, Math.min(470, player.y));
 
-    if (moving) {
-        player.walkFrame += 0.22;
-        if (isModalOpen) { modal.style.display = 'none'; isModalOpen = false; }
-    }
-
-    player.x = Math.max(30, Math.min(canvas.width - 30, player.x));
-    player.y = Math.max(mode === "gallery" ? 145 : 180, Math.min(canvas.height - 35, player.y));
-
-    if (mode === "gallery") {
-        let dist = Math.hypot(player.x - (singleDoor.x + singleDoor.w / 2), player.y - (singleDoor.y + singleDoor.h));
-        isNearDoor = (dist < 60);
-        if (isNearDoor && !isModalOpen) {
-            prompt.style.display = 'block';
-            prompt.style.left = player.x + 'px';
-            prompt.style.top = (player.y - 25) + 'px';
-        } else {
-            prompt.style.display = 'none';
-        }
-    }
+  nearIdx = -1;
+  if (mode === 'gallery') {
+    const cs = artSlots(); let best = 75;
+    cs.forEach((cx, i) => { const d = Math.abs(player.x - cx); if (d < best && player.y < 300) { best = d; nearIdx = i; } });
+  }
+  if (nearIdx >= 0 && !isModalOpen) {
+    promptEl.style.display = 'block'; promptEl.style.left = player.x + 'px';
+    promptEl.style.top = (player.y - 90) + 'px';
+    promptEl.innerText = '❗ [空白鍵] 鑑賞 ' + shortName(arts[nearIdx].name);
+  } else promptEl.style.display = 'none';
 }
 
-function drawLobby() {
-    ctx.fillStyle = '#547791'; ctx.fillRect(0, 0, canvas.width, 160);
-    ctx.fillStyle = '#374E5F'; ctx.fillRect(0, 0, canvas.width, 16);
-    ctx.fillStyle = '#B9D9F6'; ctx.fillRect(0, 16, canvas.width, 3);
-    ctx.fillStyle = '#B7B082'; ctx.fillRect(0, 156, canvas.width, 4);
-
-    const tileSize = 44;
-    for (let x = 0; x < canvas.width; x += tileSize) {
-        for (let y = 160; y < canvas.height; y += tileSize) {
-            ctx.fillStyle = ((x / tileSize + y / tileSize) % 2 === 0) ? '#E2E1B5' : '#B7B082';
-            ctx.fillRect(x, y, tileSize, tileSize);
-        }
-    }
-
-    ctx.fillStyle = '#AA5D4C'; ctx.fillRect(230, 80, 200, 48);
-    ctx.fillStyle = '#B9D9F6'; ctx.fillRect(226, 76, 208, 8);
-    ctx.fillStyle = '#E2E1B5'; ctx.font = 'bold 13px serif'; ctx.textAlign = 'center';
-    ctx.fillText('🏛️ 美術館接待諮詢處', 330, 108);
-
-    ctx.fillStyle = '#374E5F';
-    ctx.beginPath(); ctx.arc(80, 130, 24, 0, Math.PI * 2); ctx.arc(580, 130, 24, 0, Math.PI * 2); ctx.fill();
-    ctx.fillStyle = '#AA5D4C'; ctx.fillRect(70, 130, 20, 25); ctx.fillRect(570, 130, 20, 25);
-
-    ctx.fillStyle = '#547791'; ctx.fillRect(80, 260, 40, 90); ctx.fillRect(540, 260, 40, 90);
-    ctx.fillStyle = '#AA5D4C'; ctx.fillRect(76, 260, 4, 90); ctx.fillRect(580, 260, 4, 90);
-
-    ctx.fillStyle = 'rgba(185, 217, 246, 0.35)'; ctx.fillRect(280, 160, 100, canvas.height - 160);
-
-    ctx.fillStyle = '#2F3E4A'; ctx.font = 'bold 15px serif'; ctx.textAlign = 'center';
-    ctx.fillText('✨ 請於上方搜尋藝術家，或點選名家標籤開啟專屬拱門 ✨', 330, 220);
-    ctx.fillStyle = '#547791'; ctx.font = '12px serif';
-    ctx.fillText('（紳士目前在大廳休憩，領取門票後將步入專屬展廳）', 330, 245);
+function loop(t) {
+  update(); ctx.clearRect(0, 0, W, H);
+  drawWall();
+  if (mode === 'gallery') drawGalleryWall(); else drawLobbyWall();
+  drawFloor(); drawRug();
+  if (mode === 'lobby') desk();
+  column(48); column(612);
+  if (mode === 'lobby') chandelier(t || 0);
+  const items = [{ y: player.y, f: drawPlayer }];
+  if (mode === 'lobby') { items.push({ y: 255, f: () => plant(92, 255) }); items.push({ y: 255, f: () => plant(568, 255) }); }
+  else { items.push({ y: 250, f: () => plant(100, 250) }); items.push({ y: 250, f: () => plant(560, 250) }); }
+  items.sort((a, b) => a.y - b.y).forEach(o => o.f());
+  drawDust(); vignette();
+  if (mode === 'lobby') lobbyHud();
+  requestAnimationFrame(loop);
 }
-
-function drawGallery() {
-    ctx.fillStyle = '#547791'; ctx.fillRect(0, 0, canvas.width, 130);
-    ctx.fillStyle = '#374E5F'; ctx.fillRect(0, 0, canvas.width, 14);
-    ctx.fillStyle = '#B9D9F6'; ctx.fillRect(0, 14, canvas.width, 2.5);
-    ctx.fillStyle = '#B7B082'; ctx.fillRect(0, 126, canvas.width, 6);
-
-    const tileSize = 40;
-    for (let x = 0; x < canvas.width; x += tileSize) {
-        for (let y = 132; y < canvas.height; y += tileSize) {
-            ctx.fillStyle = ((x / tileSize + y / tileSize) % 2 === 0) ? '#E2E1B5' : '#B7B082';
-            ctx.fillRect(x, y, tileSize, tileSize);
-        }
-    }
-
-    const carpetW = 120;
-    const carpetX = (canvas.width - carpetW) / 2;
-    ctx.fillStyle = '#AA5D4C'; ctx.fillRect(carpetX, 132, carpetW, canvas.height - 132);
-    ctx.fillStyle = '#B9D9F6';
-    ctx.fillRect(carpetX - 3, 132, 3, canvas.height - 132);
-    ctx.fillRect(carpetX + carpetW, 132, 3, canvas.height - 132);
-
-    ctx.fillStyle = 'rgba(185, 217, 246, 0.3)';
-    ctx.beginPath(); ctx.arc(330, 85, 80, 0, Math.PI * 2); ctx.fill();
-
-    ctx.fillStyle = '#374E5F'; ctx.fillRect(singleDoor.x, singleDoor.y, singleDoor.w, singleDoor.h);
-    ctx.fillStyle = '#B9D9F6'; ctx.fillRect(singleDoor.x - 4, singleDoor.y - 4, singleDoor.w + 8, 8);
-    ctx.fillStyle = '#AA5D4C'; ctx.fillRect(singleDoor.x + 8, singleDoor.y + 12, singleDoor.w - 16, singleDoor.h - 12);
-
-    ctx.font = '34px Arial'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-    ctx.fillText(currentArtist.icon || '🎨', 330, singleDoor.y + 45);
-
-    ctx.fillStyle = '#547791';
-    ctx.fillRect(singleDoor.x - 14, singleDoor.y + singleDoor.h + 8, singleDoor.w + 28, 26);
-    ctx.strokeStyle = '#B9D9F6'; ctx.lineWidth = 1.5;
-    ctx.strokeRect(singleDoor.x - 14, singleDoor.y + singleDoor.h + 8, singleDoor.w + 28, 26);
-
-    ctx.fillStyle = '#E2E1B5'; ctx.font = 'bold 13px serif';
-    ctx.fillText(`【${currentArtist.matched_name}】展廳門`, 330, singleDoor.y + singleDoor.h + 24);
-}
-
-function drawPlayer() {
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.45)';
-    ctx.beginPath(); ctx.ellipse(player.x, player.y + 10, 11, 5, 0, 0, Math.PI * 2); ctx.fill();
-
-    const bob = Math.sin(player.walkFrame) * 2;
-
-    ctx.fillStyle = '#25333E';
-    ctx.fillRect(player.x - 6, player.y + 3 + bob, 5, 9);
-    ctx.fillRect(player.x + 1, player.y + 3 + bob, 5, 9);
-
-    ctx.fillStyle = '#547791'; ctx.fillRect(player.x - 7, player.y - 6 + bob, 14, 11);
-    ctx.fillStyle = '#E2E1B5'; ctx.fillRect(player.x - 2, player.y - 6 + bob, 4, 6);
-    ctx.fillStyle = '#AA5D4C'; ctx.fillRect(player.x - 2, player.y - 6 + bob, 4, 2);
-
-    ctx.fillStyle = '#FED7AA'; ctx.fillRect(player.x - 5, player.y - 15 + bob, 10, 9);
-
-    ctx.fillStyle = '#25333E';
-    ctx.fillRect(player.x - 9, player.y - 18 + bob, 18, 3);
-    ctx.fillRect(player.x - 6, player.y - 27 + bob, 12, 10);
-    ctx.fillStyle = '#AA5D4C'; ctx.fillRect(player.x - 6, player.y - 20 + bob, 12, 2.5);
-
-    ctx.fillStyle = '#1A120B';
-    if (player.dir === 'down') {
-        ctx.fillRect(player.x - 3, player.y - 11 + bob, 2, 2.5);
-        ctx.fillRect(player.x + 1, player.y - 11 + bob, 2, 2.5);
-    } else if (player.dir === 'left') {
-        ctx.fillRect(player.x - 4, player.y - 11 + bob, 2, 2.5);
-    } else if (player.dir === 'right') {
-        ctx.fillRect(player.x + 2, player.y - 11 + bob, 2, 2.5);
-    }
-}
-
-function loop() {
-    update();
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    if (mode === "gallery") { drawGallery(); } else { drawLobby(); }
-    drawPlayer();
-    requestAnimationFrame(loop);
-}
-loop();
+requestAnimationFrame(loop);
 </script>
 </body>
 </html>
@@ -773,17 +908,17 @@ game_html = (PIXEL_GAME_HTML
              .replace("__ARTIST__", exhibit_json))
 
 # 9. 主內容：左遊戲、右資訊
-section_title("展廳漫遊", "用方向鍵或 WASD 移動，走到拱門前按空白鍵", anchor="gallery")
+section_title("展廳漫遊", "用方向鍵或 WASD 移動（也可直接點擊地面），走近掛畫按空白鍵", anchor="gallery")
 
 col_game, col_info = st.columns([3, 2], gap="large")
 
 with col_game:
     if is_in_gallery:
-        st.subheader(f"🏛️ 【{target_artist_data['matched_name']}】專屬古典展廳大門")
-        st.caption("操縱紳士漫步至正前方古典拱門，按【空白鍵 (Space)】鑑賞真實館藏代表作！")
+        st.subheader(f"🏛️ 【{target_artist_data['matched_name']}】專屬古典展廳")
+        st.caption("漫步於展廳中，走近牆上的掛畫，按【空白鍵 (Space)】鑑賞真實館藏代表作！")
     else:
         st.subheader("🛋️ 古典接待大廳 (Grand Entrance Lobby)")
-        st.caption("紳士漫步於古典大廳中；請於上方搜尋或點選名家標籤以開啟專屬展廊！")
+        st.caption("紳士漫步於古典大廳中；請於上方搜尋或點選名家標籤以開啟專屬展廳！")
 
     components.html(game_html, height=540)
 
@@ -825,10 +960,11 @@ with col_info:
 
 #### 🎫 參觀動線說明：
 1. **領取展覽門票**：請於上方 **「搜尋藝術家」** 輸入人名，或直接點選 **「熱門名家標籤」**。
-2. **啟程漫遊專屬展廳**：領取門票後，左側畫面將只為您開啟該藝術家的**唯一專屬展廊拱門**！
-3. **深度互動鑑賞**：操縱紳士走至展門正前方並按下 **【空白鍵 (Space)】**，即可欣賞代表作真跡照片並同步解鎖其生平脈絡。
+2. **啟程漫遊專屬展廳**：領取門票後，左側畫面將開啟該藝術家的**專屬展廳**，牆上掛滿他的代表作！
+3. **深度互動鑑賞**：操縱紳士走近掛畫並按下 **【空白鍵 (Space)】**，即可放大鑑賞作品並同步解鎖其生平脈絡。
 """)
-        st.info("💡 試著點擊上方標籤「**米開朗基羅**」、「**莫內**」或「**梵谷**」，立即開啟獨立專屬展廳！")
+        st.info("💡 試著點擊上方標籤「**米開朗基羅**」、「**莫內**」或「**梵谷**」，立即開啟專屬展廳！")
 
 # 10. 頁尾
 render_footer()
+
