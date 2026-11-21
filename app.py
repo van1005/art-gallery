@@ -43,6 +43,7 @@ CSS = """
     linear-gradient(180deg, var(--bg) 0%, #141C23 100%);
   font-family: 'Noto Sans TC', 'PingFang TC', 'Microsoft JhengHei', sans-serif;
   color: var(--cream);
+  overflow-x: hidden;
 }
 .block-container {
   max-width: 1240px !important;
@@ -136,7 +137,7 @@ html { scroll-behavior: smooth; }
 .artwork-card .d { font-size: .95rem; color: var(--sky); margin-top: 4px; line-height: 1.7; }
 
 /* ---------- 7. 分頁、提示框 ---------- */
-.stTabs [data-baseweb="tab-list"] { gap: 6px; border-bottom: 1px solid rgba(185,217,246,.2); }
+.stTabs [data-baseweb="tab-list"] { gap: 6px; border-bottom: 1px solid rgba(185,217,246,.2); overflow-x: auto; }
 .stTabs [data-baseweb="tab"] { color: var(--cream); border-radius: 10px 10px 0 0; padding: 8px 16px; }
 .stTabs [aria-selected="true"] { color: var(--sky) !important; background: rgba(84,119,145,.25); }
 .stTabs [data-baseweb="tab-highlight"] { background-color: var(--rust) !important; }
@@ -146,6 +147,7 @@ div[data-testid="stAlert"] {
 }
 hr { border-color: rgba(185,217,246,.14) !important; }
 iframe { border-radius: 14px; }
+iframe[srcdoc] { width: 100% !important; border: 0; }
 
 /* ---------- 8. 頁尾 ---------- */
 .site-footer {
@@ -179,13 +181,37 @@ h1, h2, h3, h4, [data-testid="stHeading"] h3 {
 .stMarkdown h3, .stTabs [data-baseweb="tab-panel"] h3 { font-size: 1.3rem !important; margin: 1.2rem 0 .6rem !important; }
 .stMarkdown h4 { font-size: 1.12rem !important; color: #B7B082 !important; }
 
-/* ---------- 10. 手機版 ---------- */
+/* ---------- 10. 手機 / 平板版（放在最後，覆蓋上面的設定） ---------- */
 @media (max-width: 760px) {
-  .site-nav { padding: 12px 16px; }
-  .site-nav .links { display: none; }
-  .hero { padding: 54px 16px 44px 16px; }
-  .hero .stats { gap: 22px; }
   .block-container { padding: 0 14px 30px 14px !important; }
+  .site-nav { padding: 12px 16px; margin: 0 -14px; }
+  .site-nav .links { display: none; }
+  .hero { padding: 54px 16px 44px 16px; margin: 0 -14px 24px -14px; }
+  .hero.compact { padding: 28px 16px 22px 16px; margin-bottom: 18px; }
+  .hero .stats { gap: 22px; margin-top: 26px; }
+  .hero .stats div b { font-size: 1.5rem; }
+  .hero p { font-size: .95rem; }
+  .site-footer { margin: 40px -14px -30px -14px; padding: 26px 16px; font-size: .8rem; }
+  .section-title { font-size: 1.25rem; }
+
+  /* 觸控友善：按鈕夠大、輸入框 16px 避免 iOS 自動放大 */
+  .stTextInput input { font-size: 16px !important; }
+  .stButton > button { min-height: 46px; }
+
+  /* 名家標籤改成一排三個（只作用在巢狀欄位） */
+  [data-testid="stColumn"] [data-testid="stHorizontalBlock"],
+  [data-testid="column"] [data-testid="stHorizontalBlock"] { flex-wrap: wrap !important; gap: .5rem !important; }
+  [data-testid="stColumn"] [data-testid="stHorizontalBlock"] > [data-testid="stColumn"],
+  [data-testid="column"] [data-testid="stHorizontalBlock"] > [data-testid="column"] {
+    min-width: calc(33% - .5rem) !important; flex: 1 1 calc(33% - .5rem) !important; width: auto !important;
+  }
+
+  .stMarkdown p, .stMarkdown li { font-size: 1.02rem; }
+  .stTabs [data-baseweb="tab-panel"] p, .stTabs [data-baseweb="tab-panel"] li { font-size: 1.05rem !important; }
+  [data-testid="stHeading"] h3 { font-size: 1.2rem !important; }
+
+  /* 遊戲區備援高度：萬一瀏覽器不允許自動調整，也會有足夠空間放控制鍵 */
+  iframe[srcdoc] { height: auto !important; aspect-ratio: 3 / 4; }
 }
 """
 
@@ -237,7 +263,7 @@ def render_footer():
     st.markdown(
         '<a id="about"></a><div class="site-footer">'
         '<b>ART·MUSEUM 數位美術館</b><br>'
-        '操作說明：方向鍵 / WASD 移動（或直接點擊地面），走近掛畫按空白鍵鑑賞真跡<br>'
+        '電腦：方向鍵 / WASD 移動，走近掛畫按空白鍵 ｜ 手機、平板：點擊地面或使用畫面下方按鈕<br>'
         '資料來源：Wikipedia、Wikimedia Commons ｜ © 2026 跨時代藝術家互動圖譜'
         '</div>',
         unsafe_allow_html=True,
@@ -498,51 +524,82 @@ if current_query and not is_in_gallery:
 exhibit_json = json.dumps(target_artist_data, ensure_ascii=False) if target_artist_data else "{}"
 mode_str = "gallery" if is_in_gallery else "lobby"
 
-# 8. 擬真展廳遊戲（透視地板、燈光、掛畫、可點擊移動）
+# 8. 擬真展廳遊戲（響應式：電腦、平板、手機皆可操作）
 PIXEL_GAME_HTML = """
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="referrer" content="no-referrer">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700&family=LXGW+WenKai+TC:wght@400;700&display=swap" rel="stylesheet">
 <style>
-    body { margin:0; padding:0; background:transparent; display:flex; justify-content:center; align-items:center;
-           font-family:'LXGW WenKai TC','Noto Serif TC',serif; overflow:hidden; user-select:none; outline:none; }
-    #game-box { position:relative; width:660px; height:520px; border-radius:14px; overflow:hidden;
+    html, body { margin:0; padding:0; background:transparent; overflow:hidden; width:100%;
+           font-family:'LXGW WenKai TC','Noto Serif TC',serif; user-select:none; -webkit-user-select:none;
+           -webkit-tap-highlight-color:transparent; outline:none; }
+    #game-box { position:absolute; top:10px; left:0; width:660px; height:520px; border-radius:14px; overflow:hidden;
                 border:1px solid rgba(185,217,246,.45); background:#1b2630; cursor:pointer;
+                transform-origin:0 0; touch-action:manipulation;
                 box-shadow:0 18px 50px rgba(0,0,0,.8), 0 0 0 4px rgba(84,119,145,.25); }
     canvas { display:block; }
     #guide-bar { position:absolute; top:12px; left:12px; background:rgba(20,28,35,.72); color:#E2E1B5;
-                 padding:6px 14px; border-radius:20px; font-size:12.5px; border:1px solid rgba(185,217,246,.4);
-                 pointer-events:none; letter-spacing:.5px; backdrop-filter:blur(6px); }
+                 padding:6px 14px; border-radius:20px; font-size:calc(12.5px * var(--k, 1));
+                 border:1px solid rgba(185,217,246,.4); pointer-events:none; letter-spacing:.5px;
+                 backdrop-filter:blur(6px); max-width:620px; box-sizing:border-box; }
     #interact-prompt { position:absolute; display:none; color:#fff; background:rgba(170,93,76,.95);
-                       border:1.5px solid #f1e3b0; padding:5px 14px; border-radius:20px; font-size:12.5px;
-                       pointer-events:none; transform:translate(-50%,-100%); white-space:nowrap;
+                       border:1.5px solid #f1e3b0; padding:5px 14px; border-radius:20px;
+                       font-size:calc(12.5px * var(--k, 1)); pointer-events:none;
+                       transform:translate(-50%,-100%); white-space:nowrap;
                        box-shadow:0 6px 18px rgba(0,0,0,.6); animation:bounce .8s infinite alternate; }
     @keyframes bounce { from { margin-top:0; } to { margin-top:-6px; } }
     @keyframes pop { from { opacity:0; transform:translate(-50%,-46%) scale(.94); } to { opacity:1; transform:translate(-50%,-50%) scale(1); } }
-    #rpg-modal { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:570px;
-                 background:linear-gradient(145deg,rgba(47,62,74,.97),rgba(27,38,48,.97));
+
+    /* 觸控控制鍵（手機、平板自動顯示） */
+    #controls { position:absolute; left:0; right:0; display:none; justify-content:space-between; align-items:center;
+                padding:0 20px; box-sizing:border-box; touch-action:none; }
+    #dpad { display:grid; grid-template-columns:repeat(3,46px); grid-template-rows:repeat(3,46px); gap:3px; }
+    .pad { width:46px; height:46px; border-radius:12px; background:rgba(47,62,74,.9);
+           border:1px solid rgba(185,217,246,.55); color:#E2E1B5; font-size:20px; display:flex;
+           align-items:center; justify-content:center; touch-action:none; cursor:pointer; }
+    .pad.on { background:#AA5D4C; border-color:#f1e3b0; }
+    #act { width:86px; height:86px; border-radius:50%; border:2px solid #f1e3b0; color:#fff; font-size:15px;
+           font-family:inherit; cursor:pointer; touch-action:none; line-height:1.3;
+           background:radial-gradient(circle at 35% 30%,#d98a74,#AA5D4C); box-shadow:0 6px 16px rgba(0,0,0,.5); }
+    #act:active { transform:scale(.94); }
+
+    /* 作品視窗：不隨畫面縮放，手機上也維持清楚大小 */
+    #rpg-modal { position:fixed; top:50%; left:50%; transform:translate(-50%,-50%);
+                 width:min(570px, calc(100vw - 16px)); max-height:calc(100vh - 12px); overflow:auto;
+                 box-sizing:border-box; background:linear-gradient(145deg,rgba(47,62,74,.98),rgba(27,38,48,.98));
                  border:1px solid #d8b86a; border-radius:16px; padding:18px 22px; display:none; z-index:100;
                  color:#E2E1B5; box-shadow:0 24px 60px rgba(0,0,0,.9); animation:pop .25s ease-out; }
+    #close-x { position:absolute; top:8px; right:10px; width:32px; height:32px; border-radius:50%;
+               background:rgba(255,255,255,.08); border:1px solid rgba(185,217,246,.4); color:#E2E1B5;
+               font-size:15px; cursor:pointer; }
     .modal-body { display:flex; gap:18px; align-items:center; }
     .modal-img-box { flex:0 0 215px; height:255px; border-radius:6px; overflow:hidden; background:#10171d;
                      border:6px solid #c9a85c; box-shadow:0 8px 22px rgba(0,0,0,.7); display:flex;
                      align-items:center; justify-content:center; }
     .modal-img-box img { width:100%; height:100%; object-fit:contain; display:block; }
-    .modal-info { flex:1; }
-    .modal-info h3 { margin:0 0 6px 0; color:#B9D9F6; font-size:18px; font-family:'Noto Serif TC',serif; font-weight:700; line-height:1.4; }
+    .modal-info { flex:1; min-width:0; }
+    .modal-info h3 { margin:0 0 6px 0; padding-right:26px; color:#B9D9F6; font-size:18px;
+                     font-family:'Noto Serif TC',serif; font-weight:700; line-height:1.4; }
     .period-tag { display:inline-block; background:#AA5D4C; color:#fff; padding:2px 10px; border-radius:20px;
                   font-size:11.5px; margin-bottom:8px; }
     .quote { font-size:13.5px; line-height:1.7; color:#E2E1B5; border-left:3px solid #AA5D4C;
              padding:4px 0 4px 12px; margin:6px 0 8px 0; }
     #modal-desc { font-size:13px; color:#c9c39a; line-height:1.75; }
     .nav-dots { display:flex; gap:6px; margin-top:10px; flex-wrap:wrap; }
-    .nav-btn { background:transparent; color:#E2E1B5; border:1px solid rgba(185,217,246,.5); padding:3px 12px;
-               font-size:12px; border-radius:20px; cursor:pointer; font-family:inherit; }
+    .nav-btn { background:transparent; color:#E2E1B5; border:1px solid rgba(185,217,246,.5); padding:5px 14px;
+               font-size:12.5px; border-radius:20px; cursor:pointer; font-family:inherit; }
     .nav-btn.on, .nav-btn:hover { background:#AA5D4C; border-color:#AA5D4C; color:#fff; }
     .close-hint { margin-top:12px; text-align:right; font-size:11.5px; color:#B7B082; }
+    @media (max-width:560px) {
+        #rpg-modal { padding:14px 14px 12px 14px; }
+        .modal-body { flex-direction:column; gap:10px; align-items:stretch; }
+        .modal-img-box { flex:0 0 auto; width:100%; height:150px; box-sizing:border-box; }
+        .modal-info h3 { font-size:16px; }
+    }
 </style>
 </head>
 <body tabindex="0">
@@ -550,19 +607,31 @@ PIXEL_GAME_HTML = """
     <canvas id="gameCanvas"></canvas>
     <div id="guide-bar"></div>
     <div id="interact-prompt"></div>
-    <div id="rpg-modal">
-        <div class="modal-body">
-            <div class="modal-img-box"><img id="modal-img" src="" alt="作品" referrerpolicy="no-referrer"></div>
-            <div class="modal-info">
-                <h3 id="modal-title"></h3>
-                <span class="period-tag" id="modal-period"></span>
-                <div class="quote" id="modal-quote"></div>
-                <div id="modal-desc"></div>
-                <div class="nav-dots" id="modal-nav"></div>
-            </div>
-        </div>
-        <div class="close-hint">按 [空白鍵] 或 移動角色 關閉視窗</div>
+</div>
+
+<div id="controls">
+    <div id="dpad">
+        <div class="pad" id="b-up" style="grid-area:1/2">▲</div>
+        <div class="pad" id="b-left" style="grid-area:2/1">◀</div>
+        <div class="pad" id="b-right" style="grid-area:2/3">▶</div>
+        <div class="pad" id="b-down" style="grid-area:3/2">▼</div>
     </div>
+    <button id="act">🔍<br>鑑賞</button>
+</div>
+
+<div id="rpg-modal">
+    <button id="close-x">✕</button>
+    <div class="modal-body">
+        <div class="modal-img-box"><img id="modal-img" src="" alt="作品" referrerpolicy="no-referrer"></div>
+        <div class="modal-info">
+            <h3 id="modal-title"></h3>
+            <span class="period-tag" id="modal-period"></span>
+            <div class="quote" id="modal-quote"></div>
+            <div id="modal-desc"></div>
+            <div class="nav-dots" id="modal-nav"></div>
+        </div>
+    </div>
+    <div class="close-hint">按 [空白鍵] 或點 ✕ 關閉</div>
 </div>
 
 <script>
@@ -575,6 +644,8 @@ const ctx = canvas.getContext('2d');
 ctx.scale(dpr, dpr);
 ctx.imageSmoothingQuality = 'high';
 
+const box = document.getElementById('game-box');
+const ctl = document.getElementById('controls');
 const promptEl = document.getElementById('interact-prompt');
 const modal = document.getElementById('rpg-modal');
 const guide = document.getElementById('guide-bar');
@@ -589,13 +660,37 @@ const T = mode === 'gallery'
   ? { wallTop:'#3a5063', wallBot:'#263847', panel:'#1e2d39', floorA:'#80593a', floorB:'#6d4b32', rug:['#8a3232','#5c2025'] }
   : { wallTop:'#557590', wallBot:'#3a566d', panel:'#2d4458', floorA:'#ebe5cb', floorB:'#bdb798', rug:['#a24f40','#6f2f2b'] };
 
-guide.innerHTML = mode === 'gallery'
-  ? '🚶 方向鍵 / WASD 或點擊地面移動 ｜ 走近掛畫按空白鍵'
-  : '🏛️ 接待大廳 ｜ 請於上方搜尋或點選名家（先點一下畫面）';
-
 const player = { x: 330, y: mode === 'gallery' ? 440 : 400, speed: 3.2, dir: 'up', walkFrame: 0, moving: false };
 const keys = {};
-let target = null, nearIdx = -1, isModalOpen = false;
+let target = null, nearIdx = -1, isModalOpen = false, pendingOpen = -1;
+
+/* ---------- 響應式版面：依 iframe 寬度縮放，觸控裝置顯示控制鍵 ---------- */
+const isTouch = (window.matchMedia && window.matchMedia('(pointer:coarse)').matches) || ('ontouchstart' in window);
+let S = 1, K = 1, lastH = 0;
+function layout() {
+  const iw = document.documentElement.clientWidth || window.innerWidth || W;
+  S = Math.min(iw / W, 1.25);
+  K = Math.max(1, Math.min(1.5, 1 / S));
+  const needCtl = isTouch || iw < 520;
+  const gameH = H * S, CTL = 150;
+  box.style.transform = 'scale(' + S + ')';
+  box.style.left = Math.max(0, (iw - W * S) / 2) + 'px';
+  box.style.setProperty('--k', Math.max(1, Math.min(1.9, 1 / S)));
+  ctl.style.display = needCtl ? 'flex' : 'none';
+  ctl.style.top = (gameH + 20) + 'px';
+  ctl.style.height = (CTL - 20) + 'px';
+  const total = Math.round(gameH + 20 + (needCtl ? CTL : 0));
+  document.body.style.height = total + 'px';
+  if (total !== lastH) {
+    lastH = total;
+    try { window.frameElement.style.setProperty('height', total + 'px', 'important'); } catch (e) {}
+  }
+  guide.innerHTML = needCtl
+    ? (mode === 'gallery' ? '🚶 點地面或按下方按鈕移動 ｜ 點掛畫鑑賞' : '🏛️ 接待大廳 ｜ 請於上方搜尋或點選名家')
+    : (mode === 'gallery' ? '🚶 方向鍵 / WASD 或點擊地面移動 ｜ 走近掛畫按空白鍵' : '🏛️ 接待大廳 ｜ 請於上方搜尋或點選名家（先點一下畫面）');
+}
+window.addEventListener('resize', layout);
+layout();
 
 /* ---------- 小工具 ---------- */
 function rr(x, y, w, h, r) {
@@ -704,11 +799,11 @@ function pictureLight(cx, topY, w) {
   ctx.fillStyle = '#8a6f35'; ctx.fillRect(cx - 1.5, topY - 12, 3, 8);
 }
 function plaque(cx, y, text) {
-  ctx.font = '11px ' + SERIF;
-  const w = Math.max(80, ctx.measureText(text).width + 22);
-  ctx.fillStyle = '#17120c'; rr(cx - w / 2, y, w, 17, 3); ctx.fill();
+  ctx.font = (11 * K) + 'px ' + SERIF;
+  const w = Math.max(80, ctx.measureText(text).width + 22), h = 6 + 11 * K;
+  ctx.fillStyle = '#17120c'; rr(cx - w / 2, y, w, h, 3); ctx.fill();
   ctx.strokeStyle = '#c9a85c'; ctx.lineWidth = 1; ctx.stroke();
-  ctx.fillStyle = '#ecdcab'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(text, cx, y + 9);
+  ctx.fillStyle = '#ecdcab'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(text, cx, y + h / 2 + 0.5);
 }
 function shortName(n) { return n.split(' (')[0].split('(')[0]; }
 
@@ -716,10 +811,6 @@ function artSlots() {
   const n = arts.length; return arts.map((a, i) => 330 + (i - (n - 1) / 2) * 175);
 }
 function drawGalleryWall() {
-  ctx.fillStyle = 'rgba(8,14,20,.6)'; rr(230, 28, 200, 24, 12); ctx.fill();
-  ctx.strokeStyle = '#d4b46a'; ctx.lineWidth = 1; ctx.stroke();
-  ctx.fillStyle = '#ecdcab'; ctx.font = 'bold 14px ' + SERIF; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-  ctx.fillText((currentArtist.icon || '') + ' 【' + currentArtist.matched_name + '】專屬展廳', 330, 41);
   const cs = artSlots();
   arts.forEach((a, i) => {
     const im = imgs[i], ok = im.complete && im.naturalWidth > 0;
@@ -733,7 +824,7 @@ function drawGalleryWall() {
     plaque(cs[i], 163, shortName(a.name));
     const pool = ctx.createRadialGradient(cs[i], 235, 4, cs[i], 235, 85);
     pool.addColorStop(0, 'rgba(255,238,180,.16)'); pool.addColorStop(1, 'rgba(255,238,180,0)');
-    ctx.save(); ctx.translate(0, 0); ctx.fillStyle = pool; ctx.fillRect(cs[i] - 90, 195, 180, 80); ctx.restore();
+    ctx.fillStyle = pool; ctx.fillRect(cs[i] - 90, 195, 180, 80);
   });
 }
 function drawLobbyWall() {
@@ -754,7 +845,7 @@ function desk() {
   ctx.strokeStyle = 'rgba(230,201,122,.5)'; ctx.lineWidth = 1;
   for (let i = 0; i < 3; i++) ctx.strokeRect(x + 10 + i * 74, top + 12, 62, bot - top - 22);
   ctx.fillStyle = lg(0, top - 9, 0, top + 2, [[0, '#dcb583'], [1, '#a67c52']]); rr(x - 9, top - 9, w + 18, 11, 3); ctx.fill();
-  ctx.fillStyle = '#e6c97a'; ctx.font = 'bold 15px ' + SERIF; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillStyle = '#e6c97a'; ctx.font = 'bold ' + (15 * Math.min(K, 1.3)) + 'px ' + SERIF; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
   ctx.fillText('接待諮詢處', 330, top + 34);
   ctx.fillStyle = '#3a2a1a'; ctx.fillRect(x + 28, top - 14, 4, 6);
   ctx.fillStyle = '#2f6b4f'; ctx.beginPath(); ctx.moveTo(x + 18, top - 14); ctx.lineTo(x + 42, top - 14); ctx.lineTo(x + 36, top - 28); ctx.lineTo(x + 24, top - 28); ctx.closePath(); ctx.fill();
@@ -795,14 +886,13 @@ function drawPlayer() {
   ctx.fillStyle = '#f3d3b0'; ctx.beginPath(); ctx.arc(0, -43, 8, 0, 7); ctx.fill();
   ctx.fillStyle = '#1b1f27'; ctx.beginPath(); ctx.ellipse(0, -49, 13, 3.2, 0, 0, 7); ctx.fill(); rr(-7.5, -64, 15, 16, 2); ctx.fill();
   ctx.fillStyle = '#AA5D4C'; ctx.fillRect(-7.5, -54, 15, 3.5);
-  ctx.fillStyle = '#1a120b';
   if (player.dir === 'down') { ell(-3, -42, 1.2, 1.6, '#1a120b'); ell(3, -42, 1.2, 1.6, '#1a120b'); }
   else if (player.dir === 'left') ell(-4, -42, 1.2, 1.6, '#1a120b');
   else if (player.dir === 'right') ell(4, -42, 1.2, 1.6, '#1a120b');
   ctx.restore();
 }
 
-/* ---------- 灰塵光點、暗角、提示 ---------- */
+/* ---------- 灰塵光點、暗角、底部標示 ---------- */
 const dust = Array.from({ length: 30 }, (_, i) => ({ x: hash(i) * W, y: hash(i + 50) * 400, v: 0.1 + hash(i + 9) * 0.25, r: 0.8 + hash(i + 3) * 1.4 }));
 function drawDust() {
   dust.forEach(d => { d.y += d.v * 0.3; d.x += Math.sin((d.y + d.r * 50) / 40) * 0.15; if (d.y > 480) d.y = 20;
@@ -812,11 +902,14 @@ function vignette() {
   const g = ctx.createRadialGradient(330, 270, 170, 330, 270, 440);
   g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(1, 'rgba(0,0,0,.5)'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
 }
-function lobbyHud() {
-  ctx.fillStyle = 'rgba(14,20,26,.72)'; rr(95, 482, 470, 26, 13); ctx.fill();
+function hud(text) {
+  const fs = 13 * Math.min(K, 1.4);
+  ctx.font = fs + 'px ' + SERIF;
+  const w = ctx.measureText(text).width + 36, h = fs + 14;
+  ctx.fillStyle = 'rgba(14,20,26,.74)'; rr(330 - w / 2, 508 - h, w, h, h / 2); ctx.fill();
   ctx.strokeStyle = 'rgba(212,180,106,.7)'; ctx.lineWidth = 1; ctx.stroke();
-  ctx.fillStyle = '#ecdcab'; ctx.font = '13px ' + SERIF; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-  ctx.fillText('✨ 請於上方搜尋藝術家，或點選名家標籤開啟專屬展廳 ✨', 330, 495);
+  ctx.fillStyle = '#ecdcab'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillText(text, 330, 508 - h / 2 + 0.5);
 }
 
 /* ---------- 互動 ---------- */
@@ -836,29 +929,55 @@ function openModal(i) {
   showArt(i); modal.style.display = 'block'; isModalOpen = true;
 }
 function closeModal() { modal.style.display = 'none'; isModalOpen = false; }
+function doAction() {
+  if (mode !== 'gallery') return;
+  if (isModalOpen) closeModal(); else if (nearIdx >= 0) openModal(nearIdx);
+}
+document.getElementById('close-x').addEventListener('click', closeModal);
 
 window.addEventListener('keydown', e => {
   if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', ' '].includes(e.key)) e.preventDefault();
   keys[e.key.toLowerCase()] = true;
-  if ((e.key === ' ' || e.key === 'Enter') && mode === 'gallery') {
-    if (isModalOpen) closeModal(); else if (nearIdx >= 0) openModal(nearIdx);
-  }
+  if (e.key === ' ' || e.key === 'Enter') doAction();
 });
 window.addEventListener('keyup', e => { keys[e.key.toLowerCase()] = false; });
-document.getElementById('game-box').addEventListener('mousedown', e => {
+
+/* 螢幕方向鍵與鑑賞鍵（觸控） */
+[['b-up', 'arrowup'], ['b-down', 'arrowdown'], ['b-left', 'arrowleft'], ['b-right', 'arrowright']].forEach(p => {
+  const el = document.getElementById(p[0]);
+  const on = e => { e.preventDefault(); keys[p[1]] = true; el.classList.add('on'); };
+  const off = e => { e.preventDefault(); keys[p[1]] = false; el.classList.remove('on'); };
+  el.addEventListener('pointerdown', on);
+  ['pointerup', 'pointercancel', 'pointerleave'].forEach(ev => el.addEventListener(ev, off));
+});
+document.getElementById('act').addEventListener('pointerdown', e => { e.preventDefault(); doAction(); });
+
+/* 點擊 / 觸控：點地面走過去；點掛畫則走到畫前並自動開啟 */
+box.addEventListener('pointerdown', e => {
   window.focus(); document.body.focus();
-  if (e.target.closest('#rpg-modal')) return;
   const r = canvas.getBoundingClientRect();
-  target = { x: Math.max(30, Math.min(W - 30, e.clientX - r.left)), y: Math.max(215, Math.min(470, e.clientY - r.top)) };
+  const px = (e.clientX - r.left) * W / r.width, py = (e.clientY - r.top) * H / r.height;
+  if (mode === 'gallery' && py < 190) {
+    const cs = artSlots(); let bi = -1, bd = 85;
+    cs.forEach((cx, i) => { const d = Math.abs(px - cx); if (d < bd) { bd = d; bi = i; } });
+    if (bi >= 0) {
+      if (nearIdx === bi && !isModalOpen) { openModal(bi); return; }
+      target = { x: cs[bi], y: 232 }; pendingOpen = bi; return;
+    }
+  }
+  pendingOpen = -1;
+  target = { x: Math.max(30, Math.min(W - 30, px)), y: Math.max(215, Math.min(470, py)) };
 });
 
 function update() {
-  let dx = 0, dy = 0;
+  let dx = 0, dy = 0, arrived = false;
   if (keys['arrowup'] || keys['w']) dy -= 1; if (keys['arrowdown'] || keys['s']) dy += 1;
   if (keys['arrowleft'] || keys['a']) dx -= 1; if (keys['arrowright'] || keys['d']) dx += 1;
-  if (dx || dy) target = null;
-  else if (target) { const vx = target.x - player.x, vy = target.y - player.y, d = Math.hypot(vx, vy);
-    if (d < 4) target = null; else { dx = vx / d; dy = vy / d; } }
+  if (dx || dy) { target = null; pendingOpen = -1; }
+  else if (target) {
+    const vx = target.x - player.x, vy = target.y - player.y, d = Math.hypot(vx, vy);
+    if (d < 4) { target = null; arrived = true; } else { dx = vx / d; dy = vy / d; }
+  }
   player.moving = !!(dx || dy);
   if (player.moving) {
     const len = Math.hypot(dx, dy) || 1;
@@ -874,10 +993,12 @@ function update() {
     const cs = artSlots(); let best = 75;
     cs.forEach((cx, i) => { const d = Math.abs(player.x - cx); if (d < best && player.y < 300) { best = d; nearIdx = i; } });
   }
+  if (arrived && pendingOpen >= 0) { if (nearIdx === pendingOpen) openModal(pendingOpen); pendingOpen = -1; }
+
   if (nearIdx >= 0 && !isModalOpen) {
     promptEl.style.display = 'block'; promptEl.style.left = player.x + 'px';
     promptEl.style.top = (player.y - 90) + 'px';
-    promptEl.innerText = '❗ [空白鍵] 鑑賞 ' + shortName(arts[nearIdx].name);
+    promptEl.innerText = '❗ ' + (isTouch ? '點掛畫或按「鑑賞」' : '[空白鍵]') + ' 鑑賞 ' + shortName(arts[nearIdx].name);
   } else promptEl.style.display = 'none';
 }
 
@@ -894,7 +1015,8 @@ function loop(t) {
   else { items.push({ y: 250, f: () => plant(100, 250) }); items.push({ y: 250, f: () => plant(560, 250) }); }
   items.sort((a, b) => a.y - b.y).forEach(o => o.f());
   drawDust(); vignette();
-  if (mode === 'lobby') lobbyHud();
+  if (mode === 'lobby') hud(K > 1.2 ? '✨ 請於上方搜尋或點選名家 ✨' : '✨ 請於上方搜尋藝術家，或點選名家標籤開啟專屬展廳 ✨');
+  else hud((currentArtist.icon || '') + ' 【' + currentArtist.matched_name + '】專屬展廳');
   requestAnimationFrame(loop);
 }
 requestAnimationFrame(loop);
@@ -908,14 +1030,14 @@ game_html = (PIXEL_GAME_HTML
              .replace("__ARTIST__", exhibit_json))
 
 # 9. 主內容：左遊戲、右資訊
-section_title("展廳漫遊", "用方向鍵或 WASD 移動（也可直接點擊地面），走近掛畫按空白鍵", anchor="gallery")
+section_title("展廳漫遊", "電腦用方向鍵 / WASD，手機與平板可點擊地面或使用下方按鈕", anchor="gallery")
 
 col_game, col_info = st.columns([3, 2], gap="large")
 
 with col_game:
     if is_in_gallery:
         st.subheader(f"🏛️ 【{target_artist_data['matched_name']}】專屬古典展廳")
-        st.caption("漫步於展廳中，走近牆上的掛畫，按【空白鍵 (Space)】鑑賞真實館藏代表作！")
+        st.caption("漫步於展廳中，走近牆上的掛畫（或直接點選掛畫），鑑賞真實館藏代表作！")
     else:
         st.subheader("🛋️ 古典接待大廳 (Grand Entrance Lobby)")
         st.caption("紳士漫步於古典大廳中；請於上方搜尋或點選名家標籤以開啟專屬展廳！")
@@ -961,10 +1083,9 @@ with col_info:
 #### 🎫 參觀動線說明：
 1. **領取展覽門票**：請於上方 **「搜尋藝術家」** 輸入人名，或直接點選 **「熱門名家標籤」**。
 2. **啟程漫遊專屬展廳**：領取門票後，左側畫面將開啟該藝術家的**專屬展廳**，牆上掛滿他的代表作！
-3. **深度互動鑑賞**：操縱紳士走近掛畫並按下 **【空白鍵 (Space)】**，即可放大鑑賞作品並同步解鎖其生平脈絡。
+3. **深度互動鑑賞**：走近掛畫並按下 **【空白鍵】**（手機、平板可直接點選掛畫或按「鑑賞」鍵），即可放大鑑賞作品並同步解鎖其生平脈絡。
 """)
         st.info("💡 試著點擊上方標籤「**米開朗基羅**」、「**莫內**」或「**梵谷**」，立即開啟專屬展廳！")
 
 # 10. 頁尾
 render_footer()
-
